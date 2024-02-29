@@ -7,7 +7,7 @@ import {
   Entity,
   Index,
   ManyToOne,
-  OneToMany,
+  OneToMany, Opt, Property,
   Ref,
 } from '@mikro-orm/core';
 
@@ -16,6 +16,9 @@ import {
  * */
 @Entity({ tableName: 'orders' })
 export class OrderEntity extends BaseEntity {
+  @Property()
+  isActive: boolean & Opt = true;
+  
   @Index()
   @ManyToOne({ entity: () => UserEntity })
   payerUserID!: Ref<UserEntity>;
