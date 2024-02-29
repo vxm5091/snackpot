@@ -2,7 +2,7 @@ import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { BaseNode, RelayNode } from '@app/graphql/node/node.model';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Order } from '@app/graphql/order/order.model';
 import { Transaction } from '@app/graphql/transaction/transaction.model';
 import { Group } from '@app/graphql/group/group.model';
@@ -10,10 +10,9 @@ import { Group } from '@app/graphql/group/group.model';
 /**
  * fields which match scalar entity fields don't need custom resolvers
  * this enum reflects additional fields like relationships or computed fields. The use of the enum itself is to ensure string value consistency between model and resolver.
- * NOTE: id requires a resolver because it will be transformed to a globalID for Relay compatibility
  * */
 export enum EUserField {
-  ID = 'id',
+  GlobalID = 'globalID',
   OrdersPaid = 'ordersPaid',
   Transactions = 'transactions',
   Groups = 'groups',
@@ -37,6 +36,9 @@ export class User extends BaseNode {
 
   @Field(() => String, { nullable: true })
   avatarURL?: string;
+
+  @Field(() => ID)
+  [EUserField.GlobalID]: string;
 
   @Field(() => [Order], { defaultValue: [] })
   [EUserField.OrdersPaid]: OrderEntity[];

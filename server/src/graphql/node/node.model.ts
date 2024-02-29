@@ -10,12 +10,15 @@
 
 @InterfaceType('Node', { isAbstract: true })
 export class RelayNode {
-  @Field(() => ID)
-  id: string;
+  @Field(() => ID, { description: 'The globally unique relay ID' })
+  globalID: string;
 }
 
 @InterfaceType({ isAbstract: true, implements: () => RelayNode })
 export class BaseNode extends RelayNode {
+  @Field(() => ID)
+  id: string;
+
   @Field(() => GraphQLISODateTime)
   createdAt: Date;
 

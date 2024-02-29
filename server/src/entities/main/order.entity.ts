@@ -21,7 +21,7 @@ export class OrderEntity extends BaseEntity {
   
   @Index()
   @ManyToOne({ entity: () => UserEntity })
-  payerUserID!: Ref<UserEntity>;
+  payerUser!: Ref<UserEntity>;
 
   @Index()
   @ManyToOne({ entity: () => GroupEntity })

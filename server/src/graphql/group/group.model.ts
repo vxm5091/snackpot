@@ -1,18 +1,19 @@
 import { OrderEntity } from '@app/entities/main/order.entity';
 import { UserEntity } from '@app/entities/main/user.entity';
-import { RelayNode } from '@app/graphql/node/node.model';
+import { GroupMember } from '@app/graphql/groupMember/groupMember.model';
+import { BaseNode, RelayNode } from '@app/graphql/node/node.model';
 import { Order } from '@app/graphql/order/order.model';
 import { User } from '@app/graphql/user/user.model';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 /**
  * fields which match scalar entity fields don't need custom resolvers
  * this enum reflects additional fields like relationships or computed fields. The use of the enum itself is to ensure string value consistency between model and resolver.
- * NOTE: id requires a resolver because it will be transformed to a globalID for Relay compatibility
  * */
-export enum EGroupFields {
-  ID = 'id',
-  Users = 'users',
+export enum EGroupField {
+  GlobalID = 'globalID',
+  Members = 'members',
+  Owner = 'owner',
   Orders = 'orders',
   ActiveOrder = 'activeOrder',
 }
@@ -20,19 +21,25 @@ export enum EGroupFields {
 @ObjectType({
   implements: () => [RelayNode],
 })
-export class Group extends RelayNode {
+export class Group extends BaseNode {
   @Field(() => String)
   groupName: string;
 
   @Field(() => String, { nullable: true })
   avatarURL?: string;
 
-  @Field(() => [User], { defaultValue: [] })
-  [EGroupFields.Users]: UserEntity[];
+  @Field(() => ID)
+  [EGroupField.GlobalID]: string;
+
+  @Field(() => [GroupMember], { defaultValue: [] })
+  [EGroupField.Members]: GroupMember;
+
+  @Field(() => User)
+  [EGroupField.Owner]: UserEntity;
 
   @Field(() => [Order], { defaultValue: [] })
-  [EGroupFields.Orders]: OrderEntity[];
+  [EGroupField.Orders]: OrderEntity[];
 
   @Field(() => Order, { nullable: true })
-  [EGroupFields.ActiveOrder]?: OrderEntity;
+  [EGroupField.ActiveOrder]?: OrderEntity;
 }
