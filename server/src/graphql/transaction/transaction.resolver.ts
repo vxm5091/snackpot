@@ -16,7 +16,7 @@ import {
   Args,
   ID,
   Mutation,
-  Parent,
+  Parent, Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
@@ -27,6 +27,10 @@ export class TransactionResolver {
   constructor(private readonly em: EntityManager) {}
 
   //   ------------------------------------- Queries -------------------------------------
+  @Query(() => Transaction, { name: 'transaction' })
+  getTransaction(@Args('id') id: string): Promise<TransactionEntity> {
+    return this.em.findOneOrFail(TransactionEntity, id);
+  }
   //   ------------------------------------- Mutations -------------------------------------
   @Mutation(() => Transaction)
   async createTransaction(

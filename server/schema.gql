@@ -1,0 +1,105 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateGroupInput {
+  avatarURL: String
+  groupName: String!
+  usersID: [ID!]!
+}
+
+input CreateTransactionInput {
+  itemName: String!
+  itemPrice: Float
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Group implements Node {
+  activeOrder: Order
+  avatarURL: String
+  createdAt: DateTime!
+  globalID: ID!
+  groupName: String!
+  id: ID!
+  members: [GroupMember!]!
+  orders: [Order!]!
+  owner: User!
+  updatedAt: DateTime!
+}
+
+type GroupMember {
+  balance: Float!
+  group: Group!
+  user: User!
+}
+
+type Mutation {
+  createGroup(createGroupInput: CreateGroupInput!): Group!
+  createOrder(groupID: String!): Order!
+  createTransaction(createTransactionInput: CreateTransactionInput!): Transaction!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  updateTransaction(updateTransactionInput: UpdateTransactionInput!): Transaction!
+}
+
+interface Node {
+  """The globally unique relay ID"""
+  globalID: ID!
+}
+
+type Order implements Node {
+  createdAt: DateTime!
+  globalID: ID!
+  group: Group!
+  id: ID!
+  isActive: Boolean!
+  payerUser: User!
+  transactions: [Transaction!]!
+  updatedAt: DateTime!
+}
+
+type Query {
+  group(id: String!): Group!
+  order(id: String!): Order!
+  transaction(id: String!): Transaction!
+  user(id: String!): User!
+}
+
+type Transaction implements Node {
+  createdAt: DateTime!
+  globalID: ID!
+  id: ID!
+  itemName: String!
+  itemPrice: Float
+  order: Order!
+  updatedAt: DateTime!
+  user: User!
+}
+
+input UpdateOrderInput {
+  id: String!
+  isActive: Boolean!
+}
+
+input UpdateTransactionInput {
+  id: String!
+  itemName: String
+  itemPrice: Float
+}
+
+type User implements Node {
+  avatarURL: String
+  createdAt: DateTime!
+  firstName: String!
+  globalID: ID!
+  groups: [Group!]!
+  id: String!
+  lastName: String!
+  ordersPaid: [Order!]!
+  transactions: [Transaction!]!
+  updatedAt: DateTime!
+  username: String!
+}

@@ -16,6 +16,7 @@ import {
   ID,
   Mutation,
   Parent,
+  Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
@@ -29,6 +30,11 @@ export class GroupResolver {
   ) {}
 
   //   ------------------------------------- Queries -------------------------------------
+  @Query(() => Group, { name: 'group' })
+  getGroup(@Args('id') id: string): Promise<GroupEntity> {
+    return this.em.findOneOrFail(GroupEntity, id);
+  }
+
   //   ------------------------------------- Mutations -------------------------------------
   @Mutation(() => Group)
   async createGroup(

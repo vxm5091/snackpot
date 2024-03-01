@@ -42,12 +42,12 @@ const config: Options<PostgreSqlDriver> = {
   driverOptions: {
     connection: {
       keepalives_idle: 120,
-      ssl:
-        process.env.NODE_ENV === 'development'
-          ? null
-          : {
-              rejectUnauthorized: false,
-            },
+      // ssl:
+      //   process.env.NODE_ENV === 'development'
+      //     ? null
+      //     : {
+      //         rejectUnauthorized: false,
+      //       },
     },
   },
   seeder: {

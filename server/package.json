@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migration:create": "npx mikro-orm migration:create",
     "migration:up": "npx mikro-orm migration:up",
+    "migration:initial": "npx mikro-orm migration:up --initial",
     "seeder": "npx mikro-orm seeder:run",
     "seeder:fresh": "npx mikro-orm migration:fresh --seed"
   },
@@ -60,7 +61,8 @@
     "pg": "^8.7.3",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "@faker-js/faker": "^8.0.2"
+    "@faker-js/faker": "^8.0.2",
+    "esm": "^3.2.25"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

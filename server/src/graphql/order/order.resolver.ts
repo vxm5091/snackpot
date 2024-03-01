@@ -16,7 +16,7 @@ import {
   Context,
   ID,
   Mutation,
-  Parent,
+  Parent, Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
@@ -30,6 +30,10 @@ export class OrderResolver {
   ) {}
 
   //   ------------------------------------- Queries -------------------------------------
+  @Query(() => Order, { name: 'order' })
+  getOrder(@Args('id') id: string): Promise<OrderEntity> {
+    return this.em.findOneOrFail(OrderEntity, id);
+  }
   //   ------------------------------------- Mutations -------------------------------------
   @Mutation(() => Order)
   async createOrder(
@@ -68,7 +72,7 @@ export class OrderResolver {
       id: input.id,
     });
     orderEntity.isActive = input.isActive;
-    await this.em.flush()
+    await this.em.flush();
     return orderEntity;
   }
 

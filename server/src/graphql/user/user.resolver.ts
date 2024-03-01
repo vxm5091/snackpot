@@ -1,12 +1,20 @@
 import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
+import { UserEntity } from '@app/entities/main/user.entity';
 import { Group } from '@app/graphql/group/group.model';
 import { Order } from '@app/graphql/order/order.model';
 import { Transaction } from '@app/graphql/transaction/transaction.model';
 import { EUserField, User } from '@app/graphql/user/user.model';
 import { EntityManager } from '@mikro-orm/knex';
-import { ID, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { toGlobalId } from 'graphql-relay/node/node';
 
 @Resolver(() => User)
@@ -14,6 +22,10 @@ export class UserResolver {
   constructor(private readonly em: EntityManager) {}
 
   //   ------------------------------------- Queries -------------------------------------
+  @Query(() => User, { name: 'user' })
+  getUser(@Args('id') id: string): Promise<UserEntity> {
+    return this.em.findOneOrFail(UserEntity, id);
+  }
   //   ------------------------------------- Mutations -------------------------------------
   //   ------------------------------------- Resolvers -------------------------------------
   @ResolveField(() => ID, { name: EUserField.GlobalID })
