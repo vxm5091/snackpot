@@ -6,8 +6,10 @@ import {
   SafeAreaProvider,
 } from 'react-native-safe-area-context';
 import { RelayEnvironmentProvider } from 'react-relay';
+import Constants from 'expo-constants';
 
-export default function App() {
+
+const App = () => {
   return (
     <SafeAreaProvider>
       <StatusBar style="auto" />
@@ -16,6 +18,13 @@ export default function App() {
       </RelayEnvironmentProvider>
     </SafeAreaProvider>
   );
+}
+
+let AppEntryPoint = App;
+
+// dynamically switch between app and storybook using env variable
+if (Constants.expoConfig?.extra?.storybookEnabled === 'true') {
+  AppEntryPoint = require('./.storybook').default;
 }
 
 const styles = StyleSheet.create({
