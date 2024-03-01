@@ -1,0 +1,20 @@
+# schema: 'http://localhost:3000/graphql'
+schema:
+  - http://127.0.0.1:3000/graphql
+
+extensions:
+  languageService:
+    cacheSchemaFileForLookup: true
+    enableValidation: false
+  codegen:
+    overwrite: true
+    generates:
+      ./src/core/graphql/schema.gql:
+        plugins:
+          - schema-ast
+      ./src/core/graphql/enums.ts:
+        plugins:
+          - typescript
+        config:
+          onlyEnums: true
+          enumsAsTypes: true
