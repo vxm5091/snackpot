@@ -9,6 +9,7 @@ import {
 } from '@app/graphql/groupMember/groupMember.model';
 import { Order } from '@app/graphql/order/order.model';
 import { User } from '@app/graphql/user/user.model';
+import { GroupService } from '@app/services/group/group.service';
 import { EntityManager } from '@mikro-orm/knex';
 import {
   Args,
@@ -22,7 +23,10 @@ import { toGlobalId } from 'graphql-relay/node/node';
 
 @Resolver(() => Group)
 export class GroupResolver {
-  constructor(private readonly em: EntityManager) {}
+  constructor(
+    private readonly em: EntityManager,
+    private readonly groupService: GroupService,
+  ) {}
 
   //   ------------------------------------- Queries -------------------------------------
   //   ------------------------------------- Mutations -------------------------------------
@@ -31,9 +35,12 @@ export class GroupResolver {
     @Args({ name: 'createGroupInput', type: () => CreateGroupInput })
     input: CreateGroupInput,
   ): Promise<GroupEntity> {
-    const group = new GroupEntity()
-    group.groupName = input.groupName;
-    group.avatarURL = input.avatarURL;
+    const group = new GroupEntity({
+      groupName: input.groupName,
+      avatarURL: input.avatarURL,
+    });
+    this.em.persist(group);
+
     await this.em.persistAndFlush(group);
     return group;
   }
@@ -46,49 +53,17 @@ export class GroupResolver {
 
   @ResolveField(() => [GroupMember], { name: EGroupField.Members })
   async resolveMembers(@Parent() group: Group): Promise<GroupMember[]> {
-    //   query DB for users in group + orders + transactions
-    const res = (await this.em.findOne(
-      GroupEntity,
-      { id: group.id },
-      {
-        populate: ['usersJoin.user', 'orders.transactions'],
-      },
-    )) as GroupEntity;
+    const groupData = await this.groupService.getGroupData(group.id);
+    const userBalance =
+      await this.groupService.getGroupMemberBalance(groupData);
 
-    const userBalance = res.usersJoin.reduce(
-      (acc, user) => {
-        acc[user.user.id] = 0;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-
-    //   calculate balance for each user
-    //   for each user in the group
-    //   if the user paid for the order -- add all other users' amount to user's balance
-    //   if the user did not pay for order -- subtract user amount for balance
-    res.orders.getItems().forEach(order => {
-      const payerUserID = order.payerUser.id;
-      let payerUserBalance = 0;
-      order.transactions.getItems().forEach(transaction => {
-        if (transaction.user.id !== order.payerUser.id) {
-          payerUserBalance += transaction.itemPrice;
-          userBalance[payerUserID] -= transaction.itemPrice;
-        }
-      });
-
-      userBalance[payerUserID] += payerUserBalance;
-    });
-
-    const groupMembers = res.usersJoin.map(({ user }) => {
+    return groupData.usersJoin.map(({ user }) => {
       const member = new GroupMember();
-      member[EGroupMemberField.User] = user;
+      member[EGroupMemberField.User] = user.getEntity();
       member[EGroupMemberField.Balance] = userBalance[user.id];
-      member[EGroupMemberField.Group] = res;
+      member[EGroupMemberField.Group] = groupData;
       return member;
     });
-
-    return groupMembers;
   }
 
   @ResolveField(() => User, { name: EGroupField.Owner })

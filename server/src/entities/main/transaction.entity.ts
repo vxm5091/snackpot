@@ -21,4 +21,16 @@ export class TransactionEntity extends BaseEntity {
   @Index()
   @ManyToOne({ entity: () => OrderEntity })
   order!: Ref<OrderEntity>;
+
+  constructor({
+    itemName,
+    itemPrice,
+  }: {
+    itemName: string;
+    itemPrice?: number;
+  }) {
+    super();
+    this.itemName = itemName;
+    this.itemPrice = itemPrice;
+  }
 }

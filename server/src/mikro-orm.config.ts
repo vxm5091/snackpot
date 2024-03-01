@@ -1,17 +1,10 @@
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import { MikroOrmModuleOptions as Options } from '@mikro-orm/nestjs';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { LoadStrategy } from '@mikro-orm/core';
 import { Migrator, TSMigrationGenerator } from '@mikro-orm/migrations';
 import { SeedManager } from '@mikro-orm/seeder';
 import 'dotenv/config';
 import { Logger } from '@nestjs/common';
-
-console.info({
-  environment: process.env.NODE_ENV,
-  tsNode: process.env.NODE_ENV === 'development' || !!process.env.USE_TS_NODE,
-  USE_TS_NODE: process.env.USE_TS_NODE,
-});
 
 const config: Options<PostgreSqlDriver> = {
   baseDir: process.cwd(),
@@ -28,17 +21,16 @@ const config: Options<PostgreSqlDriver> = {
     identifiedReferences: true,
   },
   forceUtcTimezone: true,
-  tsNode: process.env.NODE_ENV === 'development' || !!process.env.USE_TS_NODE,
-  clientUrl: process.env.BUDDYUSER_URL,
+  tsNode: process.env.NODE_ENV === 'development',
+  clientUrl: process.env.DB_URL,
   resultCache: {
     expiration: 2000,
   },
   metadataProvider: TsMorphMetadataProvider,
-  loadStrategy: LoadStrategy.JOINED,
   registerRequestContext: false,
 
   debug: process.env.NODE_ENV !== 'production',
-  logger: (msg) => {
+  logger: msg => {
     const logger = new Logger('MikroORM');
 
     logger.log(msg);
@@ -50,8 +42,6 @@ const config: Options<PostgreSqlDriver> = {
   driverOptions: {
     connection: {
       keepalives_idle: 120,
-      application_name: process.env.DB_APP_NAME,
-
       ssl:
         process.env.NODE_ENV === 'development'
           ? null
@@ -61,8 +51,8 @@ const config: Options<PostgreSqlDriver> = {
     },
   },
   seeder: {
-    path: 'src/dummy/seeders',
-    pathTs: 'src/dummy/seeders',
+    path: 'src/data/seeders',
+    pathTs: 'src/data/seeders',
     defaultSeeder: 'DatabaseSeeder',
     glob: '!(*.d).{js,ts}',
     emit: 'ts', // seeder generation mode
@@ -70,8 +60,8 @@ const config: Options<PostgreSqlDriver> = {
   },
   migrations: {
     tableName: 'mikro_orm_migrations', // name of database table with log of executed transactions
-    path: 'dist/core/db/migrations',
-    pathTs: 'src/core/db/migrations',
+    path: 'dist/core/migrations',
+    pathTs: 'src/core/migrations',
     glob: '!(*.d).{js,ts}', // how to match migration files (all .js and .ts files, but not .d.ts)
     transactional: true, // wrap each migration in a transaction
     disableForeignKeys: false, // wrap statements with `set foreign_key_checks = 0` or equivalent

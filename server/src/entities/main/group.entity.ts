@@ -39,4 +39,16 @@ export class GroupEntity extends BaseEntity {
     entity: () => UserEntity,
   })
   owner!: UserEntity;
+
+  constructor({
+    groupName,
+    avatarURL,
+  }: {
+    groupName: string;
+    avatarURL?: string;
+  }) {
+    super();
+    this.groupName = groupName;
+    this.avatarURL = avatarURL;
+  }
 }

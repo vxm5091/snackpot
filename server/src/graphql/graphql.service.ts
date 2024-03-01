@@ -1,4 +1,6 @@
 import { IContextGQL, IReqRes } from '@app/core/types/http.types';
+import { UserEntity } from '@app/entities/main/user.entity';
+import { EntityManager } from '@mikro-orm/knex';
 import { ApolloDriverConfig } from '@nestjs/apollo';
 import { Injectable, Logger } from '@nestjs/common';
 import { GqlOptionsFactory } from '@nestjs/graphql';
@@ -9,12 +11,19 @@ import { join } from 'path';
 export class GraphQLService implements GqlOptionsFactory {
   logger = new Logger(GraphQLService.name);
 
+  constructor(private readonly em: EntityManager) {}
+
   async createGqlOptions(): Promise<Omit<ApolloDriverConfig, 'driver'>> {
     return {
       context: async ({ req, res }: IReqRes): Promise<IContextGQL> => {
+        const userEntity = (await this.em
+          .fork()
+          .findOne('User', { id: '1' })) as UserEntity;
+
         return {
           req,
           res,
+          userEntity,
         };
       },
       autoSchemaFile: join(process.cwd(), './schema.gql'),

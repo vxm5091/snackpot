@@ -7,7 +7,10 @@ import {
   Entity,
   Index,
   ManyToOne,
-  OneToMany, Opt, Property,
+  OneToMany,
+  Opt,
+  Property,
+  ref,
   Ref,
 } from '@mikro-orm/core';
 
@@ -18,7 +21,7 @@ import {
 export class OrderEntity extends BaseEntity {
   @Property()
   isActive: boolean & Opt = true;
-  
+
   @Index()
   @ManyToOne({ entity: () => UserEntity })
   payerUser!: Ref<UserEntity>;
@@ -30,4 +33,9 @@ export class OrderEntity extends BaseEntity {
   @Index()
   @OneToMany({ entity: () => TransactionEntity, mappedBy: r => r.order })
   transactions = new Collection<TransactionEntity>(this);
+
+  constructor(groupID: string) {
+    super();
+    this.group = ref(GroupEntity, groupID);
+  }
 }
