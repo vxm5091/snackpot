@@ -1,3 +1,4 @@
+import { USER_ID } from '@app/constants';
 import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
@@ -26,6 +27,12 @@ export class UserResolver {
   getUser(@Args('id') id: string): Promise<UserEntity> {
     return this.em.findOneOrFail(UserEntity, id);
   }
+
+  @Query(() => User, { name: 'me' })
+  getMe(): Promise<UserEntity> {
+    return this.em.findOneOrFail(UserEntity, { id: USER_ID });
+  }
+
   //   ------------------------------------- Mutations -------------------------------------
   //   ------------------------------------- Resolvers -------------------------------------
   @ResolveField(() => ID, { name: EUserField.GlobalID })

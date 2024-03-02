@@ -2,9 +2,8 @@ module.exports = {
   // ...
   // Configuration options accepted by the `relay-compiler` command-line tool and `babel-plugin-relay`.
   src: './src',
-  language: 'typescript', // "javascript" | "typescript" | "flow"
+  language: 'typescript',
   schema: './src/core/graphql/schema.gql',
-  // schema: 'http://localhost:3000/graphql',
   exclude: [
     '**/node_modules/**',
     '**/__mocks__/**',
@@ -17,6 +16,7 @@ module.exports = {
     DateTime: 'string',
   },
   noFutureProofEnums: true,
-
-  // schemaExtensions: ['./src/**'],
+  schemaConfig: {
+    nodeInterfaceIdField: 'globalID',
+  },
 };

@@ -7,6 +7,7 @@ export class UserFactory extends Factory<UserEntity> {
 
   definition(): Partial<UserEntity> {
     return {
+      id: faker.string.uuid(),
       username: faker.internet.userName(),
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),

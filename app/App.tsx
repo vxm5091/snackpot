@@ -15,6 +15,7 @@ const App = () => {
       <StatusBar style="auto" />
       <RelayEnvironmentProvider environment={environment}>
       {/*  navigation container*/}
+        <View/>
       </RelayEnvironmentProvider>
     </SafeAreaProvider>
   );
@@ -26,6 +27,8 @@ let AppEntryPoint = App;
 if (Constants.expoConfig?.extra?.storybookEnabled === 'true') {
   AppEntryPoint = require('./.storybook').default;
 }
+
+export default AppEntryPoint;
 
 const styles = StyleSheet.create({
   container: {

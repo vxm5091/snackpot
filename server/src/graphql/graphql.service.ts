@@ -1,3 +1,4 @@
+import { USER_ID } from '@app/constants';
 import { IContextGQL, IReqRes } from '@app/core/types/http.types';
 import { UserEntity } from '@app/entities/main/user.entity';
 import { EntityManager } from '@mikro-orm/knex';
@@ -18,7 +19,7 @@ export class GraphQLService implements GqlOptionsFactory {
       context: async ({ req, res }: IReqRes): Promise<IContextGQL> => {
         const userEntity = (await this.em
           .fork()
-          .findOne('User', { id: '1' })) as UserEntity;
+          .findOne(UserEntity, { id: USER_ID })) as UserEntity;
 
         return {
           req,

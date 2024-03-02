@@ -18,6 +18,7 @@ export class DatabaseSeeder extends Seeder {
     });
 
     const group = em.create(GroupEntity, {
+      id: faker.string.uuid(),
       groupName: 'My Group',
       avatarURL: faker.image.avatar(),
       owner: me,
@@ -34,6 +35,7 @@ export class DatabaseSeeder extends Seeder {
       .make(4);
 
     const order = em.create(OrderEntity, {
+      id: faker.string.uuid(),
       group,
       payerUser: me,
     });
@@ -42,6 +44,7 @@ export class DatabaseSeeder extends Seeder {
 
     for (const friend of friends) {
       em.create(TransactionEntity, {
+        id: faker.string.uuid(),
         user: friend,
         order,
         itemPrice: +faker.finance.amount({ min: 3, max: 10 }),

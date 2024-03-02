@@ -1,31 +1,32 @@
-module.exports = {
-    name: 'snackpot',
-    slug: 'snackpot',
-    version: '1.0.0',
-    extra: {
-      storybookEnabled: process.env.STORYBOOK_ENABLED,
+export default ({ config }) => ({
+  ...config,
+  name: 'snackpot',
+  slug: 'snackpot',
+  version: '1.0.0',
+  orientation: 'portrait',
+  icon: './assets/icon.png',
+  extra: {
+    storybookEnabled: process.env.STORYBOOK_ENABLED,
+  },
+  splash: {
+    image: './assets/splash.png',
+    resizeMode: 'contain',
+    backgroundColor: '#ffffff',
+  },
+  updates: {
+    fallbackToCacheTimeout: 0,
+  },
+  assetBundlePatterns: ['**/*'],
+  ios: {
+    supportsTablet: true,
+  },
+  android: {
+    adaptiveIcon: {
+      foregroundImage: './assets/adaptive-icon.png',
+      backgroundColor: '#FFFFFF',
     },
-    orientation: 'portrait',
-    icon: './assets/icon.png',
-    userInterfaceStyle: 'light',
-    splash: {
-      image: './assets/splash.png',
-      resizeMode: 'contain',
-      backgroundColor: '#ffffff',
-    },
-    assetBundlePatterns: [
-      '**/*',
-    ],
-    ios: {
-      supportsTablet: true,
-    },
-    android: {
-      adaptiveIcon: {
-        foregroundImage: './assets/adaptive-icon.png',
-        backgroundColor: '#ffffff',
-      },
-    },
-    web: {
-      favicon: './assets/favicon.png',
-    },
-};
+  },
+  web: {
+    favicon: './assets/favicon.png',
+  },
+});

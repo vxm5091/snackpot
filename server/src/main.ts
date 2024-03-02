@@ -9,12 +9,15 @@ async function bootstrap() {
 
   app.use(express.json());
   app.use(compression()); // GQL output can get quite long, luckily it compresses well
-  app.use(
-    helmet({
-      contentSecurityPolicy:
-        process.env.NODE_ENV === 'production' ? undefined : false,
-    }),
-  );
+  // app.use(
+  //   helmet({
+  //     contentSecurityPolicy:
+  //       process.env.NODE_ENV === 'production' ? undefined : false,
+  //   }),
+  // );
+  // app.enableCors({
+  //   origin: ['http://localhost'],
+  // });
 
   await app.listen(3000);
 }
