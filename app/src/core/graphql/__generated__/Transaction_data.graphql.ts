@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<30e5bf7678a23884d3c06d7cc094bdd7>>
+ * @generated SignedSource<<1dfeace08b7c9df9ebe01f17dcab3ab1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,11 +14,10 @@ export type Transaction_data$data = {
   readonly id: string;
   readonly itemName: string;
   readonly itemPrice: number | null;
-  readonly user: {
-    readonly avatarURL: string | null;
-    readonly firstName: string;
-    readonly lastName: string;
-    readonly username: string;
+  readonly recipient: {
+    readonly node: {
+      readonly " $fragmentSpreads": FragmentRefs<"UserAvatar_data">;
+    } | null;
   };
   readonly " $fragmentType": "Transaction_data";
 };
@@ -43,37 +42,25 @@ const node: ReaderFragment = {
     {
       "alias": null,
       "args": null,
-      "concreteType": "User",
+      "concreteType": "UserEdge",
       "kind": "LinkedField",
-      "name": "user",
+      "name": "recipient",
       "plural": false,
       "selections": [
         {
           "alias": null,
           "args": null,
-          "kind": "ScalarField",
-          "name": "username",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "firstName",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "lastName",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "avatarURL",
+          "concreteType": "User",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            {
+              "args": null,
+              "kind": "FragmentSpread",
+              "name": "UserAvatar_data"
+            }
+          ],
           "storageKey": null
         }
       ],
@@ -98,6 +85,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "9b2f627b14dc685c91a9eb960f01861e";
+(node as any).hash = "f45b914d8aa295d7dde61d2a84fd8100";
 
 export default node;

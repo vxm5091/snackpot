@@ -20,7 +20,7 @@ export const Row: React.FC<IProps> & ISubcomponents = ({
   ...props
 }) => {
   return (
-    <View style={[styles.container, gapStyles(spacing), style]} {...props}>
+    <View style={[rowStyles.container, gapStyles(spacing), style]} {...props}>
       {children}
     </View>
   );
@@ -28,7 +28,7 @@ export const Row: React.FC<IProps> & ISubcomponents = ({
 
 Row.Spaced = ({ children, style, ...props }) => {
   return (
-    <Row style={[styles.spaced, style]} {...props}>
+    <Row style={[rowStyles.spaced, style]} {...props}>
       {children}
     </Row>
   );
@@ -36,7 +36,7 @@ Row.Spaced = ({ children, style, ...props }) => {
 
 
 
-const styles = StyleSheet.create({
+export const rowStyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',

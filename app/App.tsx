@@ -1,25 +1,27 @@
+import { container } from 'ansi-fragments';
 import environment from 'core/relay';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import {
-  SafeAreaContext,
-  SafeAreaProvider,
-} from 'react-native-safe-area-context';
+import { RootNavigator } from 'flows/navigators';
+import { Dimensions, StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RelayEnvironmentProvider } from 'react-relay';
 import Constants from 'expo-constants';
 
-
 const App = () => {
   return (
+    <GestureHandlerRootView
+      style={{ height: Dimensions.get('window').height, width: Dimensions.get('window').width }}
+    >
     <SafeAreaProvider>
       <StatusBar style="auto" />
       <RelayEnvironmentProvider environment={environment}>
-      {/*  navigation container*/}
-        <View/>
+        <RootNavigator />
       </RelayEnvironmentProvider>
     </SafeAreaProvider>
+      </GestureHandlerRootView>
   );
-}
+};
 
 let AppEntryPoint = App;
 

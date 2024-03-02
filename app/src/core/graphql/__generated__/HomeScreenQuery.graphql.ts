@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<faff176e3993bb3bd12d626496d578ae>>
+ * @generated SignedSource<<4fcd6859c6f47c92266e0252042113e9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,21 +10,22 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type TransactionStoryQuery$variables = {};
-export type TransactionStoryQuery$data = {
+export type HomeScreenQuery$variables = {};
+export type HomeScreenQuery$data = {
   readonly me: {
-    readonly transactions: {
+    readonly groups: {
       readonly edges: ReadonlyArray<{
         readonly node: {
-          readonly " $fragmentSpreads": FragmentRefs<"Transaction_data">;
+          readonly " $fragmentSpreads": FragmentRefs<"GroupCard_data">;
         } | null;
       }> | null;
     };
+    readonly " $fragmentSpreads": FragmentRefs<"UserAvatar_data">;
   };
 };
-export type TransactionStoryQuery = {
-  response: TransactionStoryQuery$data;
-  variables: TransactionStoryQuery$variables;
+export type HomeScreenQuery = {
+  response: HomeScreenQuery$data;
+  variables: HomeScreenQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -39,6 +40,34 @@ v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "username",
+  "storageKey": null
+},
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "firstName",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "lastName",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "avatarURL",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "globalID",
   "storageKey": null
 };
@@ -47,7 +76,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "TransactionStoryQuery",
+    "name": "HomeScreenQuery",
     "selections": [
       {
         "alias": null,
@@ -58,17 +87,22 @@ return {
         "plural": false,
         "selections": [
           {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "UserAvatar_data"
+          },
+          {
             "alias": null,
             "args": null,
-            "concreteType": "TransactionConnection",
+            "concreteType": "GroupBalanceConnection",
             "kind": "LinkedField",
-            "name": "transactions",
+            "name": "groups",
             "plural": false,
             "selections": [
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "TransactionEdge",
+                "concreteType": "GroupBalanceEdge",
                 "kind": "LinkedField",
                 "name": "edges",
                 "plural": true,
@@ -76,7 +110,7 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "Transaction",
+                    "concreteType": "Group",
                     "kind": "LinkedField",
                     "name": "node",
                     "plural": false,
@@ -84,7 +118,7 @@ return {
                       {
                         "args": null,
                         "kind": "FragmentSpread",
-                        "name": "Transaction_data"
+                        "name": "GroupCard_data"
                       }
                     ],
                     "storageKey": null
@@ -106,7 +140,7 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "TransactionStoryQuery",
+    "name": "HomeScreenQuery",
     "selections": [
       {
         "alias": null,
@@ -116,18 +150,23 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
+          (v0/*: any*/),
+          (v1/*: any*/),
+          (v2/*: any*/),
+          (v3/*: any*/),
+          (v4/*: any*/),
           {
             "alias": null,
             "args": null,
-            "concreteType": "TransactionConnection",
+            "concreteType": "GroupBalanceConnection",
             "kind": "LinkedField",
-            "name": "transactions",
+            "name": "groups",
             "plural": false,
             "selections": [
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "TransactionEdge",
+                "concreteType": "GroupBalanceEdge",
                 "kind": "LinkedField",
                 "name": "edges",
                 "plural": true,
@@ -135,7 +174,7 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "Transaction",
+                    "concreteType": "Group",
                     "kind": "LinkedField",
                     "name": "node",
                     "plural": false,
@@ -144,70 +183,58 @@ return {
                       {
                         "alias": null,
                         "args": null,
-                        "concreteType": "UserEdge",
+                        "kind": "ScalarField",
+                        "name": "groupName",
+                        "storageKey": null
+                      },
+                      (v4/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "UserBalanceConnection",
                         "kind": "LinkedField",
-                        "name": "recipient",
+                        "name": "members",
                         "plural": false,
                         "selections": [
                           {
                             "alias": null,
                             "args": null,
-                            "concreteType": "User",
+                            "concreteType": "UserBalanceEdge",
                             "kind": "LinkedField",
-                            "name": "node",
-                            "plural": false,
+                            "name": "edges",
+                            "plural": true,
                             "selections": [
-                              (v0/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
                                 "kind": "ScalarField",
-                                "name": "username",
+                                "name": "balance",
                                 "storageKey": null
                               },
                               {
                                 "alias": null,
                                 "args": null,
-                                "kind": "ScalarField",
-                                "name": "firstName",
+                                "concreteType": "User",
+                                "kind": "LinkedField",
+                                "name": "node",
+                                "plural": false,
+                                "selections": [
+                                  (v0/*: any*/),
+                                  (v1/*: any*/),
+                                  (v2/*: any*/),
+                                  (v3/*: any*/),
+                                  (v4/*: any*/),
+                                  (v5/*: any*/)
+                                ],
                                 "storageKey": null
-                              },
-                              {
-                                "alias": null,
-                                "args": null,
-                                "kind": "ScalarField",
-                                "name": "lastName",
-                                "storageKey": null
-                              },
-                              {
-                                "alias": null,
-                                "args": null,
-                                "kind": "ScalarField",
-                                "name": "avatarURL",
-                                "storageKey": null
-                              },
-                              (v1/*: any*/)
+                              }
                             ],
                             "storageKey": null
                           }
                         ],
                         "storageKey": null
                       },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "itemName",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "itemPrice",
-                        "storageKey": null
-                      },
-                      (v1/*: any*/)
+                      (v5/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -217,23 +244,23 @@ return {
             ],
             "storageKey": null
           },
-          (v1/*: any*/)
+          (v5/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "5253d55b3f41c487c254fc6ea5690c31",
+    "cacheID": "03ea80d226ae0314dbc7ddfff9b43362",
     "id": null,
     "metadata": {},
-    "name": "TransactionStoryQuery",
+    "name": "HomeScreenQuery",
     "operationKind": "query",
-    "text": "query TransactionStoryQuery {\n  me {\n    transactions {\n      edges {\n        node {\n          ...Transaction_data\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  recipient {\n    node {\n      ...UserAvatar_data\n      globalID\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "query HomeScreenQuery {\n  me {\n    ...UserAvatar_data\n    groups {\n      edges {\n        node {\n          ...GroupCard_data\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupCard_data on Group {\n  ...GroupAvatar_data\n  groupName\n  members {\n    edges {\n      ...GroupMember_data\n    }\n  }\n}\n\nfragment GroupMember_data on UserBalanceEdge {\n  balance\n  node {\n    ...UserAvatar_data\n    username\n    globalID\n  }\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();
 
-(node as any).hash = "afaea7400e142c53d105fa04af858694";
+(node as any).hash = "54fa06169382fe87ca1664e25c6cbf45";
 
 export default node;

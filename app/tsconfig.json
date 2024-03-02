@@ -14,12 +14,15 @@
       "core/*": [
         "core/*"
       ],
-      "screens/*": [
+      "flows/*": [
         "flows/*"
       ],
       "graphql/*": [
         "graphql/*"
-      ]
+      ],
+      "shared/*": [
+        "shared/*"
+      ],
     },
     "allowJs": true,
     "jsx": "react-native",
