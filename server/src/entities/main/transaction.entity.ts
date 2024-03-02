@@ -1,4 +1,5 @@
 import { BaseEntity } from '@app/entities/abstract/base.entity';
+import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
 import { UserEntity } from '@app/entities/main/user.entity';
 import { Entity, Index, ManyToOne, Property, Ref, t } from '@mikro-orm/core';
@@ -16,11 +17,19 @@ export class TransactionEntity extends BaseEntity {
 
   @Index()
   @ManyToOne({ entity: () => UserEntity })
-  user!: Ref<UserEntity>;
+  payer!: Ref<UserEntity>;
+
+  @Index()
+  @ManyToOne({ entity: () => UserEntity })
+  recipient!: Ref<UserEntity>;
 
   @Index()
   @ManyToOne({ entity: () => OrderEntity })
   order!: Ref<OrderEntity>;
+
+  @Index()
+  @ManyToOne({ entity: () => GroupEntity })
+  group!: Ref<GroupEntity>;
 
   constructor({
     itemName,

@@ -52,7 +52,7 @@ export class OrderResolver {
     const orderEntity = new OrderEntity(groupID);
 
     // determine paying user
-    const groupData = await this.groupService.getGroupData(groupID);
+    const groupData = await this.groupService.getGroupEntity(groupID);
     const memberBalances =
       await this.groupService.getGroupMemberBalance(groupData);
     const payerUser = Object.entries(memberBalances).reduce((a, b) =>

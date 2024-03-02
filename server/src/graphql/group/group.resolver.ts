@@ -59,9 +59,8 @@ export class GroupResolver {
 
   @ResolveField(() => [GroupMember], { name: EGroupField.Members })
   async resolveMembers(@Parent() group: Group): Promise<GroupMember[]> {
-    const groupData = await this.groupService.getGroupData(group.id);
     const userBalance =
-      await this.groupService.getGroupMemberBalance(groupData);
+      await this.groupService.getGroupMemberBalance(group.id);
 
     return groupData.usersJoin.map(({ user }) => {
       const member = new GroupMember();

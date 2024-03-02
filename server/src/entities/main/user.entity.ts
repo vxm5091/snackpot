@@ -40,9 +40,16 @@ export class UserEntity extends BaseEntity {
   @Index()
   @OneToMany({
     entity: () => TransactionEntity,
-    mappedBy: r => r.user,
+    mappedBy: r => r.payer,
   })
-  transactions = new Collection<TransactionEntity>(this);
+  transactionsPaid = new Collection<TransactionEntity>(this);
+
+  @Index()
+  @OneToMany({
+    entity: () => TransactionEntity,
+    mappedBy: r => r.recipient,
+  })
+  transactionsReceived = new Collection<TransactionEntity>(this);
 
   @Index()
   @OneToMany({
