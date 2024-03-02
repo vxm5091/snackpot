@@ -1,10 +1,10 @@
-import { GroupEntity } from '@app/entities/main/group.entity';
-import { TransactionEntity } from '@app/entities/main/transaction.entity';
-import { UserEntity } from '@app/entities/main/user.entity';
-import { Group } from '@app/graphql/group/group.model';
+import { OrderEntity } from '@app/entities/main/order.entity';
+import { GroupEdge } from '@app/graphql/group/group.model';
 import { BaseNode, RelayNode } from '@app/graphql/node/node.model';
-import { Transaction } from '@app/graphql/transaction/transaction.model';
-import { User } from '@app/graphql/user/user.model';
+import { TransactionConnection } from '@app/graphql/transaction/transaction.model';
+import { UserEdge } from '@app/graphql/user/user.model';
+import { PageInfo } from '@app/relay/relay.graphql';
+import { RelayConnection, RelayEdge } from '@app/relay/types';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 /**
@@ -12,8 +12,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
  * this enum reflects additional fields like relationships or computed fields. The use of the enum itself is to ensure string value consistency between model and resolver.
  * */
 export enum EOrderField {
-  GlobalID = 'globalID',
-  PayerUser = 'payerUser',
+  Payer = 'payer',
   Group = 'group',
   Transactions = 'transactions',
 }
@@ -25,15 +24,31 @@ export class Order extends BaseNode {
   @Field(() => Boolean)
   isActive: boolean;
 
-  @Field(() => ID)
-  [EOrderField.GlobalID]: string;
+  @Field(() => UserEdge)
+  [EOrderField.Payer]: UserEdge;
 
-  @Field(() => User)
-  [EOrderField.PayerUser]: UserEntity;
+  @Field(() => GroupEdge)
+  [EOrderField.Group]: GroupEdge;
 
-  @Field(() => Group)
-  [EOrderField.Group]: GroupEntity;
+  @Field(() => TransactionConnection)
+  [EOrderField.Transactions]: TransactionConnection;
+}
 
-  @Field(() => [Transaction], { defaultValue: [] })
-  [EOrderField.Transactions]: TransactionEntity[];
+/* ================================= RELAY TYPES ======================================== */
+@ObjectType(`OrderEdge`, { isAbstract: true })
+export class OrderEdge implements RelayEdge<OrderEntity> {
+  @Field({ nullable: true })
+  cursor: string;
+
+  @Field(() => Order, { nullable: true })
+  node: OrderEntity;
+}
+
+@ObjectType(`OrderConnection`, { isAbstract: true })
+export class OrderConnection implements RelayConnection<OrderEntity> {
+  @Field(() => [OrderEdge], { nullable: true })
+  edges: OrderEdge[];
+
+  @Field(() => PageInfo, { nullable: true })
+  pageInfo: PageInfo;
 }

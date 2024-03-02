@@ -12,9 +12,17 @@ import {
   Property,
   t,
 } from '@mikro-orm/core';
+import { toGlobalId } from 'graphql-relay/node/node';
 
 @Entity({ tableName: 'groups' })
 export class GroupEntity extends BaseEntity {
+  @Property({
+    persist: false,
+  })
+  get globalID() {
+    return this.id ? toGlobalId('Group', this.id) : '';
+  }
+
   @Property({ type: t.text })
   groupName!: string;
 

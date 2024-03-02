@@ -1,9 +1,7 @@
-import { Meta, storiesOf, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { Transaction } from 'components/Transaction/Transaction';
 import { TransactionStoryQuery } from 'core/graphql/__generated__/TransactionStoryQuery.graphql';
-import { Suspense } from 'react';
-import { ActivityIndicator } from 'react-native';
-import { graphql, useLazyLoadQuery } from 'react-relay';
+import { graphql } from 'react-relay';
 import { WithRelayParameters } from '@imchhh/storybook-addon-relay';
 
 
@@ -11,7 +9,11 @@ const QUERY = graphql`
   query TransactionStoryQuery {
     me {
       transactions {
-        ...Transaction_data
+        edges {
+          node {
+                    ...Transaction_data
+					}
+				}
 			}
     }
   }
@@ -19,8 +21,8 @@ const QUERY = graphql`
 
 
 export default {
-  component: Transaction
-}
+  component: Transaction,
+};
 export const story: StoryObj = {
   parameters: {
     relay: {

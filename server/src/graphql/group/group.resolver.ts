@@ -3,30 +3,28 @@ import { OrderEntity } from '@app/entities/main/order.entity';
 import { UserEntity } from '@app/entities/main/user.entity';
 import { CreateGroupInput } from '@app/graphql/group/group.dto';
 import { EGroupField, Group } from '@app/graphql/group/group.model';
-import {
-  EGroupMemberField,
-  GroupMember,
-} from '@app/graphql/groupMember/groupMember.model';
-import { Order } from '@app/graphql/order/order.model';
-import { User } from '@app/graphql/user/user.model';
+
+import { OrderConnection, OrderEdge } from '@app/graphql/order/order.model';
+import { UserBalanceConnection, UserEdge } from '@app/graphql/user/user.model';
+import { RelayService } from '@app/relay/relay.service';
+import { RelayEdge } from '@app/relay/types';
 import { GroupService } from '@app/services/group/group.service';
 import { EntityManager } from '@mikro-orm/knex';
 import {
   Args,
-  ID,
   Mutation,
   Parent,
   Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { toGlobalId } from 'graphql-relay/node/node';
 
 @Resolver(() => Group)
 export class GroupResolver {
   constructor(
     private readonly em: EntityManager,
     private readonly groupService: GroupService,
+    private readonly relayService: RelayService,
   ) {}
 
   //   ------------------------------------- Queries -------------------------------------
@@ -52,27 +50,29 @@ export class GroupResolver {
   }
 
   //   ------------------------------------- Resolvers -------------------------------------
-  @ResolveField(() => ID, { name: EGroupField.GlobalID })
-  async resolveID(@Parent() group: Group): Promise<string> {
-    return toGlobalId('Group', group.id);
-  }
+  @ResolveField(() => UserBalanceConnection, { name: EGroupField.Members })
+  async resolveMembers(@Parent() group: Group): Promise<UserBalanceConnection> {
+    const members = await this.groupService.getGroupMembers(group.id);
+    const memberBalance = await this.groupService.getGroupMemberBalanceAll(
+      group.id,
+    );
 
-  @ResolveField(() => [GroupMember], { name: EGroupField.Members })
-  async resolveMembers(@Parent() group: Group): Promise<GroupMember[]> {
-    const userBalance =
-      await this.groupService.getGroupMemberBalance(group.id);
-
-    return groupData.usersJoin.map(({ user }) => {
-      const member = new GroupMember();
-      member[EGroupMemberField.User] = user.getEntity();
-      member[EGroupMemberField.Balance] = userBalance[user.id];
-      member[EGroupMemberField.Group] = groupData;
-      return member;
+    const edges = members.map(member => {
+      const regularEdge = this.relayService.getEdge(member, 'User');
+      return {
+        ...regularEdge,
+        balance: memberBalance?.[member.id] || 0,
+      };
     });
+
+    return {
+      edges,
+      pageInfo: this.relayService.getPageInfo(edges),
+    };
   }
 
-  @ResolveField(() => User, { name: EGroupField.Owner })
-  async resolveOwner(@Parent() group: Group): Promise<UserEntity> {
+  @ResolveField(() => UserEdge, { name: EGroupField.Owner })
+  async resolveOwner(@Parent() group: Group): Promise<UserEdge> {
     const res = (await this.em.findOne(
       GroupEntity,
       { id: group.id },
@@ -81,11 +81,11 @@ export class GroupResolver {
       },
     )) as GroupEntity;
 
-    return res.owner;
+    return this.relayService.getEdge(res.owner, 'User');
   }
 
-  @ResolveField(() => [Order], { name: EGroupField.Orders })
-  async resolveOrders(@Parent() group: Group): Promise<OrderEntity[]> {
+  @ResolveField(() => OrderConnection, { name: EGroupField.Orders })
+  async resolveOrders(@Parent() group: Group): Promise<OrderConnection> {
     const res = (await this.em.findOne(
       GroupEntity,
       { id: group.id },
@@ -94,16 +94,19 @@ export class GroupResolver {
       },
     )) as GroupEntity;
 
-    return res.orders.getItems();
+    return this.relayService.getConnection(res.orders.getItems(), 'Order');
   }
 
-  @ResolveField(() => Order, { name: EGroupField.ActiveOrder, nullable: true })
-  async resolveActiveOrder(
-    @Parent() group: Group,
-  ): Promise<OrderEntity | null> {
-    return this.em.findOne(OrderEntity, {
+  @ResolveField(() => OrderEdge, {
+    name: EGroupField.ActiveOrder,
+    nullable: true,
+  })
+  async resolveActiveOrder(@Parent() group: Group): Promise<OrderEdge | null> {
+    const res = await this.em.findOne(OrderEntity, {
       group: group.id,
       isActive: true,
     });
+
+    return this.relayService.getEdge(res, 'Order');
   }
 }

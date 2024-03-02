@@ -15,22 +15,34 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Group implements Node {
-  activeOrder: Order
+  activeOrder: OrderEdge
   avatarURL: String
   createdAt: DateTime!
+
+  """The globally unique relay ID"""
   globalID: ID!
   groupName: String!
   id: ID!
-  members: [GroupMember!]!
-  orders: [Order!]!
-  owner: User!
+  members: UserBalanceConnection!
+  orders: OrderConnection!
+  owner: UserEdge!
   updatedAt: DateTime!
 }
 
-type GroupMember {
+type GroupBalanceConnection {
+  edges: [GroupBalanceEdge!]
+  pageInfo: PageInfo
+}
+
+type GroupBalanceEdge {
   balance: Float!
-  group: Group!
-  user: User!
+  cursor: String
+  node: Group
+}
+
+type GroupEdge {
+  cursor: String
+  node: Group
 }
 
 type Mutation {
@@ -48,13 +60,32 @@ interface Node {
 
 type Order implements Node {
   createdAt: DateTime!
+
+  """The globally unique relay ID"""
   globalID: ID!
-  group: Group!
+  group: GroupEdge!
   id: ID!
   isActive: Boolean!
-  payerUser: User!
-  transactions: [Transaction!]!
+  payer: UserEdge!
+  transactions: TransactionConnection!
   updatedAt: DateTime!
+}
+
+type OrderConnection {
+  edges: [OrderEdge!]
+  pageInfo: PageInfo
+}
+
+type OrderEdge {
+  cursor: String
+  node: Order
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
 }
 
 type Query {
@@ -67,13 +98,26 @@ type Query {
 
 type Transaction implements Node {
   createdAt: DateTime!
+
+  """The globally unique relay ID"""
   globalID: ID!
   id: ID!
   itemName: String!
   itemPrice: Float
-  order: Order!
+  order: OrderEdge!
+  payer: UserEdge!
+  recipient: UserEdge!
   updatedAt: DateTime!
-  user: User!
+}
+
+type TransactionConnection {
+  edges: [TransactionEdge!]
+  pageInfo: PageInfo
+}
+
+type TransactionEdge {
+  cursor: String
+  node: Transaction
 }
 
 input UpdateOrderInput {
@@ -91,12 +135,30 @@ type User implements Node {
   avatarURL: String
   createdAt: DateTime!
   firstName: String!
+
+  """The globally unique relay ID"""
   globalID: ID!
-  groups: [Group!]!
+  groups: GroupBalanceConnection!
   id: String!
   lastName: String!
-  ordersPaid: [Order!]!
-  transactions: [Transaction!]!
+  ordersPaid: OrderConnection!
+  transactions: TransactionConnection!
   updatedAt: DateTime!
   username: String!
+}
+
+type UserBalanceConnection {
+  edges: [UserBalanceEdge!]
+  pageInfo: PageInfo
+}
+
+type UserBalanceEdge {
+  balance: Float!
+  cursor: String
+  node: User
+}
+
+type UserEdge {
+  cursor: String
+  node: User
 }

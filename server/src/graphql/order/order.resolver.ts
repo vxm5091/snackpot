@@ -1,32 +1,31 @@
 import { IContextGQL } from '@app/core/types/http.types';
-import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
-import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { UserEntity } from '@app/entities/main/user.entity';
-import { Group } from '@app/graphql/group/group.model';
+import { GroupEdge } from '@app/graphql/group/group.model';
 import { UpdateOrderInput } from '@app/graphql/order/order.dto';
 import { EOrderField, Order } from '@app/graphql/order/order.model';
-import { Transaction } from '@app/graphql/transaction/transaction.model';
-import { User } from '@app/graphql/user/user.model';
+import { TransactionConnection } from '@app/graphql/transaction/transaction.model';
+import { UserEdge } from '@app/graphql/user/user.model';
+import { RelayService } from '@app/relay/relay.service';
 import { GroupService } from '@app/services/group/group.service';
 import { ref } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/knex';
 import {
   Args,
   Context,
-  ID,
   Mutation,
-  Parent, Query,
+  Parent,
+  Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { toGlobalId } from 'graphql-relay/node/node';
 
 @Resolver(() => Order)
 export class OrderResolver {
   constructor(
     private readonly em: EntityManager,
     private readonly groupService: GroupService,
+    private readonly relayService: RelayService,
   ) {}
 
   //   ------------------------------------- Queries -------------------------------------
@@ -52,13 +51,12 @@ export class OrderResolver {
     const orderEntity = new OrderEntity(groupID);
 
     // determine paying user
-    const groupData = await this.groupService.getGroupEntity(groupID);
     const memberBalances =
-      await this.groupService.getGroupMemberBalance(groupData);
+      await this.groupService.getGroupMemberBalanceAll(groupID);
     const payerUser = Object.entries(memberBalances).reduce((a, b) =>
       a[1] < b[1] ? a : b,
     )[0];
-    orderEntity.payerUser = ref(UserEntity, payerUser);
+    orderEntity.payer = ref(UserEntity, payerUser);
 
     await this.em.persistAndFlush(orderEntity);
     return orderEntity;
@@ -77,40 +75,38 @@ export class OrderResolver {
   }
 
   //   ------------------------------------- Resolvers -------------------------------------
-  @ResolveField(() => ID, { name: EOrderField.GlobalID })
-  async resolveID(@Parent() order: Order): Promise<string> {
-    return toGlobalId('Order', order.id);
-  }
-
-  @ResolveField(() => User, { name: EOrderField.PayerUser })
-  async resolvePayerUser(@Parent() order: Order): Promise<UserEntity> {
+  @ResolveField(() => UserEdge, { name: EOrderField.Payer })
+  async resolvePayer(@Parent() order: Order): Promise<UserEdge> {
     const orderEntity = await this.em.findOneOrFail(
       OrderEntity,
       { id: order.id },
-      { populate: ['payerUser'] },
+      { populate: ['payer'] },
     );
-    return orderEntity.payerUser.getEntity();
+    return this.relayService.getEdge(orderEntity.payer.getEntity(), 'User');
   }
 
-  @ResolveField(() => Group, { name: EOrderField.Group })
-  async resolveGroup(@Parent() order: Order): Promise<GroupEntity> {
+  @ResolveField(() => GroupEdge, { name: EOrderField.Group })
+  async resolveGroup(@Parent() order: Order): Promise<GroupEdge> {
     const orderEntity = await this.em.findOneOrFail(
       OrderEntity,
       { id: order.id },
       { populate: ['group'] },
     );
-    return orderEntity.group.getEntity();
+    return this.relayService.getEdge(orderEntity.group.getEntity(), 'Group');
   }
 
-  @ResolveField(() => [Transaction], { name: EOrderField.Transactions })
+  @ResolveField(() => TransactionConnection, { name: EOrderField.Transactions })
   async resolveTransactions(
     @Parent() order: Order,
-  ): Promise<TransactionEntity[]> {
+  ): Promise<TransactionConnection> {
     const orderEntity = await this.em.findOneOrFail(
       OrderEntity,
       { id: order.id },
       { populate: ['transactions'] },
     );
-    return orderEntity.transactions.getItems();
+    return this.relayService.getConnection(
+      orderEntity.transactions.getItems(),
+      'Transaction',
+    );
   }
 }

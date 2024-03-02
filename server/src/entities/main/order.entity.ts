@@ -13,18 +13,26 @@ import {
   ref,
   Ref,
 } from '@mikro-orm/core';
+import { toGlobalId } from 'graphql-relay/node/node';
 
 /*
  * Collective group purchase.
  * */
 @Entity({ tableName: 'orders' })
 export class OrderEntity extends BaseEntity {
+  @Property({
+    persist: false,
+  })
+  get globalID() {
+    return this.id ? toGlobalId('Order', this.id) : '';
+  }
+
   @Property()
   isActive: boolean & Opt = true;
 
   @Index()
   @ManyToOne({ entity: () => UserEntity })
-  payerUser!: Ref<UserEntity>;
+  payer!: Ref<UserEntity>;
 
   @Index()
   @ManyToOne({ entity: () => GroupEntity })

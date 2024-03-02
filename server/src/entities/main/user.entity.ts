@@ -12,9 +12,17 @@ import {
   Property,
   t,
 } from '@mikro-orm/core';
+import { toGlobalId } from 'graphql-relay/node/node';
 
 @Entity({ tableName: 'users' })
 export class UserEntity extends BaseEntity {
+  @Property({
+    persist: false,
+  })
+  get globalID() {
+    return this.id ? toGlobalId('User', this.id) : '';
+  }
+
   @PrimaryKey()
   id!: string;
 
@@ -33,7 +41,7 @@ export class UserEntity extends BaseEntity {
   @Index()
   @OneToMany({
     entity: () => OrderEntity,
-    mappedBy: r => r.payerUser,
+    mappedBy: r => r.payer,
   })
   ordersPaid = new Collection<OrderEntity>(this);
 

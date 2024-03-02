@@ -1,7 +1,5 @@
-import { OrderEntity } from '@app/entities/main/order.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
-import { UserEntity } from '@app/entities/main/user.entity';
-import { Order } from '@app/graphql/order/order.model';
+import { OrderEdge } from '@app/graphql/order/order.model';
 import {
   CreateTransactionInput,
   UpdateTransactionInput,
@@ -10,21 +8,24 @@ import {
   ETransactionField,
   Transaction,
 } from '@app/graphql/transaction/transaction.model';
-import { User } from '@app/graphql/user/user.model';
+import { UserEdge } from '@app/graphql/user/user.model';
+import { RelayService } from '@app/relay/relay.service';
 import { EntityManager } from '@mikro-orm/knex';
 import {
   Args,
-  ID,
   Mutation,
-  Parent, Query,
+  Parent,
+  Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { toGlobalId } from 'graphql-relay/node/node';
 
 @Resolver(() => Transaction)
 export class TransactionResolver {
-  constructor(private readonly em: EntityManager) {}
+  constructor(
+    private readonly em: EntityManager,
+    private readonly relayService: RelayService,
+  ) {}
 
   //   ------------------------------------- Queries -------------------------------------
   @Query(() => Transaction, { name: 'transaction' })
@@ -61,30 +62,47 @@ export class TransactionResolver {
   }
 
   //   ------------------------------------- Resolvers -------------------------------------
-  @ResolveField(() => ID, { name: ETransactionField.GlobalID })
-  async resolveID(@Parent() transaction: Transaction): Promise<string> {
-    return toGlobalId('Transaction', transaction.id);
-  }
-
-  @ResolveField(() => User, { name: ETransactionField.User })
-  async resolveUser(@Parent() transaction: Transaction): Promise<UserEntity> {
+  @ResolveField(() => UserEdge, { name: ETransactionField.Payer })
+  async resolvePayer(@Parent() transaction: Transaction): Promise<UserEdge> {
     const transactionEntity = await this.em.findOneOrFail(
       TransactionEntity,
       { id: transaction.id },
-      { populate: ['user'] },
+      { populate: ['payer'] },
     );
 
-    return transactionEntity.user.getEntity();
+    return this.relayService.getEdge(
+      transactionEntity.payer.getEntity(),
+      'User',
+    );
   }
 
-  @ResolveField(() => Order, { name: ETransactionField.Order })
-  async resolveOrder(@Parent() transaction: Transaction): Promise<OrderEntity> {
+  @ResolveField(() => UserEdge, { name: ETransactionField.Recipient })
+  async resolveRecipient(
+    @Parent() transaction: Transaction,
+  ): Promise<UserEdge> {
+    const transactionEntity = await this.em.findOneOrFail(
+      TransactionEntity,
+      { id: transaction.id },
+      { populate: ['recipient'] },
+    );
+
+    return this.relayService.getEdge(
+      transactionEntity.payer.getEntity(),
+      'User',
+    );
+  }
+
+  @ResolveField(() => OrderEdge, { name: ETransactionField.Order })
+  async resolveOrder(@Parent() transaction: Transaction): Promise<OrderEdge> {
     const transactionEntity = await this.em.findOneOrFail(
       TransactionEntity,
       { id: transaction.id },
       { populate: ['order'] },
     );
 
-    return transactionEntity.order.getEntity();
+    return this.relayService.getEdge(
+      transactionEntity.order.getEntity(),
+      'Order',
+    );
   }
 }

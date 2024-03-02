@@ -231,8 +231,8 @@
           "default": "true",
           "mappedType": "boolean"
         },
-        "payer_user_id": {
-          "name": "payer_user_id",
+        "payer_id": {
+          "name": "payer_id",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -255,10 +255,10 @@
       "indexes": [
         {
           "columnNames": [
-            "payer_user_id"
+            "payer_id"
           ],
           "composite": false,
-          "keyName": "orders_payer_user_id_index",
+          "keyName": "orders_payer_id_index",
           "constraint": false,
           "primary": false,
           "unique": false
@@ -286,10 +286,10 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "orders_payer_user_id_foreign": {
-          "constraintName": "orders_payer_user_id_foreign",
+        "orders_payer_id_foreign": {
+          "constraintName": "orders_payer_id_foreign",
           "columnNames": [
-            "payer_user_id"
+            "payer_id"
           ],
           "localTableName": "public.orders",
           "referencedColumnNames": [
@@ -362,8 +362,17 @@
           "nullable": true,
           "mappedType": "float"
         },
-        "user_id": {
-          "name": "user_id",
+        "payer_id": {
+          "name": "payer_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "recipient_id": {
+          "name": "recipient_id",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -379,6 +388,15 @@
           "primary": false,
           "nullable": false,
           "mappedType": "string"
+        },
+        "group_id": {
+          "name": "group_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
         }
       },
       "name": "transactions",
@@ -386,10 +404,20 @@
       "indexes": [
         {
           "columnNames": [
-            "user_id"
+            "payer_id"
           ],
           "composite": false,
-          "keyName": "transactions_user_id_index",
+          "keyName": "transactions_payer_id_index",
+          "constraint": false,
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "recipient_id"
+          ],
+          "composite": false,
+          "keyName": "transactions_recipient_id_index",
           "constraint": false,
           "primary": false,
           "unique": false
@@ -400,6 +428,16 @@
           ],
           "composite": false,
           "keyName": "transactions_order_id_index",
+          "constraint": false,
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "group_id"
+          ],
+          "composite": false,
+          "keyName": "transactions_group_id_index",
           "constraint": false,
           "primary": false,
           "unique": false
@@ -417,10 +455,22 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "transactions_user_id_foreign": {
-          "constraintName": "transactions_user_id_foreign",
+        "transactions_payer_id_foreign": {
+          "constraintName": "transactions_payer_id_foreign",
           "columnNames": [
-            "user_id"
+            "payer_id"
+          ],
+          "localTableName": "public.transactions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.users",
+          "updateRule": "cascade"
+        },
+        "transactions_recipient_id_foreign": {
+          "constraintName": "transactions_recipient_id_foreign",
+          "columnNames": [
+            "recipient_id"
           ],
           "localTableName": "public.transactions",
           "referencedColumnNames": [
@@ -439,6 +489,18 @@
             "id"
           ],
           "referencedTableName": "public.orders",
+          "updateRule": "cascade"
+        },
+        "transactions_group_id_foreign": {
+          "constraintName": "transactions_group_id_foreign",
+          "columnNames": [
+            "group_id"
+          ],
+          "localTableName": "public.transactions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.groups",
           "updateRule": "cascade"
         }
       },

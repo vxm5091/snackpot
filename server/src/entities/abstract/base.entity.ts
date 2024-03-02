@@ -13,3 +13,4 @@ export abstract class BaseEntity {
   })
   updatedAt = new Date();
 }
+

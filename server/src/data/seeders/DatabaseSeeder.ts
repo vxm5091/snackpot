@@ -37,7 +37,7 @@ export class DatabaseSeeder extends Seeder {
     const order = em.create(OrderEntity, {
       id: faker.string.uuid(),
       group,
-      payerUser: me,
+      payer: me,
     });
 
     const ITEMS = ['coffee', 'tea', 'soda', 'juice'];
@@ -45,8 +45,10 @@ export class DatabaseSeeder extends Seeder {
     for (const friend of friends) {
       em.create(TransactionEntity, {
         id: faker.string.uuid(),
-        user: friend,
+        recipient: friend,
+        payer: me,
         order,
+        group,
         itemPrice: +faker.finance.amount({ min: 3, max: 10 }),
         itemName: ITEMS[Math.floor(Math.random() * ITEMS.length)],
       });
