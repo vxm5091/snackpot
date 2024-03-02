@@ -19,12 +19,14 @@ export const UserAvatar: React.FC<IProps> = ({ _data }) => {
     `,
     _data,
   );
+  
 
   return (
     <Avatar
-      size={'small'}
+      size={32}
+      rounded
       source={data.avatarURL ? { uri: data.avatarURL } : {}}
-      title={`${data.firstName[0]}${data.lastName[0]}`}
+      title={data.avatarURL ? undefined : `${data.firstName[0]}${data.lastName[0]}`}
     />
   );
 };

@@ -15,13 +15,19 @@ export class DatabaseSeeder extends Seeder {
       username: 'me',
       firstName: 'Me',
       lastName: 'Myself',
+      avatarURL: faker.image.url(),
     });
 
     const group = em.create(GroupEntity, {
       id: faker.string.uuid(),
       groupName: 'My Group',
-      avatarURL: faker.image.avatar(),
+      avatarURL: faker.image.url(),
       owner: me,
+    });
+
+    em.create(UserGroupJoinEntity, {
+      user: me,
+      group,
     });
 
     const friends = new UserFactory(em)

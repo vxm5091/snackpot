@@ -8,6 +8,7 @@ import { Order_orderData$key } from 'core/graphql/__generated__/Order_orderData.
 import { format } from 'date-fns/format';
 import { useMemo } from 'react';
 import { graphql, useFragment } from 'react-relay';
+import { formatDate } from 'shared/format';
 
 interface IProps {
   _orderData: Order_orderData$key;
@@ -54,7 +55,7 @@ export const Order: React.FC<IProps> = ({ _orderData, _meData }) => {
 
   // ------------------------------------------ Variables ------------------------------------------
   const dateStr = useMemo(
-    () => format(orderData.createdAt, 'LLL do'),
+    () => formatDate(orderData.createdAt),
     [orderData.createdAt],
   );
 

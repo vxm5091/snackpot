@@ -31,7 +31,7 @@ export const GroupCard: React.FC<IProps> = ({ _data }) => {
 
   // ------------------------------------------ Render ------------------------------------------
   const renderMembers = useMemo(() => {
-    return data.members.edges?.map(member => <GroupMember _data={member} />);
+    return data.members.edges?.map((member, i) => <GroupMember _data={member} key={i} />);
   }, [data]);
 
   return (

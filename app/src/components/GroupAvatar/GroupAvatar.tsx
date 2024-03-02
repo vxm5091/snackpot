@@ -22,7 +22,7 @@ export const GroupAvatar: React.FC<IProps> = ({ _data }) => {
     <Avatar
       size={'small'}
       source={data.avatarURL ? { uri: data.avatarURL } : {}}
-      title={data.groupName}
+      title={data.avatarURL ? undefined : data.groupName}
     />
   );
 };

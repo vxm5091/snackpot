@@ -9,13 +9,12 @@ const Stack = createStackNavigator<ReactNavigation.RootParamList>();
 export const RootNavigator = () => {
   return (
     <NavigationContainer>
-    <Stack.Navigator id={ENavigators.Home}>
+    <Stack.Navigator id={ENavigators.Root} screenOptions={{
+      headerShown: false,
+    }}>
       <Stack.Screen
         name={'Tabs'}
         component={TabNavigator}
-        options={{
-          title: 'Home',
-        }}
       />
     </Stack.Navigator>
       </NavigationContainer>

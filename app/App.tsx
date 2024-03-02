@@ -1,5 +1,7 @@
+import { ThemeProvider } from '@rneui/themed';
 import { container } from 'ansi-fragments';
 import environment from 'core/relay';
+import theme from 'core/theme/theme';
 import { StatusBar } from 'expo-status-bar';
 import { RootNavigator } from 'flows/navigators';
 import { Dimensions, StyleSheet } from 'react-native';
@@ -11,15 +13,20 @@ import Constants from 'expo-constants';
 const App = () => {
   return (
     <GestureHandlerRootView
-      style={{ height: Dimensions.get('window').height, width: Dimensions.get('window').width }}
+      style={{
+        height: Dimensions.get('window').height,
+        width: Dimensions.get('window').width,
+      }}
     >
-    <SafeAreaProvider>
-      <StatusBar style="auto" />
-      <RelayEnvironmentProvider environment={environment}>
-        <RootNavigator />
-      </RelayEnvironmentProvider>
-    </SafeAreaProvider>
-      </GestureHandlerRootView>
+      <SafeAreaProvider>
+        <StatusBar style="auto" />
+        <ThemeProvider theme={theme}>
+          <RelayEnvironmentProvider environment={environment}>
+            <RootNavigator />
+          </RelayEnvironmentProvider>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 };
 
@@ -31,12 +38,3 @@ if (Constants.expoConfig?.extra?.storybookEnabled === 'true') {
 }
 
 export default AppEntryPoint;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
