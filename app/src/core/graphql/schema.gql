@@ -47,10 +47,11 @@ type GroupEdge {
 
 type Mutation {
   createGroup(createGroupInput: CreateGroupInput!): Group!
-  createOrder(groupID: String!): Order!
-  createTransaction(createTransactionInput: CreateTransactionInput!): Transaction!
-  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
-  updateTransaction(updateTransactionInput: UpdateTransactionInput!): Transaction!
+  createOrder(groupID: ID!): Order!
+  createTransaction(input: CreateTransactionInput!): TransactionEdge!
+  updateOrder(input: UpdateOrderInput!): Order!
+  updateTransaction(input: UpdateTransactionInput!): TransactionEdge!
+  updateTransactionsMany(input: UpdateTransactionsManyInput!): TransactionConnection!
 }
 
 interface Node {
@@ -89,11 +90,11 @@ type PageInfo {
 }
 
 type Query {
-  group(id: String!): Group!
+  group(id: ID!): Group!
   me: User!
-  order(id: String!): Order!
-  transaction(id: String!): Transaction!
-  user(id: String!): User!
+  order(id: ID!): Order!
+  transaction(id: ID!): Transaction!
+  user(id: ID!): User!
 }
 
 type Transaction implements Node {
@@ -131,6 +132,10 @@ input UpdateTransactionInput {
   itemPrice: Float
 }
 
+input UpdateTransactionsManyInput {
+  transactions: [UpdateTransactionInput!]!
+}
+
 type User implements Node {
   avatarURL: String
   createdAt: DateTime!
@@ -162,3 +167,4 @@ type UserEdge {
   cursor: String
   node: User
 }
+

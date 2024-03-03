@@ -13,7 +13,14 @@ import { EUserField, User } from '@app/graphql/user/user.model';
 import { RelayService } from '@app/relay/relay.service';
 import { GroupService } from '@app/services/group/group.service';
 import { EntityManager } from '@mikro-orm/knex';
-import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -25,7 +32,7 @@ export class UserResolver {
 
   //   ------------------------------------- Queries -------------------------------------
   @Query(() => User, { name: 'user' })
-  getUser(@Args('id') id: string): Promise<UserEntity> {
+  getUser(@Args('id', { type: () => ID }) id: string): Promise<UserEntity> {
     return this.em.findOneOrFail(UserEntity, id);
   }
 

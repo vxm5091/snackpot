@@ -1,9 +1,8 @@
-import { Divider } from '@rneui/themed';
+import { Divider, useTheme } from '@rneui/themed';
 import { GroupCard } from 'components/GroupCard';
 import { useCallback } from 'react';
 import Reanimated from 'react-native-reanimated';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { SPACING } from '../../../shared/design/spacing';
 import {
   HomeScreenQuery,
   HomeScreenQuery$data,
@@ -33,11 +32,12 @@ export const QUERY_HomeScreen = graphql`
 `;
 
 export const HomeScreen: React.FC<IProps> = ({ _queryRef }) => {
+  const {theme} = useTheme();
   const data = usePreloadedQuery(QUERY_HomeScreen, _queryRef).me;
 
   // ------------------------------------------ Render ------------------------------------------
   const renderGroup = useCallback(
-    ({ index, item: groupEdge }: { item: TGroupEdge; index: number }) => {
+    ({ item: groupEdge }: { item: TGroupEdge; index: number }) => {
       if (!groupEdge.node) return null;
 
       return <GroupCard _data={groupEdge.node} />;
@@ -46,7 +46,7 @@ export const HomeScreen: React.FC<IProps> = ({ _queryRef }) => {
   );
 
   const renderItemSeparator = useCallback(
-    () => <Divider width={SPACING.m} />,
+    () => <Divider width={theme.spacing.md} />,
     [],
   );
 

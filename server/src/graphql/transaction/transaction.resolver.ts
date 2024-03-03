@@ -3,16 +3,21 @@ import { OrderEdge } from '@app/graphql/order/order.model';
 import {
   CreateTransactionInput,
   UpdateTransactionInput,
+  UpdateTransactionsManyInput,
 } from '@app/graphql/transaction/transaction.dto';
 import {
   ETransactionField,
   Transaction,
+  TransactionConnection,
+  TransactionEdge,
 } from '@app/graphql/transaction/transaction.model';
 import { UserEdge } from '@app/graphql/user/user.model';
 import { RelayService } from '@app/relay/relay.service';
+import { TransactionService } from '@app/services/transaction/transaction.service';
 import { EntityManager } from '@mikro-orm/knex';
 import {
   Args,
+  ID,
   Mutation,
   Parent,
   Query,
@@ -24,41 +29,47 @@ import {
 export class TransactionResolver {
   constructor(
     private readonly em: EntityManager,
+    private readonly transactionService: TransactionService,
     private readonly relayService: RelayService,
   ) {}
 
   //   ------------------------------------- Queries -------------------------------------
   @Query(() => Transaction, { name: 'transaction' })
-  getTransaction(@Args('id') id: string): Promise<TransactionEntity> {
+  getTransaction(
+    @Args('id', { type: () => ID }) id: string,
+  ): Promise<TransactionEntity> {
     return this.em.findOneOrFail(TransactionEntity, id);
   }
   //   ------------------------------------- Mutations -------------------------------------
-  @Mutation(() => Transaction)
+  // We return an edge here because that makes it easier for Relay to append a newly created edge and re-render an array.
+  @Mutation(() => TransactionEdge)
   async createTransaction(
-    @Args('createTransactionInput') input: CreateTransactionInput,
-  ): Promise<TransactionEntity> {
-    const transaction = new TransactionEntity({
-      itemName: input.itemName,
-      itemPrice: input.itemPrice,
-    });
-
-    await this.em.persistAndFlush(transaction);
-    return transaction;
+    @Args('input', { type: () => CreateTransactionInput })
+    input: CreateTransactionInput,
+  ): Promise<TransactionEdge> {
+    const res = await this.transactionService.createTransaction(input);
+    return this.relayService.getEdge(res, 'Transaction');
   }
 
-  @Mutation(() => Transaction)
+  // We return an edge here because that makes it easier for Relay to re-render a list because an array of elements is equivalent to a connection of edges.
+  @Mutation(() => TransactionEdge)
   async updateTransaction(
-    @Args('updateTransactionInput') input: UpdateTransactionInput,
-  ): Promise<TransactionEntity> {
-    const transaction = await this.em.findOneOrFail(TransactionEntity, {
-      id: input.id,
-    });
+    @Args('input', { type: () => UpdateTransactionInput })
+    input: UpdateTransactionInput,
+  ): Promise<TransactionEdge> {
+    const res = await this.transactionService.updateTransaction(input);
+    return this.relayService.getEdge(res, 'Transaction');
+  }
 
-    transaction.itemName = input.itemName;
-    transaction.itemPrice = input.itemPrice;
-
-    await this.em.flush();
-    return transaction;
+  @Mutation(() => TransactionConnection)
+  async updateTransactionsMany(
+    @Args('input', { type: () => UpdateTransactionsManyInput })
+    input: UpdateTransactionsManyInput,
+  ): Promise<TransactionConnection> {
+    const res = await this.transactionService.updateTransactionsMany(
+      input.transactions,
+    );
+    return this.relayService.getConnection(res, 'Transaction');
   }
 
   //   ------------------------------------- Resolvers -------------------------------------
@@ -87,7 +98,7 @@ export class TransactionResolver {
     );
 
     return this.relayService.getEdge(
-      transactionEntity.payer.getEntity(),
+      transactionEntity.recipient.getEntity(),
       'User',
     );
   }

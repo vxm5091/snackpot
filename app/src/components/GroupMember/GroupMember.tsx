@@ -1,13 +1,10 @@
 import { Divider, Text, useTheme } from '@rneui/themed';
-import { Box } from 'components/layout/Box';
+import { BalanceText } from 'components/BalanceText';
 import { Row } from 'components/layout/Row';
 import { UserAvatar } from 'components/UserAvatar';
 import { GroupMember_data$key } from 'core/graphql/__generated__/GroupMember_data.graphql';
-import { useMemo } from 'react';
-import { TextStyle, ViewStyle } from 'react-native';
+import { View } from 'react-native';
 import { graphql, useFragment } from 'react-relay';
-import { SPACING } from 'shared/design/spacing';
-import { formatCurrency } from 'shared/format';
 
 interface IProps {
   _data: GroupMember_data$key;
@@ -15,7 +12,7 @@ interface IProps {
 }
 
 export const GroupMember: React.FC<IProps> = ({ _data, isLast = false }) => {
-  const {theme} = useTheme()
+  const {theme} = useTheme();
   
   const data = useFragment(
     graphql`
@@ -34,18 +31,15 @@ export const GroupMember: React.FC<IProps> = ({ _data, isLast = false }) => {
   
   
   // ------------------------------------------ Styles ------------------------------------------
-  const balanceStyles = useMemo(() => {
-    return {
-      color: data.balance > 0 ? theme.colors.primary : theme.colors.error
-    } as TextStyle
-  }, [data])
+  
 
   if (!data.node) return null;
 
   return (
-    <Box style={{
-      paddingVertical: SPACING.s,
-    }} spacing={'m'}>
+    <View style={{
+      paddingVertical: theme.spacing.sm,
+      rowGap: theme.spacing.md,
+    }} >
       <Row
         style={{
           justifyContent: 'space-between',
@@ -53,15 +47,15 @@ export const GroupMember: React.FC<IProps> = ({ _data, isLast = false }) => {
       >
         <Row
           style={{
-            columnGap: SPACING.m,
+            columnGap: theme.spacing.md,
           }}
         >
           <UserAvatar _data={data.node} />
           <Text>{data.node.username}</Text>
         </Row>
-        <Text style={balanceStyles}>{formatCurrency(data.balance)}</Text>
+        <BalanceText amount={data.balance} />
       </Row>
       {!isLast && <Divider/>}
-    </Box>
+    </View>
   );
 };

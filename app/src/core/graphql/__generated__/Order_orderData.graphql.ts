@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<418976c1f9272bf8d83914379ba28e27>>
+ * @generated SignedSource<<cb4c85f18cf66d0ba804e9b34e3cee3b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,14 +18,17 @@ export type Order_orderData$data = {
     } | null;
   };
   readonly id: string;
+  readonly isActive: boolean;
   readonly payer: {
     readonly node: {
-      readonly " $fragmentSpreads": FragmentRefs<"UserAvatar_data">;
+      readonly id: string;
+      readonly username: string;
     } | null;
   };
   readonly transactions: {
     readonly edges: ReadonlyArray<{
       readonly node: {
+        readonly itemPrice: number | null;
         readonly " $fragmentSpreads": FragmentRefs<"Transaction_data">;
       } | null;
     }> | null;
@@ -37,24 +40,33 @@ export type Order_orderData$key = {
   readonly " $fragmentSpreads": FragmentRefs<"Order_orderData">;
 };
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
   "name": "Order_orderData",
   "selections": [
+    (v0/*: any*/),
     {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "id",
+      "name": "createdAt",
       "storageKey": null
     },
     {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "createdAt",
+      "name": "isActive",
       "storageKey": null
     },
     {
@@ -73,10 +85,13 @@ const node: ReaderFragment = {
           "name": "node",
           "plural": false,
           "selections": [
+            (v0/*: any*/),
             {
+              "alias": null,
               "args": null,
-              "kind": "FragmentSpread",
-              "name": "UserAvatar_data"
+              "kind": "ScalarField",
+              "name": "username",
+              "storageKey": null
             }
           ],
           "storageKey": null
@@ -141,6 +156,13 @@ const node: ReaderFragment = {
                   "args": null,
                   "kind": "FragmentSpread",
                   "name": "Transaction_data"
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "itemPrice",
+                  "storageKey": null
                 }
               ],
               "storageKey": null
@@ -155,7 +177,8 @@ const node: ReaderFragment = {
   "type": "Order",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "05c256c5e1d5d001e4fd78e77079b8e9";
+(node as any).hash = "1d6138f5d93154df3f6eb6f19bf8b5a7";
 
 export default node;

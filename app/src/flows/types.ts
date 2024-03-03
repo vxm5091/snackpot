@@ -14,6 +14,7 @@ export enum ENavigators {
 // ------------------------------------------ Root ------------------------------------------
 export type TParamListRoot = {
   Tabs: NavigatorScreenParams<TParamListTabs>;
+  GroupScreen: { id: string };
 };
 
 export type TScreenPropsRoot<T extends keyof TParamListRoot> = StackScreenProps<

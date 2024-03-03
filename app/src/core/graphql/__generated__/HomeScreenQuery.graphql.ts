@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4fcd6859c6f47c92266e0252042113e9>>
+ * @generated SignedSource<<267b4d211d64b9e4f4f7daf2100734be>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -251,12 +251,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "03ea80d226ae0314dbc7ddfff9b43362",
+    "cacheID": "da13eb340c78c882bac0af8e2effead6",
     "id": null,
     "metadata": {},
     "name": "HomeScreenQuery",
     "operationKind": "query",
-    "text": "query HomeScreenQuery {\n  me {\n    ...UserAvatar_data\n    groups {\n      edges {\n        node {\n          ...GroupCard_data\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupCard_data on Group {\n  ...GroupAvatar_data\n  groupName\n  members {\n    edges {\n      ...GroupMember_data\n    }\n  }\n}\n\nfragment GroupMember_data on UserBalanceEdge {\n  balance\n  node {\n    ...UserAvatar_data\n    username\n    globalID\n  }\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "query HomeScreenQuery {\n  me {\n    ...UserAvatar_data\n    groups {\n      edges {\n        node {\n          ...GroupCard_data\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      ...GroupMember_data\n    }\n  }\n}\n\nfragment GroupMember_data on UserBalanceEdge {\n  balance\n  node {\n    ...UserAvatar_data\n    username\n    globalID\n  }\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<faff176e3993bb3bd12d626496d578ae>>
+ * @generated SignedSource<<3c1d5bc48cfb09981d7ea5de9cd48782>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -141,6 +141,7 @@ return {
                     "plural": false,
                     "selections": [
                       (v0/*: any*/),
+                      (v1/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -206,8 +207,7 @@ return {
                         "kind": "ScalarField",
                         "name": "itemPrice",
                         "storageKey": null
-                      },
-                      (v1/*: any*/)
+                      }
                     ],
                     "storageKey": null
                   }
@@ -224,12 +224,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5253d55b3f41c487c254fc6ea5690c31",
+    "cacheID": "10fa5c99857b34eb0e376008e4215af1",
     "id": null,
     "metadata": {},
     "name": "TransactionStoryQuery",
     "operationKind": "query",
-    "text": "query TransactionStoryQuery {\n  me {\n    transactions {\n      edges {\n        node {\n          ...Transaction_data\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  recipient {\n    node {\n      ...UserAvatar_data\n      globalID\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "query TransactionStoryQuery {\n  me {\n    transactions {\n      edges {\n        node {\n          ...Transaction_data\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  globalID\n  recipient {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();

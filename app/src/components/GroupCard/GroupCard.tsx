@@ -1,7 +1,10 @@
-import { Card } from '@rneui/themed';
+import { useNavigation } from '@react-navigation/core';
+import { Card, Text, useTheme } from '@rneui/themed';
 import { GroupMember } from 'components/GroupMember';
+import { Row } from 'components/layout/Row';
 import { GroupCard_data$key } from 'core/graphql/__generated__/GroupCard_data.graphql';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { graphql, useFragment } from 'react-relay';
 import Reanimated, {
   FadeIn,
@@ -14,10 +17,14 @@ interface IProps {
 }
 
 export const GroupCard: React.FC<IProps> = ({ _data }) => {
+  const {theme} = useTheme();
+  const navigation = useNavigation();
+  
   const data = useFragment(
     graphql`
       fragment GroupCard_data on Group {
         ...GroupAvatar_data
+        id
         groupName
         members {
           edges {
@@ -29,19 +36,39 @@ export const GroupCard: React.FC<IProps> = ({ _data }) => {
     _data,
   );
 
+  // ------------------------------------------ Handlers ------------------------------------------
+  const handlePress = useCallback(() => {
+    navigation.navigate('GroupScreen', {
+      id: data.id,
+    });
+  }, [data]);
+  
   // ------------------------------------------ Render ------------------------------------------
   const renderMembers = useMemo(() => {
-    return data.members.edges?.map((member, i) => <GroupMember _data={member} key={i} />);
+    return data.members.edges?.map((member, i) => (
+      <GroupMember _data={member} key={i} />
+    ));
   }, [data]);
-
+  
   return (
     <Reanimated.View
       entering={FadeIn}
       exiting={FadeOut}
       layout={LinearTransition}
     >
-      <Card>
-        <Card.Title>{data.groupName}</Card.Title>
+      <Card
+        >
+        <Row.Spaced style={{
+          alignItems: 'flex-start',
+        }}>
+          <Card.Title>{data.groupName}</Card.Title>
+          <TouchableOpacity onPress={handlePress}>
+            {/* eslint-disable-next-line react/jsx-no-undef */}
+            <Text style={{
+              color: theme.colors.secondary,
+            }}>Go to group page</Text>
+          </TouchableOpacity>
+        </Row.Spaced>
         {renderMembers}
       </Card>
     </Reanimated.View>

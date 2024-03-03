@@ -20,9 +20,13 @@ export const GroupAvatar: React.FC<IProps> = ({ _data }) => {
 
   return (
     <Avatar
-      size={'small'}
+      size={'medium'}
       source={data.avatarURL ? { uri: data.avatarURL } : {}}
       title={data.avatarURL ? undefined : data.groupName}
+      containerStyle={{
+        borderRadius: 10,
+        overflow: 'hidden',
+      }}
     />
   );
 };

@@ -52,7 +52,8 @@ module.exports = {
     'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
     'no-trailing-spaces': 'off',
     'newline-before-return': 'off',
-    '@typescript-eslint/no-unused-vars': 1,
+    'react/jsx-no-undef': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
     'unused-imports/no-unused-imports': 'error',
     'react/no-unescaped-entities': [
       'error',

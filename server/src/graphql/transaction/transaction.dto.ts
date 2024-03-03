@@ -21,3 +21,9 @@ export class UpdateTransactionInput extends PartialType(
   @IsString()
   id: string;
 }
+
+@InputType()
+export class UpdateTransactionsManyInput {
+  @Field(() => [UpdateTransactionInput])
+  transactions: UpdateTransactionInput[];
+}

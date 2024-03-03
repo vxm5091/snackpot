@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1dfeace08b7c9df9ebe01f17dcab3ab1>>
+ * @generated SignedSource<<c95a96cdbc4c2dff293a1e886a4861e2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,11 +11,13 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type Transaction_data$data = {
+  readonly globalID: string;
   readonly id: string;
   readonly itemName: string;
   readonly itemPrice: number | null;
   readonly recipient: {
     readonly node: {
+      readonly username: string;
       readonly " $fragmentSpreads": FragmentRefs<"UserAvatar_data">;
     } | null;
   };
@@ -42,6 +44,13 @@ const node: ReaderFragment = {
     {
       "alias": null,
       "args": null,
+      "kind": "ScalarField",
+      "name": "globalID",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
       "concreteType": "UserEdge",
       "kind": "LinkedField",
       "name": "recipient",
@@ -59,6 +68,13 @@ const node: ReaderFragment = {
               "args": null,
               "kind": "FragmentSpread",
               "name": "UserAvatar_data"
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "username",
+              "storageKey": null
             }
           ],
           "storageKey": null
@@ -85,6 +101,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "f45b914d8aa295d7dde61d2a84fd8100";
+(node as any).hash = "c212c3c28092c5e72eac2ed139f38122";
 
 export default node;

@@ -12,6 +12,7 @@ import { GroupService } from '@app/services/group/group.service';
 import { EntityManager } from '@mikro-orm/knex';
 import {
   Args,
+  ID,
   Mutation,
   Parent,
   Query,
@@ -29,7 +30,7 @@ export class GroupResolver {
 
   //   ------------------------------------- Queries -------------------------------------
   @Query(() => Group, { name: 'group' })
-  getGroup(@Args('id') id: string): Promise<GroupEntity> {
+  getGroup(@Args('id', { type: () => ID }) id: string): Promise<GroupEntity> {
     return this.em.findOneOrFail(GroupEntity, id);
   }
 

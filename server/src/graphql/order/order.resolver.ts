@@ -13,6 +13,7 @@ import { EntityManager } from '@mikro-orm/knex';
 import {
   Args,
   Context,
+  ID,
   Mutation,
   Parent,
   Query,
@@ -30,14 +31,14 @@ export class OrderResolver {
 
   //   ------------------------------------- Queries -------------------------------------
   @Query(() => Order, { name: 'order' })
-  getOrder(@Args('id') id: string): Promise<OrderEntity> {
+  getOrder(@Args('id', { type: () => ID }) id: string): Promise<OrderEntity> {
     return this.em.findOneOrFail(OrderEntity, id);
   }
   //   ------------------------------------- Mutations -------------------------------------
   @Mutation(() => Order)
   async createOrder(
     @Context() { userEntity }: IContextGQL,
-    @Args('groupID') groupID: string,
+    @Args('groupID', { type: () => ID }) groupID: string,
   ): Promise<OrderEntity> {
     // check if there is an active order -> if so, return that order
     const activeOrder = await this.em.findOne(OrderEntity, {
@@ -64,7 +65,7 @@ export class OrderResolver {
 
   @Mutation(() => Order)
   async updateOrder(
-    @Args('updateOrderInput') input: UpdateOrderInput,
+    @Args('input', { type: () => UpdateOrderInput }) input: UpdateOrderInput,
   ): Promise<OrderEntity> {
     const orderEntity = await this.em.findOneOrFail(OrderEntity, {
       id: input.id,
