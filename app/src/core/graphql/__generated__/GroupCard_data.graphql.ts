@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<822748933636cf434bf536abd73c509d>>
+ * @generated SignedSource<<16e49b8ee3655065fecc32975f366950>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,8 +15,10 @@ export type GroupCard_data$data = {
   readonly id: string;
   readonly members: {
     readonly edges: ReadonlyArray<{
-      readonly " $fragmentSpreads": FragmentRefs<"GroupMember_data">;
-    }> | null;
+      readonly node: {
+        readonly " $fragmentSpreads": FragmentRefs<"GroupMember_data">;
+      } | null;
+    }>;
   };
   readonly " $fragmentSpreads": FragmentRefs<"GroupAvatar_data">;
   readonly " $fragmentType": "GroupCard_data";
@@ -54,7 +56,7 @@ const node: ReaderFragment = {
     {
       "alias": null,
       "args": null,
-      "concreteType": "UserBalanceConnection",
+      "concreteType": "GroupMemberConnection",
       "kind": "LinkedField",
       "name": "members",
       "plural": false,
@@ -62,15 +64,26 @@ const node: ReaderFragment = {
         {
           "alias": null,
           "args": null,
-          "concreteType": "UserBalanceEdge",
+          "concreteType": "GroupMemberEdge",
           "kind": "LinkedField",
           "name": "edges",
           "plural": true,
           "selections": [
             {
+              "alias": null,
               "args": null,
-              "kind": "FragmentSpread",
-              "name": "GroupMember_data"
+              "concreteType": "GroupMember",
+              "kind": "LinkedField",
+              "name": "node",
+              "plural": false,
+              "selections": [
+                {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "GroupMember_data"
+                }
+              ],
+              "storageKey": null
             }
           ],
           "storageKey": null
@@ -83,6 +96,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "66cbe0869afa358df9f195765cdce245";
+(node as any).hash = "0b2e81d287443dabc982988383595f6c";
 
 export default node;

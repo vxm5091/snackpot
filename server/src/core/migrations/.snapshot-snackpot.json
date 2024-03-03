@@ -508,6 +508,35 @@
     },
     {
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
         "user_id": {
           "name": "user_id",
           "type": "varchar(255)",
@@ -553,10 +582,9 @@
         {
           "keyName": "users_groups_pkey",
           "columnNames": [
-            "user_id",
-            "group_id"
+            "id"
           ],
-          "composite": true,
+          "composite": false,
           "constraint": true,
           "primary": true,
           "unique": true

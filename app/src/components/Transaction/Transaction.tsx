@@ -53,6 +53,7 @@ export const Transaction: React.FC<IProps> = ({
             #        Returning the above fragment in the mutation response tells Relay to re-render the component with the updated data
             node {
               ...Transaction_data
+              
             }
           }
         }

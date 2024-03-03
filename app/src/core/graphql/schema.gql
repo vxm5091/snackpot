@@ -23,26 +23,38 @@ type Group implements Node {
   globalID: ID!
   groupName: String!
   id: ID!
-  members: UserBalanceConnection!
+  members: GroupMemberConnection!
   orders: OrderConnection!
   owner: UserEdge!
   updatedAt: DateTime!
 }
 
-type GroupBalanceConnection {
-  edges: [GroupBalanceEdge!]
-  pageInfo: PageInfo
-}
-
-type GroupBalanceEdge {
-  balance: Float!
-  cursor: String
-  node: Group
-}
-
 type GroupEdge {
   cursor: String
   node: Group
+}
+
+type GroupMember implements Node {
+  balance: Float!
+  createdAt: DateTime!
+
+  """The globally unique relay ID"""
+  globalID: ID!
+  group: GroupEdge!
+  id: ID!
+  transactions: TransactionConnection!
+  updatedAt: DateTime!
+  user: UserEdge!
+}
+
+type GroupMemberConnection {
+  edges: [GroupMemberEdge!]!
+  pageInfo: PageInfo!
+}
+
+type GroupMemberEdge {
+  cursor: String
+  node: GroupMember
 }
 
 type Mutation {
@@ -143,7 +155,7 @@ type User implements Node {
 
   """The globally unique relay ID"""
   globalID: ID!
-  groups: GroupBalanceConnection!
+  groups: GroupMemberConnection!
   id: String!
   lastName: String!
   ordersPaid: OrderConnection!
@@ -152,19 +164,7 @@ type User implements Node {
   username: String!
 }
 
-type UserBalanceConnection {
-  edges: [UserBalanceEdge!]
-  pageInfo: PageInfo
-}
-
-type UserBalanceEdge {
-  balance: Float!
-  cursor: String
-  node: User
-}
-
 type UserEdge {
   cursor: String
   node: User
 }
-

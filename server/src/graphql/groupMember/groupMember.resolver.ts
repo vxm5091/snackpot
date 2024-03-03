@@ -10,7 +10,7 @@ import { UserEdge } from '@app/graphql/user/user.model';
 import { RelayService } from '@app/relay/relay.service';
 import { GroupService } from '@app/services/group/group.service';
 import { EntityManager } from '@mikro-orm/knex';
-import { Int, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Float, Int, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 
 @Resolver(() => GroupMember)
 export class GroupMemberResolver {
@@ -75,7 +75,7 @@ export class GroupMemberResolver {
     );
   }
 
-  @ResolveField(() => Int, { name: EGroupMemberField.Balance })
+  @ResolveField(() => Float, { name: EGroupMemberField.Balance })
   async resolveBalance(@Parent() groupMember: GroupMember): Promise<number> {
     const memberEntity = await this.em.findOneOrFail(UserGroupJoinEntity, {
       id: groupMember.id,

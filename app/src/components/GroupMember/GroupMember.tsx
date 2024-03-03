@@ -16,11 +16,13 @@ export const GroupMember: React.FC<IProps> = ({ _data, isLast = false }) => {
   
   const data = useFragment(
     graphql`
-      fragment GroupMember_data on UserBalanceEdge {
+      fragment GroupMember_data on GroupMember {
         balance
-        node {
+        user {
+          node {
           ...UserAvatar_data
           username
+					}
         }
       }
     `,
@@ -28,13 +30,6 @@ export const GroupMember: React.FC<IProps> = ({ _data, isLast = false }) => {
   );
   
   
-  
-  
-  // ------------------------------------------ Styles ------------------------------------------
-  
-
-  if (!data.node) return null;
-
   return (
     <View style={{
       paddingVertical: theme.spacing.sm,
@@ -50,8 +45,8 @@ export const GroupMember: React.FC<IProps> = ({ _data, isLast = false }) => {
             columnGap: theme.spacing.md,
           }}
         >
-          <UserAvatar _data={data.node} />
-          <Text>{data.node.username}</Text>
+          <UserAvatar _data={data.user.node!} />
+          <Text>{data.user.node!.username}</Text>
         </Row>
         <BalanceText amount={data.balance} />
       </Row>

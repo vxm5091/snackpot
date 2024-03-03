@@ -1,18 +1,13 @@
 import { GroupEntity } from '@app/entities/main/group.entity';
+import {
+  GroupMemberConnection
+} from '@app/graphql/groupMember/groupMember.model';
 import { BaseNode, RelayNode } from '@app/graphql/node/node.model';
-import {
-  Order,
-  OrderConnection,
-  OrderEdge,
-} from '@app/graphql/order/order.model';
-import {
-  User,
-  UserBalanceConnection,
-  UserEdge,
-} from '@app/graphql/user/user.model';
+import { OrderConnection, OrderEdge } from '@app/graphql/order/order.model';
+import { UserEdge } from '@app/graphql/user/user.model';
 import { PageInfo } from '@app/relay/relay.graphql';
 import { RelayConnection, RelayEdge } from '@app/relay/types';
-import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import * as Relay from 'graphql-relay/index';
 
 /**
@@ -36,8 +31,8 @@ export class Group extends BaseNode {
   @Field(() => String, { nullable: true })
   avatarURL?: string;
 
-  @Field(() => UserBalanceConnection)
-  [EGroupField.Members]: UserBalanceConnection;
+  @Field(() => GroupMemberConnection)
+  [EGroupField.Members]: GroupMemberConnection;
 
   @Field(() => UserEdge)
   [EGroupField.Owner]: UserEdge;
@@ -66,20 +61,4 @@ export class GroupConnection implements RelayConnection<GroupEntity> {
 
   @Field(() => PageInfo)
   pageInfo: Relay.PageInfo;
-}
-
-// when traversing User -> Group, we want the edge to also include that user's balance
-@ObjectType(`GroupBalanceEdge`, { isAbstract: true })
-export class GroupBalanceEdge extends GroupEdge {
-  @Field(() => Float, { defaultValue: 0 })
-  balance: number;
-}
-
-@ObjectType(`GroupBalanceConnection`, { isAbstract: true })
-export class GroupBalanceConnection implements RelayConnection<GroupEntity> {
-  @Field(() => [GroupBalanceEdge], { nullable: true })
-  edges: GroupBalanceEdge[];
-
-  @Field(() => PageInfo, { nullable: true })
-  pageInfo: PageInfo;
 }

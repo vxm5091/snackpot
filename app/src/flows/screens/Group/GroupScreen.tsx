@@ -20,10 +20,10 @@ export const QUERY_GroupScreen = graphql`
       groupName
       members {
         edges {
-          ...GroupMember_data
-          balance
           node {
+            ...GroupMember_data
             id
+          balance
           }
         }
       }
@@ -74,8 +74,8 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
   const sortedMembers = useMemo(
     () =>
       [...(groupData.members.edges || [])].sort((a, b) => {
-        const balanceA = a.balance;
-        const balanceB = b.balance;
+        const balanceA = a.node!.balance;
+        const balanceB = b.node!.balance;
         return balanceB - balanceA;
       }),
     [groupData],
@@ -127,7 +127,7 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
           Member with lowest balance will pay for next order
         </Card.FeaturedSubtitle>
         {sortedMembers.map((member, i, arr) => (
-          <GroupMember _data={member} key={i} isLast={i === arr.length - 1} />
+          <GroupMember _data={member.node!} key={i} isLast={i === arr.length - 1} />
         ))}
       </Card>
     );

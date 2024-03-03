@@ -26,6 +26,7 @@ export class DatabaseSeeder extends Seeder {
     });
 
     em.create(UserGroupJoinEntity, {
+      id: faker.string.uuid(),
       user: me,
       group,
     });
@@ -34,6 +35,7 @@ export class DatabaseSeeder extends Seeder {
       .each(user => {
         //   add to my group (join)
         em.create(UserGroupJoinEntity, {
+          id: faker.string.uuid(),
           user,
           group,
         });

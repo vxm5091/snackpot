@@ -1,11 +1,16 @@
+import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
 import { UserEntity } from '@app/entities/main/user.entity';
 import { CreateGroupInput } from '@app/graphql/group/group.dto';
 import { EGroupField, Group } from '@app/graphql/group/group.model';
+import {
+  GroupMemberConnection
+} from '@app/graphql/groupMember/groupMember.model';
 
 import { OrderConnection, OrderEdge } from '@app/graphql/order/order.model';
-import { UserBalanceConnection, UserEdge } from '@app/graphql/user/user.model';
+import { ENodeType } from '@app/graphql/types';
+import { UserEdge } from '@app/graphql/user/user.model';
 import { RelayService } from '@app/relay/relay.service';
 import { RelayEdge } from '@app/relay/types';
 import { GroupService } from '@app/services/group/group.service';
@@ -51,25 +56,10 @@ export class GroupResolver {
   }
 
   //   ------------------------------------- Resolvers -------------------------------------
-  @ResolveField(() => UserBalanceConnection, { name: EGroupField.Members })
-  async resolveMembers(@Parent() group: Group): Promise<UserBalanceConnection> {
-    const members = await this.groupService.getGroupMembers(group.id);
-    const memberBalance = await this.groupService.getGroupMemberBalanceAll(
-      group.id,
-    );
-
-    const edges = members.map(member => {
-      const regularEdge = this.relayService.getEdge(member, 'User');
-      return {
-        ...regularEdge,
-        balance: memberBalance?.[member.id] || 0,
-      };
-    });
-
-    return {
-      edges,
-      pageInfo: this.relayService.getPageInfo(edges),
-    };
+  @ResolveField(() => GroupMemberConnection, { name: EGroupField.Members })
+  async resolveMembers(@Parent() group: Group): Promise<GroupMemberConnection> {
+    const res = await this.em.find(UserGroupJoinEntity, { group: group.id });
+    return this.relayService.getConnection(res, ENodeType.GroupMember);
   }
 
   @ResolveField(() => UserEdge, { name: EGroupField.Owner })

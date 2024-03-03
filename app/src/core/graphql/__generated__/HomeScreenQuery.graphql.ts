@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<267b4d211d64b9e4f4f7daf2100734be>>
+ * @generated SignedSource<<96c721d3b8f080cae616d1c432428626>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,9 +16,13 @@ export type HomeScreenQuery$data = {
     readonly groups: {
       readonly edges: ReadonlyArray<{
         readonly node: {
-          readonly " $fragmentSpreads": FragmentRefs<"GroupCard_data">;
+          readonly group: {
+            readonly node: {
+              readonly " $fragmentSpreads": FragmentRefs<"GroupCard_data">;
+            } | null;
+          };
         } | null;
-      }> | null;
+      }>;
     };
     readonly " $fragmentSpreads": FragmentRefs<"UserAvatar_data">;
   };
@@ -94,7 +98,7 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "GroupBalanceConnection",
+            "concreteType": "GroupMemberConnection",
             "kind": "LinkedField",
             "name": "groups",
             "plural": false,
@@ -102,7 +106,7 @@ return {
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "GroupBalanceEdge",
+                "concreteType": "GroupMemberEdge",
                 "kind": "LinkedField",
                 "name": "edges",
                 "plural": true,
@@ -110,15 +114,37 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "Group",
+                    "concreteType": "GroupMember",
                     "kind": "LinkedField",
                     "name": "node",
                     "plural": false,
                     "selections": [
                       {
+                        "alias": null,
                         "args": null,
-                        "kind": "FragmentSpread",
-                        "name": "GroupCard_data"
+                        "concreteType": "GroupEdge",
+                        "kind": "LinkedField",
+                        "name": "group",
+                        "plural": false,
+                        "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "Group",
+                            "kind": "LinkedField",
+                            "name": "node",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "args": null,
+                                "kind": "FragmentSpread",
+                                "name": "GroupCard_data"
+                              }
+                            ],
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
                       }
                     ],
                     "storageKey": null
@@ -158,7 +184,7 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "GroupBalanceConnection",
+            "concreteType": "GroupMemberConnection",
             "kind": "LinkedField",
             "name": "groups",
             "plural": false,
@@ -166,7 +192,7 @@ return {
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "GroupBalanceEdge",
+                "concreteType": "GroupMemberEdge",
                 "kind": "LinkedField",
                 "name": "edges",
                 "plural": true,
@@ -174,60 +200,106 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "Group",
+                    "concreteType": "GroupMember",
                     "kind": "LinkedField",
                     "name": "node",
                     "plural": false,
                     "selections": [
-                      (v0/*: any*/),
                       {
                         "alias": null,
                         "args": null,
-                        "kind": "ScalarField",
-                        "name": "groupName",
-                        "storageKey": null
-                      },
-                      (v4/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "UserBalanceConnection",
+                        "concreteType": "GroupEdge",
                         "kind": "LinkedField",
-                        "name": "members",
+                        "name": "group",
                         "plural": false,
                         "selections": [
                           {
                             "alias": null,
                             "args": null,
-                            "concreteType": "UserBalanceEdge",
+                            "concreteType": "Group",
                             "kind": "LinkedField",
-                            "name": "edges",
-                            "plural": true,
+                            "name": "node",
+                            "plural": false,
                             "selections": [
+                              (v0/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
                                 "kind": "ScalarField",
-                                "name": "balance",
+                                "name": "groupName",
                                 "storageKey": null
                               },
+                              (v4/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
-                                "concreteType": "User",
+                                "concreteType": "GroupMemberConnection",
                                 "kind": "LinkedField",
-                                "name": "node",
+                                "name": "members",
                                 "plural": false,
                                 "selections": [
-                                  (v0/*: any*/),
-                                  (v1/*: any*/),
-                                  (v2/*: any*/),
-                                  (v3/*: any*/),
-                                  (v4/*: any*/),
-                                  (v5/*: any*/)
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "GroupMemberEdge",
+                                    "kind": "LinkedField",
+                                    "name": "edges",
+                                    "plural": true,
+                                    "selections": [
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "GroupMember",
+                                        "kind": "LinkedField",
+                                        "name": "node",
+                                        "plural": false,
+                                        "selections": [
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "kind": "ScalarField",
+                                            "name": "balance",
+                                            "storageKey": null
+                                          },
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "UserEdge",
+                                            "kind": "LinkedField",
+                                            "name": "user",
+                                            "plural": false,
+                                            "selections": [
+                                              {
+                                                "alias": null,
+                                                "args": null,
+                                                "concreteType": "User",
+                                                "kind": "LinkedField",
+                                                "name": "node",
+                                                "plural": false,
+                                                "selections": [
+                                                  (v0/*: any*/),
+                                                  (v1/*: any*/),
+                                                  (v2/*: any*/),
+                                                  (v3/*: any*/),
+                                                  (v4/*: any*/),
+                                                  (v5/*: any*/)
+                                                ],
+                                                "storageKey": null
+                                              }
+                                            ],
+                                            "storageKey": null
+                                          },
+                                          (v5/*: any*/)
+                                        ],
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
                                 ],
                                 "storageKey": null
-                              }
+                              },
+                              (v5/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -251,16 +323,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "da13eb340c78c882bac0af8e2effead6",
+    "cacheID": "5be15193a4e71ba67cb6361dcc25f9d6",
     "id": null,
     "metadata": {},
     "name": "HomeScreenQuery",
     "operationKind": "query",
-    "text": "query HomeScreenQuery {\n  me {\n    ...UserAvatar_data\n    groups {\n      edges {\n        node {\n          ...GroupCard_data\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      ...GroupMember_data\n    }\n  }\n}\n\nfragment GroupMember_data on UserBalanceEdge {\n  balance\n  node {\n    ...UserAvatar_data\n    username\n    globalID\n  }\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "query HomeScreenQuery {\n  me {\n    ...UserAvatar_data\n    groups {\n      edges {\n        node {\n          group {\n            node {\n              ...GroupCard_data\n              globalID\n            }\n          }\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();
 
-(node as any).hash = "54fa06169382fe87ca1664e25c6cbf45";
+(node as any).hash = "1bf184e8dfe1a254415edff2f3bd6f42";
 
 export default node;

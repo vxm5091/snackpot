@@ -17,18 +17,22 @@ type TGroupEdge = TNonNullable<
 >[number];
 
 export const QUERY_HomeScreen = graphql`
-  query HomeScreenQuery {
-    me {
-      ...UserAvatar_data
-      groups {
-        edges {
-          node {
-            ...GroupCard_data
-          }
-        }
-      }
-    }
-  }
+	query HomeScreenQuery {
+		me {
+			...UserAvatar_data
+			groups {
+				edges {
+					node {
+						group {
+							node {
+								...GroupCard_data
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 `;
 
 export const HomeScreen: React.FC<IProps> = ({ _queryRef }) => {
@@ -40,7 +44,7 @@ export const HomeScreen: React.FC<IProps> = ({ _queryRef }) => {
     ({ item: groupEdge }: { item: TGroupEdge; index: number }) => {
       if (!groupEdge.node) return null;
 
-      return <GroupCard _data={groupEdge.node} />;
+      return <GroupCard _data={groupEdge.node.group.node!} />;
     },
     [],
   );

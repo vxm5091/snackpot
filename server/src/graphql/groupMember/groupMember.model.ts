@@ -5,7 +5,7 @@ import { TransactionConnection } from '@app/graphql/transaction/transaction.mode
 import { UserEdge } from '@app/graphql/user/user.model';
 import { PageInfo } from '@app/relay/relay.graphql';
 import { RelayConnection, RelayEdge } from '@app/relay/types';
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import Relay from 'graphql-relay';
 
 /**
@@ -32,7 +32,7 @@ export class GroupMember extends BaseNode {
   @Field(() => TransactionConnection)
   [EGroupMemberField.Transactions]: TransactionConnection;
 
-  @Field(() => Int)
+  @Field(() => Float)
   [EGroupMemberField.Balance]: number;
 }
 

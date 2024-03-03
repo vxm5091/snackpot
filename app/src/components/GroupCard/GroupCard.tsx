@@ -28,7 +28,9 @@ export const GroupCard: React.FC<IProps> = ({ _data }) => {
         groupName
         members {
           edges {
-            ...GroupMember_data
+            node {
+              ...GroupMember_data
+						}
           }
         }
       }
@@ -45,8 +47,8 @@ export const GroupCard: React.FC<IProps> = ({ _data }) => {
   
   // ------------------------------------------ Render ------------------------------------------
   const renderMembers = useMemo(() => {
-    return data.members.edges?.map((member, i) => (
-      <GroupMember _data={member} key={i} />
+    return data.members.edges?.map((member, i, arr) => (
+      <GroupMember _data={member.node!} key={i} isLast={i === arr.length - 1} />
     ));
   }, [data]);
   

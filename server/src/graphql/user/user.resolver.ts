@@ -1,14 +1,15 @@
 import { USER_ID } from '@app/constants';
+import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { UserEntity } from '@app/entities/main/user.entity';
 import {
-  GroupBalanceConnection,
-  GroupBalanceEdge,
-} from '@app/graphql/group/group.model';
+  GroupMemberConnection
+} from '@app/graphql/groupMember/groupMember.model';
 import { OrderConnection } from '@app/graphql/order/order.model';
 import { TransactionConnection } from '@app/graphql/transaction/transaction.model';
+import { ENodeType } from '@app/graphql/types';
 import { EUserField, User } from '@app/graphql/user/user.model';
 import { RelayService } from '@app/relay/relay.service';
 import { GroupService } from '@app/services/group/group.service';
@@ -63,27 +64,11 @@ export class UserResolver {
     return this.relayService.getConnection(res, 'Transaction');
   }
 
-  @ResolveField(() => GroupBalanceConnection, {
+  @ResolveField(() => GroupMemberConnection, {
     name: EUserField.Groups,
   })
-  async resolveGroups(@Parent() user: User): Promise<GroupBalanceConnection> {
-    const groups = await this.em.find(GroupEntity, {
-      usersJoin: { user: user.id },
-    });
-    const edges: GroupBalanceEdge[] = await Promise.all(
-      groups.map(async group => {
-        const balance = await this.groupService.getGroupMemberBalanceOne(
-          group.id,
-          user.id,
-        );
-        const regularEdge = this.relayService.getEdge(group, 'Group');
-        return { ...regularEdge, balance };
-      }),
-    );
-
-    return {
-      edges,
-      pageInfo: this.relayService.getPageInfo(edges),
-    };
+  async resolveGroups(@Parent() user: User): Promise<GroupMemberConnection> {
+    const res = await this.em.find(UserGroupJoinEntity, { user: user.id });
+    return this.relayService.getConnection(res, ENodeType.GroupMember);
   }
 }

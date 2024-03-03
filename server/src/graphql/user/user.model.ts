@@ -1,11 +1,13 @@
 import { UserEntity } from '@app/entities/main/user.entity';
+import {
+  GroupMemberConnection
+} from '@app/graphql/groupMember/groupMember.model';
 import { BaseNode, RelayNode } from '@app/graphql/node/node.model';
 import { PageInfo } from '@app/relay/relay.graphql';
 import { RelayConnection, RelayEdge } from '@app/relay/types';
 import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { OrderConnection } from '@app/graphql/order/order.model';
 import { TransactionConnection } from '@app/graphql/transaction/transaction.model';
-import { GroupBalanceConnection } from '@app/graphql/group/group.model';
 
 /**
  * fields which match scalar entity fields don't need custom resolvers
@@ -37,13 +39,13 @@ export class User extends BaseNode {
   avatarURL?: string;
 
   @Field(() => OrderConnection)
-  [EUserField.OrdersPaid]: typeof OrderConnection;
+  [EUserField.OrdersPaid]: OrderConnection;
 
   @Field(() => TransactionConnection)
-  [EUserField.Transactions]: typeof TransactionConnection;
+  [EUserField.Transactions]: TransactionConnection;
 
-  @Field(() => GroupBalanceConnection)
-  [EUserField.Groups]: GroupBalanceConnection;
+  @Field(() => GroupMemberConnection)
+  [EUserField.Groups]: GroupMemberConnection;
 }
 
 /* ================================= RELAY TYPES ======================================== */
@@ -65,18 +67,3 @@ export class UserConnection implements RelayConnection<UserEntity> {
   pageInfo: PageInfo;
 }
 
-// when traversing Group -> User, we want the edge to also include the user's balance
-@ObjectType(`UserBalanceEdge`, { isAbstract: true })
-export class UserBalanceEdge extends UserEdge {
-  @Field(() => Float, { defaultValue: 0 })
-  balance: number;
-}
-
-@ObjectType(`UserBalanceConnection`, { isAbstract: true })
-export class UserBalanceConnection {
-  @Field(() => [UserBalanceEdge], { nullable: true })
-  edges: UserBalanceEdge[];
-
-  @Field(() => PageInfo, { nullable: true })
-  pageInfo: PageInfo;
-}

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<968908ab063a5ca89d614da771ff595c>>
+ * @generated SignedSource<<0f782e398f7e2074a8d4bd34e58be358>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,12 +18,12 @@ export type GroupScreenQuery$data = {
     readonly groupName: string;
     readonly members: {
       readonly edges: ReadonlyArray<{
-        readonly balance: number;
         readonly node: {
+          readonly balance: number;
           readonly id: string;
+          readonly " $fragmentSpreads": FragmentRefs<"GroupMember_data">;
         } | null;
-        readonly " $fragmentSpreads": FragmentRefs<"GroupMember_data">;
-      }> | null;
+      }>;
     };
     readonly orders: {
       readonly edges: ReadonlyArray<{
@@ -71,14 +71,14 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "balance",
+  "name": "id",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "id",
+  "name": "balance",
   "storageKey": null
 },
 v5 = {
@@ -102,35 +102,37 @@ v7 = {
   "name": "globalID",
   "storageKey": null
 },
-v8 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "User",
-  "kind": "LinkedField",
-  "name": "node",
-  "plural": false,
-  "selections": [
-    (v4/*: any*/),
-    (v6/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "firstName",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "lastName",
-      "storageKey": null
-    },
-    (v5/*: any*/),
-    (v7/*: any*/)
-  ],
-  "storageKey": null
-};
+v8 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "User",
+    "kind": "LinkedField",
+    "name": "node",
+    "plural": false,
+    "selections": [
+      (v3/*: any*/),
+      (v6/*: any*/),
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "firstName",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "lastName",
+        "storageKey": null
+      },
+      (v5/*: any*/),
+      (v7/*: any*/)
+    ],
+    "storageKey": null
+  }
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -160,7 +162,7 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "UserBalanceConnection",
+            "concreteType": "GroupMemberConnection",
             "kind": "LinkedField",
             "name": "members",
             "plural": false,
@@ -168,25 +170,25 @@ return {
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "UserBalanceEdge",
+                "concreteType": "GroupMemberEdge",
                 "kind": "LinkedField",
                 "name": "edges",
                 "plural": true,
                 "selections": [
                   {
-                    "args": null,
-                    "kind": "FragmentSpread",
-                    "name": "GroupMember_data"
-                  },
-                  (v3/*: any*/),
-                  {
                     "alias": null,
                     "args": null,
-                    "concreteType": "User",
+                    "concreteType": "GroupMember",
                     "kind": "LinkedField",
                     "name": "node",
                     "plural": false,
                     "selections": [
+                      {
+                        "args": null,
+                        "kind": "FragmentSpread",
+                        "name": "GroupMember_data"
+                      },
+                      (v3/*: any*/),
                       (v4/*: any*/)
                     ],
                     "storageKey": null
@@ -221,7 +223,7 @@ return {
                     "name": "node",
                     "plural": false,
                     "selections": [
-                      (v4/*: any*/),
+                      (v3/*: any*/),
                       {
                         "args": null,
                         "kind": "FragmentSpread",
@@ -252,7 +254,7 @@ return {
             "kind": "FragmentSpread",
             "name": "Order_meData"
           },
-          (v4/*: any*/)
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
@@ -274,13 +276,13 @@ return {
         "name": "group",
         "plural": false,
         "selections": [
-          (v4/*: any*/),
+          (v3/*: any*/),
           (v2/*: any*/),
           (v5/*: any*/),
           {
             "alias": null,
             "args": null,
-            "concreteType": "UserBalanceConnection",
+            "concreteType": "GroupMemberConnection",
             "kind": "LinkedField",
             "name": "members",
             "plural": false,
@@ -288,13 +290,35 @@ return {
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "UserBalanceEdge",
+                "concreteType": "GroupMemberEdge",
                 "kind": "LinkedField",
                 "name": "edges",
                 "plural": true,
                 "selections": [
-                  (v3/*: any*/),
-                  (v8/*: any*/)
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "GroupMember",
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v4/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "UserEdge",
+                        "kind": "LinkedField",
+                        "name": "user",
+                        "plural": false,
+                        "selections": (v8/*: any*/),
+                        "storageKey": null
+                      },
+                      (v7/*: any*/),
+                      (v3/*: any*/)
+                    ],
+                    "storageKey": null
+                  }
                 ],
                 "storageKey": null
               }
@@ -325,7 +349,7 @@ return {
                     "name": "node",
                     "plural": false,
                     "selections": [
-                      (v4/*: any*/),
+                      (v3/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -356,7 +380,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v4/*: any*/),
+                              (v3/*: any*/),
                               (v6/*: any*/),
                               (v7/*: any*/)
                             ],
@@ -413,7 +437,7 @@ return {
                                 "name": "node",
                                 "plural": false,
                                 "selections": [
-                                  (v4/*: any*/),
+                                  (v3/*: any*/),
                                   (v7/*: any*/),
                                   {
                                     "alias": null,
@@ -422,9 +446,7 @@ return {
                                     "kind": "LinkedField",
                                     "name": "recipient",
                                     "plural": false,
-                                    "selections": [
-                                      (v8/*: any*/)
-                                    ],
+                                    "selections": (v8/*: any*/),
                                     "storageKey": null
                                   },
                                   {
@@ -472,7 +494,7 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
-          (v4/*: any*/),
+          (v3/*: any*/),
           (v7/*: any*/)
         ],
         "storageKey": null
@@ -480,16 +502,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0cd9b45c40e9305d106143b804ccfc0e",
+    "cacheID": "0f66d806de890e8eddf11e611a2e1dbb",
     "id": null,
     "metadata": {},
     "name": "GroupScreenQuery",
     "operationKind": "query",
-    "text": "query GroupScreenQuery(\n  $id: ID!\n) {\n  group(id: $id) {\n    ...GroupCard_data\n    ...GroupAvatar_data\n    groupName\n    members {\n      edges {\n        ...GroupMember_data\n        balance\n        node {\n          id\n          globalID\n        }\n      }\n    }\n    orders {\n      edges {\n        node {\n          id\n          ...Order_orderData\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n  me {\n    ...Order_meData\n    id\n    globalID\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      ...GroupMember_data\n    }\n  }\n}\n\nfragment GroupMember_data on UserBalanceEdge {\n  balance\n  node {\n    ...UserAvatar_data\n    username\n    globalID\n  }\n}\n\nfragment Order_meData on User {\n  id\n}\n\nfragment Order_orderData on Order {\n  id\n  createdAt\n  isActive\n  payer {\n    node {\n      id\n      username\n      globalID\n    }\n  }\n  group {\n    node {\n      groupName\n      globalID\n    }\n  }\n  transactions {\n    edges {\n      node {\n        ...Transaction_data\n        itemPrice\n        globalID\n      }\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  globalID\n  recipient {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "query GroupScreenQuery(\n  $id: ID!\n) {\n  group(id: $id) {\n    ...GroupCard_data\n    ...GroupAvatar_data\n    groupName\n    members {\n      edges {\n        node {\n          ...GroupMember_data\n          id\n          balance\n          globalID\n        }\n      }\n    }\n    orders {\n      edges {\n        node {\n          id\n          ...Order_orderData\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n  me {\n    ...Order_meData\n    id\n    globalID\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n}\n\nfragment Order_meData on User {\n  id\n}\n\nfragment Order_orderData on Order {\n  id\n  createdAt\n  isActive\n  payer {\n    node {\n      id\n      username\n      globalID\n    }\n  }\n  group {\n    node {\n      groupName\n      globalID\n    }\n  }\n  transactions {\n    edges {\n      node {\n        ...Transaction_data\n        itemPrice\n        globalID\n      }\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  globalID\n  recipient {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c022ca931920b39f747a10993fc698e2";
+(node as any).hash = "4e3796825423410df13f997061018429";
 
 export default node;
