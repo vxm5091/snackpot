@@ -49,7 +49,7 @@ export class Group extends BaseNode {
   [EGroupField.ActiveOrder]?: OrderEdge;
 }
 
-/* ANCHOR ================================= RELAY TYPES ======================================== */
+/* ================================= RELAY TYPES ======================================== */
 @ObjectType(`GroupEdge`, { isAbstract: true })
 export class GroupEdge implements RelayEdge<GroupEntity> {
   @Field({ nullable: true })
@@ -66,9 +66,6 @@ export class GroupConnection implements RelayConnection<GroupEntity> {
 
   @Field(() => PageInfo)
   pageInfo: Relay.PageInfo;
-
-  @Field(() => Int)
-  count: number;
 }
 
 // when traversing User -> Group, we want the edge to also include that user's balance

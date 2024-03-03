@@ -1,5 +1,4 @@
 import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
-import { GroupEntity } from '@app/entities/main/group.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { UserEntity } from '@app/entities/main/user.entity';
 
@@ -10,10 +9,10 @@ import { Injectable } from '@nestjs/common';
 export class GroupService {
   constructor(private readonly em: EntityManager) {}
 
-  getEntity(groupID: string) {
-    return this.em.findOne(GroupEntity, groupID);
+  getUserGroupJoinEntity(id: string) {
+    return this.em.findOne(UserGroupJoinEntity, id);
   }
-  
+
   async getGroupMembers(groupID: string): Promise<UserEntity[]> {
     const res = await this.em.find(
       UserGroupJoinEntity,
@@ -24,11 +23,18 @@ export class GroupService {
     return res.map(join => join.user.getEntity());
   }
 
-  async getGroupMemberBalanceOne(groupID: string, userID: string) {
-    const transactions = await this.em.find(TransactionEntity, {
+  async getUserGroupTransactions(
+    groupID: string,
+    userID: string,
+  ): Promise<TransactionEntity[]> {
+    return this.em.find(TransactionEntity, {
       group: groupID,
       $or: [{ payer: userID }, { recipient: userID }],
     });
+  }
+
+  async getGroupMemberBalanceOne(groupID: string, userID: string) {
+    const transactions = await this.getUserGroupTransactions(groupID, userID);
 
     return transactions.reduce((acc, transaction) => {
       if (transaction.payer.id === userID) {
