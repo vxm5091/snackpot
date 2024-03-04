@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<96c721d3b8f080cae616d1c432428626>>
+ * @generated SignedSource<<00851df884e452140cb28c03ae057576>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,7 +18,7 @@ export type HomeScreenQuery$data = {
         readonly node: {
           readonly group: {
             readonly node: {
-              readonly " $fragmentSpreads": FragmentRefs<"GroupCard_data">;
+              readonly " $fragmentSpreads": FragmentRefs<"GroupBalanceCard_data">;
             } | null;
           };
         } | null;
@@ -138,7 +138,7 @@ return {
                               {
                                 "args": null,
                                 "kind": "FragmentSpread",
-                                "name": "GroupCard_data"
+                                "name": "GroupBalanceCard_data"
                               }
                             ],
                             "storageKey": null
@@ -289,6 +289,7 @@ return {
                                             ],
                                             "storageKey": null
                                           },
+                                          (v0/*: any*/),
                                           (v5/*: any*/)
                                         ],
                                         "storageKey": null
@@ -323,16 +324,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "5be15193a4e71ba67cb6361dcc25f9d6",
+    "cacheID": "08eb2610d20a92f5723267154083650c",
     "id": null,
     "metadata": {},
     "name": "HomeScreenQuery",
     "operationKind": "query",
-    "text": "query HomeScreenQuery {\n  me {\n    ...UserAvatar_data\n    groups {\n      edges {\n        node {\n          group {\n            node {\n              ...GroupCard_data\n              globalID\n            }\n          }\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "query HomeScreenQuery {\n  me {\n    ...UserAvatar_data\n    groups {\n      edges {\n        node {\n          group {\n            node {\n              ...GroupBalanceCard_data\n              globalID\n            }\n          }\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupBalanceCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        id\n        balance\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();
 
-(node as any).hash = "1bf184e8dfe1a254415edff2f3bd6f42";
+(node as any).hash = "56cf6afc0f15505feb77009e4a1aa7b7";
 
 export default node;

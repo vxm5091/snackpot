@@ -1,3 +1,4 @@
+import { IContextGQL } from '@app/core/types/http.types';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { GroupEdge } from '@app/graphql/group/group.model';
 import { GroupMemberEdge } from '@app/graphql/groupMember/groupMember.model';
@@ -14,12 +15,13 @@ import {
   TransactionEdge,
 } from '@app/graphql/transaction/transaction.model';
 import { ENodeType } from '@app/graphql/types';
-import { UserEdge } from '@app/graphql/user/user.model';
 import { RelayService } from '@app/relay/relay.service';
 import { TransactionService } from '@app/services/transaction/transaction.service';
 import { EntityManager } from '@mikro-orm/knex';
+import { BadRequestException } from '@nestjs/common';
 import {
   Args,
+  Context,
   ID,
   Mutation,
   Parent,
@@ -49,12 +51,19 @@ export class TransactionResolver {
   async createTransaction(
     @Args('input', { type: () => CreateTransactionInput })
     input: CreateTransactionInput,
+    @Context() ctx: IContextGQL,
   ): Promise<TransactionEdge> {
-    const res = await this.transactionService.createTransaction(input);
+    if (!ctx.userEntity) {
+      // TODO convert to graphQL error
+      throw new BadRequestException()
+    }
+    const res = await this.transactionService.createTransaction(
+      input,
+      ctx.userEntity.id,
+    );
     return this.relayService.getEdge(res, ENodeType.Transaction);
   }
 
-  // We return an edge here because that makes it easier for Relay to re-render a list because an array of elements is equivalent to a connection of edges.
   @Mutation(() => TransactionEdge)
   async updateTransaction(
     @Args('input', { type: () => UpdateTransactionInput })
@@ -77,7 +86,9 @@ export class TransactionResolver {
 
   //   ------------------------------------- Resolvers -------------------------------------
   @ResolveField(() => GroupMemberEdge, { name: ETransactionField.Payer })
-  async resolvePayer(@Parent() transaction: Transaction): Promise<GroupMemberEdge> {
+  async resolvePayer(
+    @Parent() transaction: Transaction,
+  ): Promise<GroupMemberEdge> {
     const transactionEntity = await this.em.findOneOrFail(
       TransactionEntity,
       { id: transaction.id },
@@ -119,17 +130,17 @@ export class TransactionResolver {
       ENodeType.Order,
     );
   }
-  
+
   @ResolveField(() => GroupEdge, { name: ETransactionField.Group })
   async resolveGroup(@Parent() transaction: Transaction): Promise<GroupEdge> {
     const transactionEntity = await this.em.findOneOrFail(
       TransactionEntity,
       { id: transaction.id },
-      { populate: ['group'] },
+      { populate: ['order.group'] },
     );
 
     return this.relayService.getEdge(
-      transactionEntity.group.getEntity(),
+      transactionEntity.order.getEntity().group.getEntity(),
       ENodeType.Group,
     );
   }

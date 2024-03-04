@@ -1,5 +1,5 @@
 import { Divider, useTheme } from '@rneui/themed';
-import { GroupCard } from 'components/GroupCard';
+import { GroupBalanceCard } from 'components/GroupBalanceCard';
 import { useCallback } from 'react';
 import Reanimated from 'react-native-reanimated';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
@@ -25,7 +25,7 @@ export const QUERY_HomeScreen = graphql`
 					node {
 						group {
 							node {
-								...GroupCard_data
+								...GroupBalanceCard_data
 							}
 						}
 					}
@@ -44,7 +44,7 @@ export const HomeScreen: React.FC<IProps> = ({ _queryRef }) => {
     ({ item: groupEdge }: { item: TGroupEdge; index: number }) => {
       if (!groupEdge.node) return null;
 
-      return <GroupCard _data={groupEdge.node.group.node!} />;
+      return <GroupBalanceCard _data={groupEdge.node.group.node!} />;
     },
     [],
   );

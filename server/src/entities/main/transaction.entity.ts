@@ -2,7 +2,15 @@ import { BaseEntity } from '@app/entities/abstract/base.entity';
 import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
-import { Entity, Index, ManyToOne, Property, Ref, t } from '@mikro-orm/core';
+import {
+  Entity,
+  Index,
+  ManyToOne,
+  OptionalProps,
+  Property,
+  Ref,
+  t,
+} from '@mikro-orm/core';
 import { toGlobalId } from 'graphql-relay/node/node';
 
 /*
@@ -10,6 +18,11 @@ import { toGlobalId } from 'graphql-relay/node/node';
  * */
 @Entity({ tableName: 'transactions' })
 export class TransactionEntity extends BaseEntity {
+  [OptionalProps]?:
+    | 'createdAt'
+    | 'updatedAt'
+    | 'id'
+    | 'globalID'
   @Property({
     persist: false,
   })
@@ -35,19 +48,7 @@ export class TransactionEntity extends BaseEntity {
   @ManyToOne({ entity: () => OrderEntity })
   order!: Ref<OrderEntity>;
 
-  @Index()
-  @ManyToOne({ entity: () => GroupEntity })
-  group!: Ref<GroupEntity>;
-
-  constructor({
-    itemName,
-    itemPrice,
-  }: {
-    itemName: string;
-    itemPrice?: number;
-  }) {
-    super();
-    this.itemName = itemName;
-    this.itemPrice = itemPrice;
-  }
+  // @Index()
+  // @ManyToOne({ entity: () => GroupEntity })
+  // group!: Ref<GroupEntity>;
 }

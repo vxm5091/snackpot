@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<76ac5e4f6cc2f43c7fe2291c3b2b1e7b>>
+ * @generated SignedSource<<bca01c7e76c5abadc81d38c8c18abe9d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -33,7 +33,7 @@ export type GroupScreenQuery$data = {
         } | null;
       }> | null;
     };
-    readonly " $fragmentSpreads": FragmentRefs<"GroupAvatar_data" | "GroupCard_data">;
+    readonly " $fragmentSpreads": FragmentRefs<"GroupAvatar_data" | "GroupBalanceCard_data">;
   };
   readonly me: {
     readonly id: string;
@@ -160,7 +160,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "GroupCard_data"
+            "name": "GroupBalanceCard_data"
           },
           {
             "args": null,
@@ -314,8 +314,8 @@ return {
                     "selections": [
                       (v4/*: any*/),
                       (v8/*: any*/),
-                      (v7/*: any*/),
-                      (v3/*: any*/)
+                      (v3/*: any*/),
+                      (v7/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -461,7 +461,6 @@ return {
                                 "plural": false,
                                 "selections": [
                                   (v3/*: any*/),
-                                  (v7/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -490,16 +489,10 @@ return {
                                     "alias": null,
                                     "args": null,
                                     "kind": "ScalarField",
-                                    "name": "itemName",
-                                    "storageKey": null
-                                  },
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "kind": "ScalarField",
                                     "name": "itemPrice",
                                     "storageKey": null
-                                  }
+                                  },
+                                  (v7/*: any*/)
                                 ],
                                 "storageKey": null
                               }
@@ -539,16 +532,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2722d56a32b8d005fb172460e7420c08",
+    "cacheID": "8dd2b23ca1fc86262b30f8a3a22ddabe",
     "id": null,
     "metadata": {},
     "name": "GroupScreenQuery",
     "operationKind": "query",
-    "text": "query GroupScreenQuery(\n  $id: ID!\n) {\n  group(id: $id) {\n    ...GroupCard_data\n    ...GroupAvatar_data\n    groupName\n    members {\n      edges {\n        node {\n          ...GroupMember_data\n          id\n          balance\n          globalID\n        }\n      }\n    }\n    orders {\n      edges {\n        node {\n          id\n          ...Order_orderData\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n  me {\n    ...Order_meData\n    id\n    globalID\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n}\n\nfragment Order_meData on User {\n  id\n}\n\nfragment Order_orderData on Order {\n  id\n  createdAt\n  isActive\n  payer {\n    node {\n      user {\n        node {\n          id\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n  group {\n    node {\n      groupName\n      globalID\n    }\n  }\n  transactions {\n    edges {\n      node {\n        ...Transaction_data\n        itemPrice\n        globalID\n      }\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  globalID\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "query GroupScreenQuery(\n  $id: ID!\n) {\n  group(id: $id) {\n    ...GroupBalanceCard_data\n    ...GroupAvatar_data\n    groupName\n    members {\n      edges {\n        node {\n          ...GroupMember_data\n          id\n          balance\n          globalID\n        }\n      }\n    }\n    orders {\n      edges {\n        node {\n          id\n          ...Order_orderData\n          globalID\n        }\n      }\n    }\n    globalID\n  }\n  me {\n    ...Order_meData\n    id\n    globalID\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupBalanceCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        id\n        balance\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n}\n\nfragment Order_meData on User {\n  id\n}\n\nfragment Order_orderData on Order {\n  id\n  createdAt\n  isActive\n  payer {\n    node {\n      user {\n        node {\n          id\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n  group {\n    node {\n      groupName\n      globalID\n    }\n  }\n  transactions {\n    edges {\n      node {\n        ...Transaction_data\n        itemPrice\n        globalID\n      }\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          id\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4e3796825423410df13f997061018429";
+(node as any).hash = "e98a73b17d004c9f123c203f41d35674";
 
 export default node;

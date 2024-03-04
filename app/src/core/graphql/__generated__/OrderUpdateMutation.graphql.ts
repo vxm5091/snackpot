@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ce77249c78364bf21d566ad80a8924be>>
+ * @generated SignedSource<<895d0c9f6a2a4085027d140e5e46cedf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -222,7 +222,6 @@ return {
                     "plural": false,
                     "selections": [
                       (v2/*: any*/),
-                      (v4/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -296,16 +295,10 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
-                        "name": "itemName",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
                         "name": "itemPrice",
                         "storageKey": null
-                      }
+                      },
+                      (v4/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -322,12 +315,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "753d02aa46ef8a5e9d8b7a80cb874515",
+    "cacheID": "f5c5ecfae07276cbfaf281593e42eedb",
     "id": null,
     "metadata": {},
     "name": "OrderUpdateMutation",
     "operationKind": "mutation",
-    "text": "mutation OrderUpdateMutation(\n  $input: UpdateOrderInput!\n) {\n  updateOrder(input: $input) {\n    ...Order_orderData\n    globalID\n  }\n}\n\nfragment Order_orderData on Order {\n  id\n  createdAt\n  isActive\n  payer {\n    node {\n      user {\n        node {\n          id\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n  group {\n    node {\n      groupName\n      globalID\n    }\n  }\n  transactions {\n    edges {\n      node {\n        ...Transaction_data\n        itemPrice\n        globalID\n      }\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  globalID\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "mutation OrderUpdateMutation(\n  $input: UpdateOrderInput!\n) {\n  updateOrder(input: $input) {\n    ...Order_orderData\n    globalID\n  }\n}\n\nfragment Order_orderData on Order {\n  id\n  createdAt\n  isActive\n  payer {\n    node {\n      user {\n        node {\n          id\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n  group {\n    node {\n      groupName\n      globalID\n    }\n  }\n  transactions {\n    edges {\n      node {\n        ...Transaction_data\n        itemPrice\n        globalID\n      }\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          id\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();

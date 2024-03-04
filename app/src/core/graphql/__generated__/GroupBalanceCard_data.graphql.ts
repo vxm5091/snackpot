@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<16e49b8ee3655065fecc32975f366950>>
+ * @generated SignedSource<<6eadf4fd4f92db32dac822bcb166b83a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,42 +10,46 @@
 
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type GroupCard_data$data = {
+export type GroupBalanceCard_data$data = {
   readonly groupName: string;
   readonly id: string;
   readonly members: {
     readonly edges: ReadonlyArray<{
       readonly node: {
+        readonly balance: number;
+        readonly id: string;
         readonly " $fragmentSpreads": FragmentRefs<"GroupMember_data">;
       } | null;
     }>;
   };
   readonly " $fragmentSpreads": FragmentRefs<"GroupAvatar_data">;
-  readonly " $fragmentType": "GroupCard_data";
+  readonly " $fragmentType": "GroupBalanceCard_data";
 };
-export type GroupCard_data$key = {
-  readonly " $data"?: GroupCard_data$data;
-  readonly " $fragmentSpreads": FragmentRefs<"GroupCard_data">;
+export type GroupBalanceCard_data$key = {
+  readonly " $data"?: GroupBalanceCard_data$data;
+  readonly " $fragmentSpreads": FragmentRefs<"GroupBalanceCard_data">;
 };
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "GroupCard_data",
+  "name": "GroupBalanceCard_data",
   "selections": [
     {
       "args": null,
       "kind": "FragmentSpread",
       "name": "GroupAvatar_data"
     },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
+    (v0/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -81,6 +85,14 @@ const node: ReaderFragment = {
                   "args": null,
                   "kind": "FragmentSpread",
                   "name": "GroupMember_data"
+                },
+                (v0/*: any*/),
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "balance",
+                  "storageKey": null
                 }
               ],
               "storageKey": null
@@ -95,7 +107,8 @@ const node: ReaderFragment = {
   "type": "Group",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "0b2e81d287443dabc982988383595f6c";
+(node as any).hash = "a9bf5b33d16878198eb8a941f39e2672";
 
 export default node;

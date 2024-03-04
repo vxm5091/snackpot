@@ -1,8 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
-import { Card, ListItem, useTheme, Text } from '@rneui/themed';
+import { ListItem, useTheme, Text } from '@rneui/themed';
 import { GroupAvatar } from 'components/GroupAvatar';
-import { GroupCard } from 'components/GroupCard';
-import { GroupMember } from 'components/GroupMember';
+import { GroupBalanceCard } from 'components/GroupBalanceCard';
 import { Order } from 'components/Order';
 import { GroupScreenQuery } from 'core/graphql/__generated__/GroupScreenQuery.graphql';
 import { TScreenPropsRoot } from 'flows/types';
@@ -14,35 +13,35 @@ import { formatPlural } from 'shared/format/formatPlural';
 import { useDidMount } from 'shared/hooks/lifecycleHooks';
 
 export const QUERY_GroupScreen = graphql`
-  query GroupScreenQuery($id: ID!) {
-    group(id: $id) {
-      ...GroupCard_data
-      ...GroupAvatar_data
-      groupName
-      members {
-        edges {
-          node {
-            ...GroupMember_data
-            id
-          balance
-          }
-        }
-      }
-      orders {
-        edges {
-          node {
-            id
-            ...Order_orderData
-          }
-        }
-      }
-    }
+	query GroupScreenQuery($id: ID!) {
+		group(id: $id) {
+			...GroupBalanceCard_data
+			...GroupAvatar_data
+			groupName
+			members {
+				edges {
+					node {
+						...GroupMember_data
+						id
+						balance
+					}
+				}
+			}
+			orders {
+				edges {
+					node {
+						id
+						...Order_orderData
+					}
+				}
+			}
+		}
 
-    me {
-      ...Order_meData
-      id
-    }
-  }
+		me {
+			...Order_meData
+			id
+		}
+	}
 `;
 
 interface IProps {
@@ -115,25 +114,6 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
     );
   }, [groupData, memberCount, orderCount, theme]);
 
-  const renderMembersBalance = useMemo(() => {
-    return (
-      <Card>
-        <Card.Title>Member balance</Card.Title>
-        <Card.FeaturedSubtitle
-          style={{
-            color: theme.colors.grey2,
-            marginTop: 0,
-          }}
-        >
-          Member with lowest balance will pay for next order
-        </Card.FeaturedSubtitle>
-        {sortedMembers.map((member, i, arr) => (
-          <GroupMember _data={member.node!} key={i} isLast={i === arr.length - 1} />
-        ))}
-      </Card>
-    );
-  }, [sortedMembers, theme]);
-
   const renderOrderHistory = useMemo(() => {
     return (
       <View>
@@ -170,7 +150,7 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
     >
       {renderHeader}
       {/*{renderMembersBalance}*/}
-      <GroupCard _data={data.group}/>
+      <GroupBalanceCard _data={data.group} context={'GroupScreen'}/>
       {renderOrderHistory}
     </Reanimated.ScrollView>
   );

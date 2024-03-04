@@ -97,11 +97,6 @@ export const Order: React.FC<IProps> = ({ _orderData, _meData }) => {
   }, [orderData, canEdit]);
   
   
-  console.log({
-    isActive: orderData.isActive,
-    canEdit,
-    canComplete,
-  });
   
   
   
@@ -110,7 +105,6 @@ export const Order: React.FC<IProps> = ({ _orderData, _meData }) => {
   const handlePressComplete = useCallback(() => {
     setShowIncompleteError(!canComplete);
     if (!canComplete) {
-      console.log({canComplete, transactionPrices: orderData.transactions.edges?.map(txn => txn.node!.itemPrice)});
       return;
     }
     commitUpdateOrder({
@@ -127,7 +121,7 @@ export const Order: React.FC<IProps> = ({ _orderData, _meData }) => {
   // ------------------------------------------ Render ------------------------------------------
   const renderTransactions = useMemo(() => {
     return orderData.transactions.edges?.map((txn, i, arr) => (
-      <Transaction _data={txn.node!} isLast={i === arr.length - 1} key={i} canEdit={canEdit} />
+      <Transaction _transactionData={txn.node!} isLast={i === arr.length - 1} key={i} canEdit={canEdit} />
     ));
   }, [orderData, canEdit]);
   

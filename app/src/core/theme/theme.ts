@@ -46,7 +46,8 @@ const theme = createTheme({
     },
     Text: {
       style: {
-        color: 'black'
+        color: 'black',
+        fontWeight: '500',
       }
     }
   }

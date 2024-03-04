@@ -4,8 +4,9 @@ import { OrderEntity } from '@app/entities/main/order.entity';
 import { GroupEdge } from '@app/graphql/group/group.model';
 import { GroupMemberEdge } from '@app/graphql/groupMember/groupMember.model';
 import { UpdateOrderInput } from '@app/graphql/order/order.dto';
-import { EOrderField, Order } from '@app/graphql/order/order.model';
+import { EOrderField, Order, OrderEdge } from '@app/graphql/order/order.model';
 import { TransactionConnection } from '@app/graphql/transaction/transaction.model';
+import { ENodeType } from '@app/graphql/types';
 import { RelayService } from '@app/relay/relay.service';
 import { GroupService } from '@app/services/group/group.service';
 import { ref } from '@mikro-orm/core';
@@ -31,38 +32,45 @@ export class OrderResolver {
 
   //   ------------------------------------- Queries -------------------------------------
   @Query(() => Order, { name: 'order' })
-  async getOrder(@Args('id', { type: () => ID }) id: string): Promise<OrderEntity> {
+  async getOrder(
+    @Args('id', { type: () => ID }) id: string,
+  ): Promise<OrderEntity> {
     const res = await this.em.findOneOrFail(OrderEntity, id);
-    console.log(res)
+    console.log(res);
     return res;
   }
   //   ------------------------------------- Mutations -------------------------------------
-  @Mutation(() => Order)
+  // We return an edge here because that makes it easier for Relay to re-render a list because an array of elements is equivalent to a connection of edges.
+  @Mutation(() => OrderEdge)
   async createOrder(
     @Context() { userEntity }: IContextGQL,
     @Args('groupID', { type: () => ID }) groupID: string,
-  ): Promise<OrderEntity> {
+  ): Promise<OrderEdge> {
     // check if there is an active order -> if so, return that order
     const activeOrder = await this.em.findOne(OrderEntity, {
       group: groupID,
       isActive: true,
     });
+
+    let entity: OrderEntity;
+
     if (activeOrder) {
-      return activeOrder;
+      entity = activeOrder;
+    } else {
+      const orderEntity = new OrderEntity(groupID);
+
+      // determine paying user
+      const memberBalances =
+        await this.groupService.getGroupMemberBalanceAll(groupID);
+      const payerUser = Object.entries(memberBalances).reduce((a, b) =>
+        a[1] < b[1] ? a : b,
+      )[0];
+      orderEntity.payer = ref(UserGroupJoinEntity, payerUser);
+
+      await this.em.persistAndFlush(orderEntity);
+      entity = orderEntity;
     }
-
-    const orderEntity = new OrderEntity(groupID);
-
-    // determine paying user
-    const memberBalances =
-      await this.groupService.getGroupMemberBalanceAll(groupID);
-    const payerUser = Object.entries(memberBalances).reduce((a, b) =>
-      a[1] < b[1] ? a : b,
-    )[0];
-    orderEntity.payer = ref(UserGroupJoinEntity, payerUser);
-
-    await this.em.persistAndFlush(orderEntity);
-    return orderEntity;
+    return this.relayService.getEdge(entity, ENodeType.Order);
   }
 
   @Mutation(() => Order)

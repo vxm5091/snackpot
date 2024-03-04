@@ -1,8 +1,12 @@
+import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
+import { GroupEntity } from '@app/entities/main/group.entity';
+import { OrderEntity } from '@app/entities/main/order.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import {
   CreateTransactionInput,
   UpdateTransactionInput,
 } from '@app/graphql/transaction/transaction.dto';
+import { ref } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/knex';
 import { Injectable } from '@nestjs/common';
 
@@ -12,10 +16,15 @@ export class TransactionService {
 
   async createTransaction(
     input: CreateTransactionInput,
+    userID: string,
   ): Promise<TransactionEntity> {
-    const transaction = new TransactionEntity({
-      itemName: input.itemName,
-      itemPrice: input.itemPrice,
+    const orderEntity = await this.em.findOneOrFail(OrderEntity, input.orderID)
+    
+    const transaction = this.em.create(TransactionEntity, {
+      ...input,
+      order: ref(OrderEntity, input.orderID),
+      recipient: ref(OrderEntity, input.groupMemberID),
+      
     });
 
     await this.em.persistAndFlush(transaction);

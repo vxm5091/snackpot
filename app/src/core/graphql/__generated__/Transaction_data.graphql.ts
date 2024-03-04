@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3862554e4f93c4343e2b90981845e420>>
+ * @generated SignedSource<<bec8c01d5a032a1492331a6ce97558c0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,14 +11,12 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type Transaction_data$data = {
-  readonly globalID: string;
   readonly id: string;
-  readonly itemName: string;
-  readonly itemPrice: number | null;
   readonly recipient: {
     readonly node: {
       readonly user: {
         readonly node: {
+          readonly id: string;
           readonly username: string;
           readonly " $fragmentSpreads": FragmentRefs<"UserAvatar_data">;
         } | null;
@@ -32,26 +30,21 @@ export type Transaction_data$key = {
   readonly " $fragmentSpreads": FragmentRefs<"Transaction_data">;
 };
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
   "name": "Transaction_data",
   "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "globalID",
-      "storageKey": null
-    },
+    (v0/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -89,6 +82,7 @@ const node: ReaderFragment = {
                       "kind": "FragmentSpread",
                       "name": "UserAvatar_data"
                     },
+                    (v0/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -107,26 +101,13 @@ const node: ReaderFragment = {
         }
       ],
       "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "itemName",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "itemPrice",
-      "storageKey": null
     }
   ],
   "type": "Transaction",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "43e0ffa14884017b2b02384757dc9aec";
+(node as any).hash = "0d0769e737d776bd2f2cc6fa460b5794";
 
 export default node;

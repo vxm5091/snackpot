@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f01ff4b6e537946589cd82567995bf0e>>
+ * @generated SignedSource<<4b7b351b1d9f38b1287353a8dd3f58bf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,7 +23,7 @@ export type TransactionUpdateMutation$data = {
     readonly node: {
       readonly group: {
         readonly node: {
-          readonly " $fragmentSpreads": FragmentRefs<"GroupCard_data">;
+          readonly " $fragmentSpreads": FragmentRefs<"GroupBalanceCard_data">;
         } | null;
       };
       readonly " $fragmentSpreads": FragmentRefs<"Transaction_data">;
@@ -61,14 +61,14 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "globalID",
+  "name": "avatarURL",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "avatarURL",
+  "name": "globalID",
   "storageKey": null
 },
 v5 = {
@@ -109,8 +109,8 @@ v5 = {
           "name": "lastName",
           "storageKey": null
         },
-        (v4/*: any*/),
-        (v3/*: any*/)
+        (v3/*: any*/),
+        (v4/*: any*/)
       ],
       "storageKey": null
     }
@@ -164,7 +164,7 @@ return {
                       {
                         "args": null,
                         "kind": "FragmentSpread",
-                        "name": "GroupCard_data"
+                        "name": "GroupBalanceCard_data"
                       }
                     ],
                     "storageKey": null
@@ -205,7 +205,6 @@ return {
             "plural": false,
             "selections": [
               (v2/*: any*/),
-              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -223,25 +222,11 @@ return {
                     "plural": false,
                     "selections": [
                       (v5/*: any*/),
-                      (v3/*: any*/)
+                      (v4/*: any*/)
                     ],
                     "storageKey": null
                   }
                 ],
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "itemName",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "itemPrice",
                 "storageKey": null
               },
               {
@@ -268,7 +253,7 @@ return {
                         "name": "groupName",
                         "storageKey": null
                       },
-                      (v4/*: any*/),
+                      (v3/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -301,7 +286,8 @@ return {
                                     "storageKey": null
                                   },
                                   (v5/*: any*/),
-                                  (v3/*: any*/)
+                                  (v2/*: any*/),
+                                  (v4/*: any*/)
                                 ],
                                 "storageKey": null
                               }
@@ -311,13 +297,14 @@ return {
                         ],
                         "storageKey": null
                       },
-                      (v3/*: any*/)
+                      (v4/*: any*/)
                     ],
                     "storageKey": null
                   }
                 ],
                 "storageKey": null
-              }
+              },
+              (v4/*: any*/)
             ],
             "storageKey": null
           }
@@ -327,16 +314,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "602660ccea0168373eb9d012814a39a2",
+    "cacheID": "cc31439645c5cb9a6d8c38a9695f6f42",
     "id": null,
     "metadata": {},
     "name": "TransactionUpdateMutation",
     "operationKind": "mutation",
-    "text": "mutation TransactionUpdateMutation(\n  $input: UpdateTransactionInput!\n) {\n  updateTransaction(input: $input) {\n    node {\n      ...Transaction_data\n      group {\n        node {\n          ...GroupCard_data\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  globalID\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "mutation TransactionUpdateMutation(\n  $input: UpdateTransactionInput!\n) {\n  updateTransaction(input: $input) {\n    node {\n      ...Transaction_data\n      group {\n        node {\n          ...GroupBalanceCard_data\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupBalanceCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        id\n        balance\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          id\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();
 
-(node as any).hash = "98a3561ac0f69b2481dda84ef889133b";
+(node as any).hash = "30b944ae2a3c1ed56a7488515e1cd62b";
 
 export default node;

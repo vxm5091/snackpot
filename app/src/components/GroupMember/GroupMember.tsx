@@ -31,8 +31,8 @@ export const GroupMember: React.FC<IProps> = ({ _data, isLast = false }) => {
   
   return (
     <View style={{
-      paddingVertical: theme.spacing.sm,
-      rowGap: theme.spacing.md,
+      // paddingVertical: theme.spacing.sm,
+      rowGap: theme.spacing.xs,
     }} >
       <Row
         style={{

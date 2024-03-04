@@ -59,7 +59,7 @@ type GroupMemberEdge {
 
 type Mutation {
   createGroup(createGroupInput: CreateGroupInput!): Group!
-  createOrder(groupID: ID!): Order!
+  createOrder(groupID: ID!): OrderEdge!
   createTransaction(input: CreateTransactionInput!): TransactionEdge!
   updateOrder(input: UpdateOrderInput!): Order!
   updateTransaction(input: UpdateTransactionInput!): TransactionEdge!
