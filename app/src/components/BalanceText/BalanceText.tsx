@@ -23,9 +23,8 @@ export const BalanceText: React.FC<IProps> = ({ amount, withColor = true, contai
       fontWeight: '500',
       textAlign: 'right'
     } as TextStyle;
-  }, []);
+  }, [amount, theme, withColor]);
 
-  const amountStr = useMemo(() => formatCurrency(amount), []);
 
-  return <Text style={[style, containerStyle]}>{amountStr}</Text>;
+  return <Text style={[style, containerStyle]}>{formatCurrency(amount)}</Text>;
 };

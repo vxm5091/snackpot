@@ -46,11 +46,11 @@ export const GroupCard: React.FC<IProps> = ({ _data }) => {
   }, [data]);
   
   // ------------------------------------------ Render ------------------------------------------
-  const renderMembers = useMemo(() => {
+  const renderMembers = () => {
     return data.members.edges?.map((member, i, arr) => (
       <GroupMember _data={member.node!} key={i} isLast={i === arr.length - 1} />
     ));
-  }, [data]);
+  }
   
   return (
     <Reanimated.View
@@ -71,7 +71,7 @@ export const GroupCard: React.FC<IProps> = ({ _data }) => {
             }}>Go to group page</Text>
           </TouchableOpacity>
         </Row.Spaced>
-        {renderMembers}
+        {renderMembers()}
       </Card>
     </Reanimated.View>
   );

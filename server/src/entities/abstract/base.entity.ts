@@ -5,12 +5,12 @@ export abstract class BaseEntity {
   @PrimaryKey()
   id!: string;
 
-  @Property()
-  createdAt = new Date();
+  @Property({ defaultRaw: 'now()' })
+  createdAt: Date;
 
   @Property({
     onUpdate: () => new Date(),
+    defaultRaw: 'now()',
   })
-  updatedAt = new Date();
+  updatedAt?: Date;
 }
-

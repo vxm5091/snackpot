@@ -29,7 +29,6 @@ export const GroupMember: React.FC<IProps> = ({ _data, isLast = false }) => {
     _data,
   );
   
-  
   return (
     <View style={{
       paddingVertical: theme.spacing.sm,

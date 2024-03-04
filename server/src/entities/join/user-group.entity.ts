@@ -1,8 +1,19 @@
 import { BaseEntity } from '@app/entities/abstract/base.entity';
 import { GroupEntity } from '@app/entities/main/group.entity';
+import { OrderEntity } from '@app/entities/main/order.entity';
+import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { UserEntity } from '@app/entities/main/user.entity';
 import { ENodeType } from '@app/graphql/types';
-import { Entity, Index, ManyToOne, Property, Ref, ref } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  Index,
+  ManyToOne,
+  OneToMany,
+  Property,
+  Ref,
+  ref,
+} from '@mikro-orm/core';
 import { toGlobalId } from 'graphql-relay/node/node';
 
 @Entity({
@@ -20,6 +31,27 @@ export class UserGroupJoinEntity extends BaseEntity {
     entity: () => GroupEntity,
   })
   group!: Ref<GroupEntity>;
+
+  @Index()
+  @OneToMany({
+    entity: () => TransactionEntity,
+    mappedBy: r => r.payer,
+  })
+  transactionsPaid = new Collection<TransactionEntity>(this);
+
+  @Index()
+  @OneToMany({
+    entity: () => TransactionEntity,
+    mappedBy: r => r.recipient,
+  })
+  transactionsReceived = new Collection<TransactionEntity>(this);
+
+  @Index()
+  @OneToMany({
+    entity: () => OrderEntity,
+    mappedBy: r => r.payer,
+  })
+  ordersPaid = new Collection<OrderEntity>(this);
 
   @Property({
     persist: false,

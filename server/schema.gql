@@ -83,7 +83,7 @@ type Order implements Node {
   group: GroupEdge!
   id: ID!
   isActive: Boolean!
-  payer: UserEdge!
+  payer: GroupMemberEdge!
   transactions: TransactionConnection!
   updatedAt: DateTime!
 }
@@ -118,12 +118,13 @@ type Transaction implements Node {
 
   """The globally unique relay ID"""
   globalID: ID!
+  group: GroupEdge!
   id: ID!
   itemName: String!
   itemPrice: Float
   order: OrderEdge!
-  payer: UserEdge!
-  recipient: UserEdge!
+  payer: GroupMemberEdge!
+  recipient: GroupMemberEdge!
   updatedAt: DateTime!
 }
 
@@ -162,8 +163,6 @@ type User implements Node {
   groups: GroupMemberConnection!
   id: String!
   lastName: String!
-  ordersPaid: OrderConnection!
-  transactions: TransactionConnection!
   updatedAt: DateTime!
   username: String!
 }

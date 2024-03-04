@@ -1,6 +1,4 @@
-import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
-import { UserEntity } from '@app/entities/main/user.entity';
 
 import { EntityManager } from '@mikro-orm/knex';
 import { Injectable } from '@nestjs/common';
@@ -9,40 +7,12 @@ import { Injectable } from '@nestjs/common';
 export class GroupService {
   constructor(private readonly em: EntityManager) {}
 
-  getUserGroupJoinEntity(id: string) {
-    return this.em.findOne(UserGroupJoinEntity, id);
-  }
-
-  async getGroupMembers(groupID: string): Promise<UserEntity[]> {
-    const res = await this.em.find(
-      UserGroupJoinEntity,
-      { group: groupID },
-      { populate: ['user'] },
-    );
-
-    return res.map(join => join.user.getEntity());
-  }
-
   async getUserGroupTransactions(
-    groupID: string,
-    userID: string,
+    groupMemberID: string,
   ): Promise<TransactionEntity[]> {
     return this.em.find(TransactionEntity, {
-      group: groupID,
-      $or: [{ payer: userID }, { recipient: userID }],
+      $or: [{ payer: groupMemberID }, { recipient: groupMemberID }],
     });
-  }
-
-  async getGroupMemberBalanceOne(groupID: string, userID: string) {
-    const transactions = await this.getUserGroupTransactions(groupID, userID);
-
-    return transactions.reduce((acc, transaction) => {
-      if (transaction.payer.id === userID) {
-        return acc + transaction.itemPrice;
-      } else {
-        return acc - transaction.itemPrice;
-      }
-    }, 0);
   }
 
   async getGroupMemberBalanceAll(groupID: string) {

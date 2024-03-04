@@ -28,6 +28,7 @@ const config: Options<PostgreSqlDriver> = {
   },
   metadataProvider: TsMorphMetadataProvider,
   registerRequestContext: false,
+  
 
   debug: process.env.NODE_ENV !== 'production',
   logger: msg => {

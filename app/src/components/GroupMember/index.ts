@@ -1,1 +1,1 @@
-export * from './GroupMember'
+export * from './GroupMember';

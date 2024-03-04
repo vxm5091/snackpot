@@ -6,6 +6,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "noLib": false,
+    "allowJs": true,
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
@@ -19,6 +22,6 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@app/*": ["./*"]
-    },
+    }
   }
 }

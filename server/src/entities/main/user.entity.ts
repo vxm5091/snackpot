@@ -38,26 +38,7 @@ export class UserEntity extends BaseEntity {
   @Property({ type: t.text })
   avatarURL?: string;
 
-  @Index()
-  @OneToMany({
-    entity: () => OrderEntity,
-    mappedBy: r => r.payer,
-  })
-  ordersPaid = new Collection<OrderEntity>(this);
-
-  @Index()
-  @OneToMany({
-    entity: () => TransactionEntity,
-    mappedBy: r => r.payer,
-  })
-  transactionsPaid = new Collection<TransactionEntity>(this);
-
-  @Index()
-  @OneToMany({
-    entity: () => TransactionEntity,
-    mappedBy: r => r.recipient,
-  })
-  transactionsReceived = new Collection<TransactionEntity>(this);
+  
 
   @Index()
   @OneToMany({

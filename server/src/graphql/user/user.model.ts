@@ -14,8 +14,6 @@ import { TransactionConnection } from '@app/graphql/transaction/transaction.mode
  * this enum reflects additional fields like relationships or computed fields. The use of the enum itself is to ensure string value consistency between model and resolver.
  * */
 export enum EUserField {
-  OrdersPaid = 'ordersPaid',
-  Transactions = 'transactions',
   Groups = 'groups',
 }
 
@@ -37,12 +35,6 @@ export class User extends BaseNode {
 
   @Field(() => String, { nullable: true })
   avatarURL?: string;
-
-  @Field(() => OrderConnection)
-  [EUserField.OrdersPaid]: OrderConnection;
-
-  @Field(() => TransactionConnection)
-  [EUserField.Transactions]: TransactionConnection;
 
   @Field(() => GroupMemberConnection)
   [EUserField.Groups]: GroupMemberConnection;

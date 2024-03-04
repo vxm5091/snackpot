@@ -25,41 +25,40 @@ export class DatabaseSeeder extends Seeder {
       owner: me,
     });
 
-    em.create(UserGroupJoinEntity, {
+    const meMember = em.create(UserGroupJoinEntity, {
       id: faker.string.uuid(),
       user: me,
       group,
     });
 
-    const friends = new UserFactory(em)
-      .each(user => {
-        //   add to my group (join)
-        em.create(UserGroupJoinEntity, {
-          id: faker.string.uuid(),
-          user,
-          group,
-        });
-      })
-      .make(4);
-
     const order = em.create(OrderEntity, {
       id: faker.string.uuid(),
       group,
-      payer: me,
+      payer: meMember,
     });
 
     const ITEMS = ['coffee', 'tea', 'soda', 'juice'];
 
-    for (const friend of friends) {
-      em.create(TransactionEntity, {
-        id: faker.string.uuid(),
-        recipient: friend,
-        payer: me,
-        order,
-        group,
-        itemPrice: +faker.finance.amount({ min: 3, max: 10 }),
-        itemName: ITEMS[Math.floor(Math.random() * ITEMS.length)],
-      });
-    }
+    new UserFactory(em)
+      .each(user => {
+        //   add to my group (join)
+        const friendMember = em.create(UserGroupJoinEntity, {
+          id: faker.string.uuid(),
+          user,
+          group,
+        });
+
+
+        em.create(TransactionEntity, {
+          id: faker.string.uuid(),
+          recipient: friendMember,
+          payer: meMember,
+          order,
+          group,
+          itemPrice: +faker.finance.amount({ min: 3, max: 10 }),
+          itemName: ITEMS[Math.floor(Math.random() * ITEMS.length)],
+        });
+      })
+      .make(4);
   }
 }

@@ -2,8 +2,7 @@ import { useFocusEffect } from '@react-navigation/core';
 import { GroupCardSkeleton } from 'components/skeleton';
 import { HomeScreenQuery } from 'core/graphql/__generated__/HomeScreenQuery.graphql';
 import { HomeScreen, QUERY_HomeScreen } from 'flows/screens/Home/HomeScreen';
-import { Suspense, useCallback, useMemo } from 'react';
-import { View } from 'react-native';
+import { Suspense, useCallback } from 'react';
 import { useQueryLoader } from 'react-relay';
 
 export const HomeScreenRoute = () => {

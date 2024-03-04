@@ -1,4 +1,5 @@
 import { BaseEntity } from '@app/entities/abstract/base.entity';
+import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { GroupEntity } from '@app/entities/main/group.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { UserEntity } from '@app/entities/main/user.entity';
@@ -8,7 +9,6 @@ import {
   Index,
   ManyToOne,
   OneToMany,
-  Opt,
   Property,
   ref,
   Ref,
@@ -28,11 +28,11 @@ export class OrderEntity extends BaseEntity {
   }
 
   @Property()
-  isActive: boolean & Opt = true;
+  isActive = true
 
   @Index()
-  @ManyToOne({ entity: () => UserEntity })
-  payer!: Ref<UserEntity>;
+  @ManyToOne({ entity: () => UserGroupJoinEntity })
+  payer!: Ref<UserGroupJoinEntity>;
 
   @Index()
   @ManyToOne({ entity: () => GroupEntity })

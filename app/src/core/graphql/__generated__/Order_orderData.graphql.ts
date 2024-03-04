@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<cb4c85f18cf66d0ba804e9b34e3cee3b>>
+ * @generated SignedSource<<ba13ff45da8368d076d0e5c9e618439f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,8 +21,12 @@ export type Order_orderData$data = {
   readonly isActive: boolean;
   readonly payer: {
     readonly node: {
-      readonly id: string;
-      readonly username: string;
+      readonly user: {
+        readonly node: {
+          readonly id: string;
+          readonly username: string;
+        } | null;
+      };
     } | null;
   };
   readonly transactions: {
@@ -72,7 +76,7 @@ return {
     {
       "alias": null,
       "args": null,
-      "concreteType": "UserEdge",
+      "concreteType": "GroupMemberEdge",
       "kind": "LinkedField",
       "name": "payer",
       "plural": false,
@@ -80,17 +84,39 @@ return {
         {
           "alias": null,
           "args": null,
-          "concreteType": "User",
+          "concreteType": "GroupMember",
           "kind": "LinkedField",
           "name": "node",
           "plural": false,
           "selections": [
-            (v0/*: any*/),
             {
               "alias": null,
               "args": null,
-              "kind": "ScalarField",
-              "name": "username",
+              "concreteType": "UserEdge",
+              "kind": "LinkedField",
+              "name": "user",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "User",
+                  "kind": "LinkedField",
+                  "name": "node",
+                  "plural": false,
+                  "selections": [
+                    (v0/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "username",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
               "storageKey": null
             }
           ],
@@ -179,6 +205,6 @@ return {
 };
 })();
 
-(node as any).hash = "1d6138f5d93154df3f6eb6f19bf8b5a7";
+(node as any).hash = "50731e0250318092dbbdcb4705b75fec";
 
 export default node;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c95a96cdbc4c2dff293a1e886a4861e2>>
+ * @generated SignedSource<<3862554e4f93c4343e2b90981845e420>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,8 +17,12 @@ export type Transaction_data$data = {
   readonly itemPrice: number | null;
   readonly recipient: {
     readonly node: {
-      readonly username: string;
-      readonly " $fragmentSpreads": FragmentRefs<"UserAvatar_data">;
+      readonly user: {
+        readonly node: {
+          readonly username: string;
+          readonly " $fragmentSpreads": FragmentRefs<"UserAvatar_data">;
+        } | null;
+      };
     } | null;
   };
   readonly " $fragmentType": "Transaction_data";
@@ -51,7 +55,7 @@ const node: ReaderFragment = {
     {
       "alias": null,
       "args": null,
-      "concreteType": "UserEdge",
+      "concreteType": "GroupMemberEdge",
       "kind": "LinkedField",
       "name": "recipient",
       "plural": false,
@@ -59,21 +63,43 @@ const node: ReaderFragment = {
         {
           "alias": null,
           "args": null,
-          "concreteType": "User",
+          "concreteType": "GroupMember",
           "kind": "LinkedField",
           "name": "node",
           "plural": false,
           "selections": [
             {
-              "args": null,
-              "kind": "FragmentSpread",
-              "name": "UserAvatar_data"
-            },
-            {
               "alias": null,
               "args": null,
-              "kind": "ScalarField",
-              "name": "username",
+              "concreteType": "UserEdge",
+              "kind": "LinkedField",
+              "name": "user",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "User",
+                  "kind": "LinkedField",
+                  "name": "node",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "args": null,
+                      "kind": "FragmentSpread",
+                      "name": "UserAvatar_data"
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "username",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
               "storageKey": null
             }
           ],
@@ -101,6 +127,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "c212c3c28092c5e72eac2ed139f38122";
+(node as any).hash = "43e0ffa14884017b2b02384757dc9aec";
 
 export default node;

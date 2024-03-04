@@ -1,7 +1,7 @@
 import { BaseEntity } from '@app/entities/abstract/base.entity';
+import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
-import { UserEntity } from '@app/entities/main/user.entity';
 import { Entity, Index, ManyToOne, Property, Ref, t } from '@mikro-orm/core';
 import { toGlobalId } from 'graphql-relay/node/node';
 
@@ -16,7 +16,7 @@ export class TransactionEntity extends BaseEntity {
   get globalID() {
     return this.id ? toGlobalId('Transaction', this.id) : '';
   }
-  
+
   @Property({ type: t.text })
   itemName!: string;
 
@@ -24,12 +24,12 @@ export class TransactionEntity extends BaseEntity {
   itemPrice?: number;
 
   @Index()
-  @ManyToOne({ entity: () => UserEntity })
-  payer!: Ref<UserEntity>;
+  @ManyToOne({ entity: () => UserGroupJoinEntity })
+  payer!: Ref<UserGroupJoinEntity>;
 
   @Index()
-  @ManyToOne({ entity: () => UserEntity })
-  recipient!: Ref<UserEntity>;
+  @ManyToOne({ entity: () => UserGroupJoinEntity })
+  recipient!: Ref<UserGroupJoinEntity>;
 
   @Index()
   @ManyToOne({ entity: () => OrderEntity })

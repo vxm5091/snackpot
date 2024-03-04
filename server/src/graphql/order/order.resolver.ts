@@ -1,11 +1,11 @@
 import { IContextGQL } from '@app/core/types/http.types';
+import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
-import { UserEntity } from '@app/entities/main/user.entity';
 import { GroupEdge } from '@app/graphql/group/group.model';
+import { GroupMemberEdge } from '@app/graphql/groupMember/groupMember.model';
 import { UpdateOrderInput } from '@app/graphql/order/order.dto';
 import { EOrderField, Order } from '@app/graphql/order/order.model';
 import { TransactionConnection } from '@app/graphql/transaction/transaction.model';
-import { UserEdge } from '@app/graphql/user/user.model';
 import { RelayService } from '@app/relay/relay.service';
 import { GroupService } from '@app/services/group/group.service';
 import { ref } from '@mikro-orm/core';
@@ -31,8 +31,10 @@ export class OrderResolver {
 
   //   ------------------------------------- Queries -------------------------------------
   @Query(() => Order, { name: 'order' })
-  getOrder(@Args('id', { type: () => ID }) id: string): Promise<OrderEntity> {
-    return this.em.findOneOrFail(OrderEntity, id);
+  async getOrder(@Args('id', { type: () => ID }) id: string): Promise<OrderEntity> {
+    const res = await this.em.findOneOrFail(OrderEntity, id);
+    console.log(res)
+    return res;
   }
   //   ------------------------------------- Mutations -------------------------------------
   @Mutation(() => Order)
@@ -57,7 +59,7 @@ export class OrderResolver {
     const payerUser = Object.entries(memberBalances).reduce((a, b) =>
       a[1] < b[1] ? a : b,
     )[0];
-    orderEntity.payer = ref(UserEntity, payerUser);
+    orderEntity.payer = ref(UserGroupJoinEntity, payerUser);
 
     await this.em.persistAndFlush(orderEntity);
     return orderEntity;
@@ -72,12 +74,13 @@ export class OrderResolver {
     });
     orderEntity.isActive = input.isActive;
     await this.em.flush();
+    console.log('returning order entity', { orderEntity });
     return orderEntity;
   }
 
   //   ------------------------------------- Resolvers -------------------------------------
-  @ResolveField(() => UserEdge, { name: EOrderField.Payer })
-  async resolvePayer(@Parent() order: Order): Promise<UserEdge> {
+  @ResolveField(() => GroupMemberEdge, { name: EOrderField.Payer })
+  async resolvePayer(@Parent() order: Order): Promise<GroupMemberEdge> {
     const orderEntity = await this.em.findOneOrFail(
       OrderEntity,
       { id: order.id },

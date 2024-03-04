@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import { Card, ListItem, useTheme, Text } from '@rneui/themed';
 import { GroupAvatar } from 'components/GroupAvatar';
+import { GroupCard } from 'components/GroupCard';
 import { GroupMember } from 'components/GroupMember';
 import { Order } from 'components/Order';
 import { GroupScreenQuery } from 'core/graphql/__generated__/GroupScreenQuery.graphql';
@@ -112,7 +113,7 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
         </ListItem.Content>
       </ListItem>
     );
-  }, [groupData]);
+  }, [groupData, memberCount, orderCount, theme]);
 
   const renderMembersBalance = useMemo(() => {
     return (
@@ -131,7 +132,7 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
         ))}
       </Card>
     );
-  }, [groupData]);
+  }, [sortedMembers, theme]);
 
   const renderOrderHistory = useMemo(() => {
     return (
@@ -156,7 +157,7 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
         )}
       </View>
     );
-  }, [groupData, meData]);
+  }, [groupData, meData, theme]);
 
   return (
     <Reanimated.ScrollView
@@ -168,7 +169,8 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
       showsVerticalScrollIndicator={false}
     >
       {renderHeader}
-      {renderMembersBalance}
+      {/*{renderMembersBalance}*/}
+      <GroupCard _data={data.group}/>
       {renderOrderHistory}
     </Reanimated.ScrollView>
   );

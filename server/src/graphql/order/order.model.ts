@@ -1,5 +1,6 @@
 import { OrderEntity } from '@app/entities/main/order.entity';
 import { GroupEdge } from '@app/graphql/group/group.model';
+import { GroupMemberEdge } from '@app/graphql/groupMember/groupMember.model';
 import { BaseNode, RelayNode } from '@app/graphql/node/node.model';
 import { TransactionConnection } from '@app/graphql/transaction/transaction.model';
 import { UserEdge } from '@app/graphql/user/user.model';
@@ -24,8 +25,8 @@ export class Order extends BaseNode {
   @Field(() => Boolean)
   isActive: boolean;
 
-  @Field(() => UserEdge)
-  [EOrderField.Payer]: UserEdge;
+  @Field(() => GroupMemberEdge)
+  [EOrderField.Payer]: GroupMemberEdge;
 
   @Field(() => GroupEdge)
   [EOrderField.Group]: GroupEdge;

@@ -1,4 +1,5 @@
 import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
+import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { GroupEdge } from '@app/graphql/group/group.model';
 import {
   EGroupMemberField,
@@ -10,7 +11,7 @@ import { UserEdge } from '@app/graphql/user/user.model';
 import { RelayService } from '@app/relay/relay.service';
 import { GroupService } from '@app/services/group/group.service';
 import { EntityManager } from '@mikro-orm/knex';
-import { Float, Int, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { Float, Parent, ResolveField, Resolver } from '@nestjs/graphql';
 
 @Resolver(() => GroupMember)
 export class GroupMemberResolver {
@@ -59,30 +60,25 @@ export class GroupMemberResolver {
   async resolveTransactions(
     @Parent() groupMember: GroupMember,
   ): Promise<TransactionConnection> {
-    const memberEntity = await this.em.findOneOrFail(UserGroupJoinEntity, {
-      id: groupMember.id,
-    });
-
-    const transactionEntities =
-      await this.groupService.getUserGroupTransactions(
-        memberEntity.group.id,
-        memberEntity.user.id,
-      );
-
-    return this.relayService.getConnection(
-      transactionEntities,
-      ENodeType.Transaction,
+    const txnEntities = await this.groupService.getUserGroupTransactions(
+      groupMember.id,
     );
+
+    return this.relayService.getConnection(txnEntities, ENodeType.Transaction);
   }
 
   @ResolveField(() => Float, { name: EGroupMemberField.Balance })
   async resolveBalance(@Parent() groupMember: GroupMember): Promise<number> {
-    const memberEntity = await this.em.findOneOrFail(UserGroupJoinEntity, {
-      id: groupMember.id,
-    });
-    return this.groupService.getGroupMemberBalanceOne(
-      memberEntity.group.id,
-      memberEntity.user.id,
+    const txnEntities = await this.groupService.getUserGroupTransactions(
+      groupMember.id,
     );
+
+    return txnEntities.reduce((acc, transaction) => {
+      if (transaction.payer.id === groupMember.id) {
+        return acc + transaction.itemPrice;
+      } else {
+        return acc - transaction.itemPrice;
+      }
+    }, 0);
   }
 }

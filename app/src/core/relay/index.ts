@@ -15,6 +15,8 @@ const fetchRetry = fetchRetryWrapper(fetch);
 /* ANCHOR ================================= HTTP Network ======================================== */
 async function fetchQuery(params: RequestParameters, variables: Variables) {
   try {
+    // const API_HTTP = `http://${process.env.EXPO_PUBLIC_IP}:3000/graphql`
+    console.info('API_HTTP', config.API_HTTP)
     const response = await fetchRetry(config.API_HTTP, {
       method: 'POST',
 

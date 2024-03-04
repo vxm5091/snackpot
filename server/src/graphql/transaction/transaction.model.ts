@@ -1,4 +1,6 @@
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
+import { GroupEdge } from '@app/graphql/group/group.model';
+import { GroupMemberEdge } from '@app/graphql/groupMember/groupMember.model';
 import { BaseNode, RelayNode } from '@app/graphql/node/node.model';
 import { OrderEdge } from '@app/graphql/order/order.model';
 import { UserEdge } from '@app/graphql/user/user.model';
@@ -14,6 +16,7 @@ export enum ETransactionField {
   Payer = 'payer',
   Recipient = 'recipient',
   Order = 'order',
+  Group = 'group',
 }
 
 @ObjectType({
@@ -26,14 +29,17 @@ export class Transaction extends BaseNode {
   @Field(() => Float, { nullable: true })
   itemPrice?: number;
 
-  @Field(() => UserEdge)
-  [ETransactionField.Payer]: UserEdge;
+  @Field(() => GroupMemberEdge)
+  [ETransactionField.Payer]: GroupMemberEdge;
 
-  @Field(() => UserEdge)
-  [ETransactionField.Recipient]: UserEdge;
+  @Field(() => GroupMemberEdge)
+  [ETransactionField.Recipient]: GroupMemberEdge;
 
   @Field(() => OrderEdge)
   [ETransactionField.Order]: OrderEdge;
+  
+  @Field(() => GroupEdge)
+  [ETransactionField.Group]: GroupEdge;
 }
 
 /* ================================= RELAY TYPES ======================================== */

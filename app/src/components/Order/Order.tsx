@@ -1,18 +1,19 @@
-import { Badge, Card, Text, useTheme } from '@rneui/themed';
+import { Badge, Button, Card, Text, useTheme } from '@rneui/themed';
 import { Row } from 'components/layout/Row';
 import { Transaction } from 'components/Transaction';
-import { UserAvatar } from 'components/UserAvatar';
 import { Order_meData$key } from 'core/graphql/__generated__/Order_meData.graphql';
 import { Order_orderData$key } from 'core/graphql/__generated__/Order_orderData.graphql';
-import { useMemo } from 'react';
+import { OrderUpdateMutation } from 'core/graphql/__generated__/OrderUpdateMutation.graphql';
+import { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import Reanimated, {
   FadeIn,
   FadeOut,
-  LinearTransition,
+  LinearTransition, useSharedValue, withTiming,
 } from 'react-native-reanimated';
-import { graphql, useFragment } from 'react-relay';
+import { graphql, useFragment, useMutation } from 'react-relay';
 import { formatDate } from 'shared/format';
+import { useDidUpdate } from 'shared/hooks/lifecycleHooks';
 
 interface IProps {
   _orderData: Order_orderData$key;
@@ -21,33 +22,39 @@ interface IProps {
 
 export const Order: React.FC<IProps> = ({ _orderData, _meData }) => {
   const {theme} = useTheme();
+  const [showIncompleteError, setShowIncompleteError] = useState(false);
+  
   // ------------------------------------------ Data ------------------------------------------
   const orderData = useFragment(
     graphql`
-      fragment Order_orderData on Order {
-        id
-        createdAt
-        isActive
-        payer {
-          node {
-            id
-            username
-          }
-        }
-        group {
-          node {
-            groupName
-          }
-        }
-        transactions {
-          edges {
-            node {
-              ...Transaction_data
-              itemPrice
-            }
-          }
-        }
-      }
+			fragment Order_orderData on Order {
+				id
+				createdAt
+				isActive
+				payer {
+					node {
+						user {
+							node {
+								id
+								username
+							}
+						}
+					}
+				}
+				group {
+					node {
+						groupName
+					}
+				}
+				transactions {
+					edges {
+						node {
+							...Transaction_data
+							itemPrice
+						}
+					}
+				}
+			}
     `,
     _orderData,
   );
@@ -61,6 +68,16 @@ export const Order: React.FC<IProps> = ({ _orderData, _meData }) => {
     _meData,
   );
   
+  const [commitUpdateOrder, isCommittingUpdateOrder] = useMutation<OrderUpdateMutation>(graphql`
+    mutation OrderUpdateMutation($input: UpdateOrderInput!) {
+      updateOrder(input: $input) {
+        ...Order_orderData
+      }
+    }
+  `);
+  
+  
+  
 
   // ------------------------------------------ Variables ------------------------------------------
   const dateStr = useMemo(
@@ -68,34 +85,91 @@ export const Order: React.FC<IProps> = ({ _orderData, _meData }) => {
     [orderData.createdAt],
   );
   
-  const isPayer = useMemo(() => orderData.payer.node!.id === meData.id, [orderData, meData])
+  const isPayer = useMemo(() => orderData.payer.node!.user.node!.id === meData.id, [orderData, meData]);
   
   const canEdit = useMemo(() => {
-    return isPayer && orderData.isActive
-  }, [isPayer, orderData])
+    return isPayer && orderData.isActive;
+  }, [isPayer, orderData]);
   
   const canComplete = useMemo(() => {
     if (!canEdit) return false;
-    return orderData.transactions.edges?.every(txn => !!txn.node!.itemPrice)
-  }, [orderData, canEdit])
+    return orderData.transactions.edges?.every(txn => !!txn.node!.itemPrice);
+  }, [orderData, canEdit]);
+  
+  
+  console.log({
+    isActive: orderData.isActive,
+    canEdit,
+    canComplete,
+  });
+  
+  
+  
+  
+  // ------------------------------------------ Handlers ------------------------------------------
+  const handlePressComplete = useCallback(() => {
+    setShowIncompleteError(!canComplete);
+    if (!canComplete) {
+      console.log({canComplete, transactionPrices: orderData.transactions.edges?.map(txn => txn.node!.itemPrice)});
+      return;
+    }
+    commitUpdateOrder({
+      variables: {
+        input: {
+          id: orderData.id,
+          isActive: false,
+        },
+      },
+    });
+  }, [canComplete, commitUpdateOrder, orderData]);
+  
 
   // ------------------------------------------ Render ------------------------------------------
   const renderTransactions = useMemo(() => {
     return orderData.transactions.edges?.map((txn, i, arr) => (
       <Transaction _data={txn.node!} isLast={i === arr.length - 1} key={i} canEdit={canEdit} />
     ));
-  }, [orderData]);
+  }, [orderData, canEdit]);
+  
+  const renderErrorMessage = useMemo(() => {
+    if (!canEdit || !showIncompleteError) return null;
+    return (
+      <Reanimated.View entering={FadeIn} exiting={FadeOut} layout={LinearTransition}>
+        <Text style={{
+          width: '100%',
+          textAlign: 'center',
+          color: theme.colors.error,
+          fontWeight: '500',
+        }}>Fill in everyone's price first. Get those points!</Text>
+          </Reanimated.View>
+    );
+  }, [showIncompleteError, canEdit]);
+  
+  const renderSubmitSection = useMemo(() => {
+    if (!canEdit) return null;
+    return (
+      <Reanimated.View entering={FadeIn} exiting={FadeOut} layout={LinearTransition} style={{
+        rowGap: theme.spacing.md,
+      }}>
+        {renderErrorMessage}
+        <Button title={'Complete'} onPress={handlePressComplete} loading={isCommittingUpdateOrder}/>
+      </Reanimated.View>
+    );
+  }, [canEdit, handlePressComplete, isCommittingUpdateOrder, renderErrorMessage, theme]);
+  
   
   const renderActiveBadge = useMemo(() => {
     if (!orderData.isActive) return null;
     return (
       <Badge status={'primary'} value={'Active'}/>
-    )
-  }, [orderData])
+    );
+  }, [orderData]);
 
   return (
     <Reanimated.View entering={FadeIn} exiting={FadeOut} layout={LinearTransition}>
-    <Card>
+    <Card wrapperStyle={{
+      rowGap: theme.spacing.md,
+    }}>
       <Row style={{
         columnGap: theme.spacing.sm,
       }}>
@@ -105,10 +179,11 @@ export const Order: React.FC<IProps> = ({ _orderData, _meData }) => {
       <Row style={{
         marginBottom: theme.spacing.md,
       }}>
-        <Text>Paid by {orderData.payer.node!.username}</Text>
+        <Text>Paid by {orderData.payer.node!.user.node!.username}</Text>
         {/*  TODO include payer's balance from this order*/}
       </Row>
       <View>{renderTransactions}</View>
+      {renderSubmitSection}
     </Card>
       </Reanimated.View>
   );

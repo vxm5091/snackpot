@@ -33,8 +33,12 @@ export const Transaction: React.FC<IProps> = ({
         globalID
         recipient {
           node {
-            ...UserAvatar_data
-            username
+            user {
+              node {
+                ...UserAvatar_data
+                username
+							}
+						}
           }
         }
         itemName
@@ -50,10 +54,14 @@ export const Transaction: React.FC<IProps> = ({
         mutation TransactionUpdateMutation($input: UpdateTransactionInput!)
          {
           updateTransaction(input: $input) {
-            #        Returning the above fragment in the mutation response tells Relay to re-render the component with the updated data
+            #        Returning fragments in the mutation response tells Relay to re-render any components that use those fragments
             node {
               ...Transaction_data
-              
+              group {
+                node {
+                  ...GroupCard_data
+								}
+							}
             }
           }
         }
@@ -179,7 +187,7 @@ export const Transaction: React.FC<IProps> = ({
             flex: 1,
           }}
         >
-          <UserAvatar _data={data.recipient.node!} />
+          <UserAvatar _data={data.recipient.node!.user.node!} />
           <View
             style={{
               rowGap: theme.spacing.xs,
@@ -191,7 +199,7 @@ export const Transaction: React.FC<IProps> = ({
                 fontWeight: '300',
               }}
             >
-              {data.recipient.node!.username}
+              {data.recipient.node!.user.node!.username}
             </Text>
             <Text
               style={{
