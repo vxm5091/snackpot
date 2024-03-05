@@ -1,6 +1,7 @@
 import { IContextGQL } from '@app/core/types/http.types';
 import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
+import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { GroupEdge } from '@app/graphql/group/group.model';
 import { GroupMemberEdge } from '@app/graphql/groupMember/groupMember.model';
 import { UpdateOrderInput } from '@app/graphql/order/order.dto';
@@ -8,6 +9,7 @@ import { EOrderField, Order, OrderEdge } from '@app/graphql/order/order.model';
 import { TransactionConnection } from '@app/graphql/transaction/transaction.model';
 import { ENodeType } from '@app/graphql/types';
 import { RelayService } from '@app/relay/relay.service';
+import { RelayConnection } from '@app/relay/types';
 import { GroupService } from '@app/services/group/group.service';
 import { ref } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/knex';
@@ -35,9 +37,7 @@ export class OrderResolver {
   async getOrder(
     @Args('id', { type: () => ID }) id: string,
   ): Promise<OrderEntity> {
-    const res = await this.em.findOneOrFail(OrderEntity, id);
-    console.log(res);
-    return res;
+    return await this.em.findOneOrFail(OrderEntity, id);
   }
   //   ------------------------------------- Mutations -------------------------------------
   // We return an edge here because that makes it easier for Relay to re-render a list because an array of elements is equivalent to a connection of edges.
@@ -82,7 +82,6 @@ export class OrderResolver {
     });
     orderEntity.isActive = input.isActive;
     await this.em.flush();
-    console.log('returning order entity', { orderEntity });
     return orderEntity;
   }
 
@@ -110,7 +109,7 @@ export class OrderResolver {
   @ResolveField(() => TransactionConnection, { name: EOrderField.Transactions })
   async resolveTransactions(
     @Parent() order: Order,
-  ): Promise<TransactionConnection> {
+  ): Promise<RelayConnection<TransactionEntity>> {
     const orderEntity = await this.em.findOneOrFail(
       OrderEntity,
       { id: order.id },

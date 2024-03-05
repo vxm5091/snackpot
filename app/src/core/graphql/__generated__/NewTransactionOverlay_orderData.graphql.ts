@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<22d415dbdca00c61fd74092684a1f7a3>>
+ * @generated SignedSource<<968354c17d31f824d82478b4709d0589>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,9 +14,23 @@ export type NewTransactionOverlay_orderData$data = {
   readonly group: {
     readonly node: {
       readonly id: string;
-    } | null;
+      readonly me: {
+        readonly node: {
+          readonly id: string;
+        };
+      };
+    };
   };
   readonly id: string;
+  readonly payer: {
+    readonly node: {
+      readonly user: {
+        readonly node: {
+          readonly username: string;
+        };
+      };
+    } | null;
+  };
   readonly " $fragmentType": "NewTransactionOverlay_orderData";
 };
 export type NewTransactionOverlay_orderData$key = {
@@ -48,14 +62,103 @@ return {
       "plural": false,
       "selections": [
         {
+          "kind": "RequiredField",
+          "field": {
+            "alias": null,
+            "args": null,
+            "concreteType": "Group",
+            "kind": "LinkedField",
+            "name": "node",
+            "plural": false,
+            "selections": [
+              (v0/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "GroupMemberEdge",
+                "kind": "LinkedField",
+                "name": "me",
+                "plural": false,
+                "selections": [
+                  {
+                    "kind": "RequiredField",
+                    "field": {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "GroupMember",
+                      "kind": "LinkedField",
+                      "name": "node",
+                      "plural": false,
+                      "selections": [
+                        (v0/*: any*/)
+                      ],
+                      "storageKey": null
+                    },
+                    "action": "THROW",
+                    "path": "group.node.me.node"
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          "action": "THROW",
+          "path": "group.node"
+        }
+      ],
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "GroupMemberEdge",
+      "kind": "LinkedField",
+      "name": "payer",
+      "plural": false,
+      "selections": [
+        {
           "alias": null,
           "args": null,
-          "concreteType": "Group",
+          "concreteType": "GroupMember",
           "kind": "LinkedField",
           "name": "node",
           "plural": false,
           "selections": [
-            (v0/*: any*/)
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "UserEdge",
+              "kind": "LinkedField",
+              "name": "user",
+              "plural": false,
+              "selections": [
+                {
+                  "kind": "RequiredField",
+                  "field": {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "User",
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "username",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  "action": "THROW",
+                  "path": "payer.node.user.node"
+                }
+              ],
+              "storageKey": null
+            }
           ],
           "storageKey": null
         }
@@ -68,6 +171,6 @@ return {
 };
 })();
 
-(node as any).hash = "995f5b3adefadfd3636a6a3d2937a1eb";
+(node as any).hash = "54c3b05294db420dd21579cb40f7e74c";
 
 export default node;

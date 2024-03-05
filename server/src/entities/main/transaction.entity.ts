@@ -38,10 +38,6 @@ export class TransactionEntity extends BaseEntity {
 
   @Index()
   @ManyToOne({ entity: () => UserGroupJoinEntity })
-  payer!: Ref<UserGroupJoinEntity>;
-
-  @Index()
-  @ManyToOne({ entity: () => UserGroupJoinEntity })
   recipient!: Ref<UserGroupJoinEntity>;
 
   @Index()

@@ -1,5 +1,3 @@
-import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
-import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import {
@@ -16,15 +14,11 @@ export class TransactionService {
 
   async createTransaction(
     input: CreateTransactionInput,
-    userID: string,
   ): Promise<TransactionEntity> {
-    const orderEntity = await this.em.findOneOrFail(OrderEntity, input.orderID)
-    
     const transaction = this.em.create(TransactionEntity, {
       ...input,
       order: ref(OrderEntity, input.orderID),
       recipient: ref(OrderEntity, input.groupMemberID),
-      
     });
 
     await this.em.persistAndFlush(transaction);
@@ -53,7 +47,7 @@ export class TransactionService {
   async updateTransactionsMany(
     transactions: UpdateTransactionInput[],
   ): Promise<TransactionEntity[]> {
-    const transactionsID = [];
+    const transactionsID: string[] = [];
     const inputMap = new Map<string, UpdateTransactionInput>();
     for (const txn of transactions) {
       transactionsID.push(txn.id);
@@ -66,7 +60,10 @@ export class TransactionService {
 
     transactionEntities.forEach(txnEntity => {
       const txnInput = inputMap.get(txnEntity.id);
-      txnEntity.itemName = txnInput.itemName;
+      if (!txnInput) return;
+      if (txnInput.itemName) {
+        txnEntity.itemName = txnInput.itemName;
+      }
       txnEntity.itemPrice = txnInput.itemPrice;
     });
 

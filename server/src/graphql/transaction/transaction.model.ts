@@ -13,7 +13,6 @@ import { Field, Float, ObjectType } from '@nestjs/graphql';
  * this enum reflects additional fields like relationships or computed fields. The use of the enum itself is to ensure string value consistency between model and resolver.
  * */
 export enum ETransactionField {
-  Payer = 'payer',
   Recipient = 'recipient',
   Order = 'order',
   Group = 'group',
@@ -28,9 +27,6 @@ export class Transaction extends BaseNode {
 
   @Field(() => Float, { nullable: true })
   itemPrice?: number;
-
-  @Field(() => GroupMemberEdge)
-  [ETransactionField.Payer]: GroupMemberEdge;
 
   @Field(() => GroupMemberEdge)
   [ETransactionField.Recipient]: GroupMemberEdge;

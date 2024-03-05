@@ -36,11 +36,6 @@ export const QUERY_GroupScreen = graphql`
 				}
 			}
 		}
-
-		me {
-			...Order_meData
-			id
-		}
 	}
 `;
 
@@ -57,7 +52,6 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
     _queryRef,
   );
   const groupData = data.group;
-  const meData = data.me;
 
   // ------------------------------------------ Variables ------------------------------------------
   const memberCount = useMemo(
@@ -66,18 +60,6 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
   );
   const orderCount = useMemo(
     () => groupData.orders.edges?.length || 0,
-    [groupData],
-  );
-  // const sortedMembers = useMemo(() => data.members.edges!.sort(), [data])
-
-  // sort members by balance
-  const sortedMembers = useMemo(
-    () =>
-      [...(groupData.members.edges || [])].sort((a, b) => {
-        const balanceA = a.node!.balance;
-        const balanceB = b.node!.balance;
-        return balanceB - balanceA;
-      }),
     [groupData],
   );
 
@@ -130,14 +112,14 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
             order.node && (
               <Order
                 _orderData={order.node}
-                _meData={meData}
                 key={order.node.id}
+                
               />
             ),
         )}
       </View>
     );
-  }, [groupData, meData, theme]);
+  }, [groupData, theme]);
 
   return (
     <Reanimated.ScrollView
@@ -150,7 +132,7 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
     >
       {renderHeader}
       {/*{renderMembersBalance}*/}
-      <GroupBalanceCard _data={data.group} context={'GroupScreen'}/>
+      <GroupBalanceCard _data={data.group} />
       {renderOrderHistory}
     </Reanimated.ScrollView>
   );

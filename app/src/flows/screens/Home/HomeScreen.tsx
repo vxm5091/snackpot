@@ -1,5 +1,5 @@
 import { Divider, useTheme } from '@rneui/themed';
-import { GroupBalanceCard } from 'components/GroupBalanceCard';
+import { ActiveOrderCard } from 'components/ActiveOrderCard';
 import { useCallback } from 'react';
 import Reanimated from 'react-native-reanimated';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
@@ -22,10 +22,10 @@ export const QUERY_HomeScreen = graphql`
 			...UserAvatar_data
 			groups {
 				edges {
-					node {
+					node @required(action: THROW) {
 						group {
-							node {
-								...GroupBalanceCard_data
+							node @required(action: THROW) {
+								...ActiveOrderCard_data
 							}
 						}
 					}
@@ -41,10 +41,8 @@ export const HomeScreen: React.FC<IProps> = ({ _queryRef }) => {
 
   // ------------------------------------------ Render ------------------------------------------
   const renderGroup = useCallback(
-    ({ item: groupEdge }: { item: TGroupEdge; index: number }) => {
-      if (!groupEdge.node) return null;
-
-      return <GroupBalanceCard _data={groupEdge.node.group.node!} />;
+    ({ item: groupMemberEdge, index }: { item: TGroupEdge; index: number }) => {
+      return <ActiveOrderCard _data={groupMemberEdge.node.group.node} key={groupMemberEdge.id}/>;
     },
     [],
   );

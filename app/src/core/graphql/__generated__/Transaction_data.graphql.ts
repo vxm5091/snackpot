@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<bec8c01d5a032a1492331a6ce97558c0>>
+ * @generated SignedSource<<3015ec16ce47e6665beec2820862a36f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,6 +12,8 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type Transaction_data$data = {
   readonly id: string;
+  readonly itemName: string;
+  readonly itemPrice: number | null;
   readonly recipient: {
     readonly node: {
       readonly user: {
@@ -101,6 +103,20 @@ return {
         }
       ],
       "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "itemName",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "itemPrice",
+      "storageKey": null
     }
   ],
   "type": "Transaction",
@@ -108,6 +124,6 @@ return {
 };
 })();
 
-(node as any).hash = "0d0769e737d776bd2f2cc6fa460b5794";
+(node as any).hash = "891a13a2f5a66f745581e1058361867f";
 
 export default node;

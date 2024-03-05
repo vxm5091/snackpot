@@ -1,6 +1,6 @@
 import { GroupEntity } from '@app/entities/main/group.entity';
 import {
-  GroupMemberConnection
+  GroupMemberConnection, GroupMemberEdge,
 } from '@app/graphql/groupMember/groupMember.model';
 import { BaseNode, RelayNode } from '@app/graphql/node/node.model';
 import { OrderConnection, OrderEdge } from '@app/graphql/order/order.model';
@@ -19,6 +19,7 @@ export enum EGroupField {
   Owner = 'owner',
   Orders = 'orders',
   ActiveOrder = 'activeOrder',
+  Me = 'me',
 }
 
 @ObjectType({
@@ -42,6 +43,9 @@ export class Group extends BaseNode {
 
   @Field(() => OrderEdge, { nullable: true })
   [EGroupField.ActiveOrder]?: OrderEdge;
+  
+  @Field(() => GroupMemberEdge)
+  [EGroupField.Me]: GroupMemberEdge;
 }
 
 /* ================================= RELAY TYPES ======================================== */

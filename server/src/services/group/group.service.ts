@@ -7,21 +7,33 @@ import { Injectable } from '@nestjs/common';
 export class GroupService {
   constructor(private readonly em: EntityManager) {}
 
-  async getUserGroupTransactions(
-    groupMemberID: string,
-  ): Promise<TransactionEntity[]> {
-    return this.em.find(TransactionEntity, {
-      $or: [{ payer: groupMemberID }, { recipient: groupMemberID }],
-    });
+  async getUserGroupTransactions(groupMemberID: string) {
+    return this.em.find(
+      TransactionEntity,
+      {
+        $or: [
+          { recipient: groupMemberID },
+          { order: { payer: groupMemberID } },
+        ],
+      },
+      { populate: ['order'] },
+    );
   }
 
-  async getGroupMemberBalanceAll(groupID: string) {
-    const transactions = await this.em.find(TransactionEntity, {
-      group: groupID,
-    });
+  async getGroupMemberBalanceAll(groupID: string): Promise<Record<string, number>> {
+    const transactions = await this.em.find(
+      TransactionEntity,
+      {
+        order: { group: groupID },
+      },
+      { populate: ['order'] },
+    );
 
     return transactions.reduce((acc, txn) => {
-      const payerID = txn.payer.id;
+      if (!txn.itemPrice) {
+        return acc;
+      }
+      const payerID = txn.order.$.payer.id;
       const recipientID = txn.recipient.id;
       acc[payerID] = (acc[payerID] || 0) + txn.itemPrice;
       acc[recipientID] = (acc[recipientID] || 0) - txn.itemPrice;

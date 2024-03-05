@@ -10,6 +10,7 @@ import {
   Index,
   ManyToOne,
   OneToMany,
+  OptionalProps,
   Property,
   Ref,
   ref,
@@ -20,6 +21,8 @@ import { toGlobalId } from 'graphql-relay/node/node';
   tableName: 'users_groups',
 })
 export class UserGroupJoinEntity extends BaseEntity {
+  [OptionalProps]?: 'createdAt' | 'updatedAt' | 'id' | 'globalID';
+
   @Index()
   @ManyToOne({
     entity: () => UserEntity,
@@ -31,13 +34,6 @@ export class UserGroupJoinEntity extends BaseEntity {
     entity: () => GroupEntity,
   })
   group!: Ref<GroupEntity>;
-
-  @Index()
-  @OneToMany({
-    entity: () => TransactionEntity,
-    mappedBy: r => r.payer,
-  })
-  transactionsPaid = new Collection<TransactionEntity>(this);
 
   @Index()
   @OneToMany({

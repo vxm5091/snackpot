@@ -1,22 +1,25 @@
+import { IContextGQL } from '@app/core/types/http.types';
 import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
-import { UserEntity } from '@app/entities/main/user.entity';
 import { CreateGroupInput } from '@app/graphql/group/group.dto';
 import { EGroupField, Group } from '@app/graphql/group/group.model';
 import {
-  GroupMemberConnection
+  GroupMemberConnection,
+  GroupMemberEdge,
 } from '@app/graphql/groupMember/groupMember.model';
 
 import { OrderConnection, OrderEdge } from '@app/graphql/order/order.model';
 import { ENodeType } from '@app/graphql/types';
 import { UserEdge } from '@app/graphql/user/user.model';
 import { RelayService } from '@app/relay/relay.service';
-import { RelayEdge } from '@app/relay/types';
+import { RelayConnection, RelayEdge } from '@app/relay/types';
 import { GroupService } from '@app/services/group/group.service';
 import { EntityManager } from '@mikro-orm/knex';
+import { BadRequestException } from '@nestjs/common';
 import {
   Args,
+  Context,
   ID,
   Mutation,
   Parent,
@@ -76,7 +79,7 @@ export class GroupResolver {
   }
 
   @ResolveField(() => OrderConnection, { name: EGroupField.Orders })
-  async resolveOrders(@Parent() group: Group): Promise<OrderConnection> {
+  async resolveOrders(@Parent() group: Group): Promise<RelayConnection<OrderEntity>> {
     const res = (await this.em.findOne(
       GroupEntity,
       { id: group.id },
@@ -92,12 +95,34 @@ export class GroupResolver {
     name: EGroupField.ActiveOrder,
     nullable: true,
   })
-  async resolveActiveOrder(@Parent() group: Group): Promise<OrderEdge | null> {
+  async resolveActiveOrder(
+    @Parent() group: Group,
+  ): Promise<RelayEdge<OrderEntity> | null> {
     const res = await this.em.findOne(OrderEntity, {
       group: group.id,
       isActive: true,
     });
 
+    if (!res) return null;
+
     return this.relayService.getEdge(res, 'Order');
+  }
+
+  @ResolveField(() => GroupMemberEdge, {
+    name: EGroupField.Me,
+  })
+  async resolveMe(
+    @Parent() group: Group,
+    @Context() ctx: IContextGQL,
+  ): Promise<GroupMemberEdge> {
+    const userID = ctx.userEntity?.id;
+    if (!userID) {
+      throw new BadRequestException();
+    }
+    const res = await this.em.findOneOrFail(UserGroupJoinEntity, {
+      group: group.id,
+      user: userID,
+    });
+    return this.relayService.getEdge(res, ENodeType.GroupMember);
   }
 }

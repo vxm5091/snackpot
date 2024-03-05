@@ -1,13 +1,12 @@
 import { BaseEntity } from '@app/entities/abstract/base.entity';
 import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { GroupEntity } from '@app/entities/main/group.entity';
-import { OrderEntity } from '@app/entities/main/order.entity';
-import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import {
   Collection,
   Entity,
   Index,
   OneToMany,
+  OptionalProps,
   PrimaryKey,
   Property,
   t,
@@ -16,6 +15,7 @@ import { toGlobalId } from 'graphql-relay/node/node';
 
 @Entity({ tableName: 'users' })
 export class UserEntity extends BaseEntity {
+  [OptionalProps]?: 'createdAt' | 'updatedAt' | 'id' | 'globalID';
   @Property({
     persist: false,
   })
@@ -37,8 +37,6 @@ export class UserEntity extends BaseEntity {
 
   @Property({ type: t.text })
   avatarURL?: string;
-
-  
 
   @Index()
   @OneToMany({

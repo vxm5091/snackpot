@@ -16,6 +16,7 @@ import {
 } from '@app/graphql/transaction/transaction.model';
 import { ENodeType } from '@app/graphql/types';
 import { RelayService } from '@app/relay/relay.service';
+import { RelayConnection } from '@app/relay/types';
 import { TransactionService } from '@app/services/transaction/transaction.service';
 import { EntityManager } from '@mikro-orm/knex';
 import { BadRequestException } from '@nestjs/common';
@@ -55,12 +56,9 @@ export class TransactionResolver {
   ): Promise<TransactionEdge> {
     if (!ctx.userEntity) {
       // TODO convert to graphQL error
-      throw new BadRequestException()
+      throw new BadRequestException();
     }
-    const res = await this.transactionService.createTransaction(
-      input,
-      ctx.userEntity.id,
-    );
+    const res = await this.transactionService.createTransaction(input);
     return this.relayService.getEdge(res, ENodeType.Transaction);
   }
 
@@ -77,7 +75,7 @@ export class TransactionResolver {
   async updateTransactionsMany(
     @Args('input', { type: () => UpdateTransactionsManyInput })
     input: UpdateTransactionsManyInput,
-  ): Promise<TransactionConnection> {
+  ): Promise<RelayConnection<TransactionEntity>> {
     const res = await this.transactionService.updateTransactionsMany(
       input.transactions,
     );
@@ -85,22 +83,6 @@ export class TransactionResolver {
   }
 
   //   ------------------------------------- Resolvers -------------------------------------
-  @ResolveField(() => GroupMemberEdge, { name: ETransactionField.Payer })
-  async resolvePayer(
-    @Parent() transaction: Transaction,
-  ): Promise<GroupMemberEdge> {
-    const transactionEntity = await this.em.findOneOrFail(
-      TransactionEntity,
-      { id: transaction.id },
-      { populate: ['payer'] },
-    );
-
-    return this.relayService.getEdge(
-      transactionEntity.payer.getEntity(),
-      ENodeType.GroupMember,
-    );
-  }
-
   @ResolveField(() => GroupMemberEdge, { name: ETransactionField.Recipient })
   async resolveRecipient(
     @Parent() transaction: Transaction,

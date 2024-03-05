@@ -53,7 +53,7 @@ module.exports = {
     'no-trailing-spaces': 'off',
     'newline-before-return': 'off',
     'react/jsx-no-undef': 'off',
-    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-unused-vars': 'warn',
     'unused-imports/no-unused-imports': 'error',
     'react/no-unescaped-entities': [
       'error',

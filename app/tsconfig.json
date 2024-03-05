@@ -3,26 +3,14 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
-    "lib": [
-      "es2020"
-    ],
+    "lib": ["es2020"],
     "baseUrl": "./src/",
     "paths": {
-      "components/*": [
-        "components/*"
-      ],
-      "core/*": [
-        "core/*"
-      ],
-      "flows/*": [
-        "flows/*"
-      ],
-      "graphql/*": [
-        "graphql/*"
-      ],
-      "shared/*": [
-        "shared/*"
-      ],
+      "components/*": ["components/*"],
+      "core/*": ["core/*"],
+      "flows/*": ["flows/*"],
+      "graphql/*": ["graphql/*"],
+      "shared/*": ["shared/*"]
     },
     "allowJs": true,
     "jsx": "react-native",
@@ -44,8 +32,5 @@
     "jest.config.js",
     "react-native/Libraries/NewAppScreen"
   ],
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "include": ["**/*.ts", "**/*.tsx"]
 }

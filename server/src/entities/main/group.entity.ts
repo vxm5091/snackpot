@@ -1,7 +1,6 @@
 import { BaseEntity } from '@app/entities/abstract/base.entity';
 import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
-import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { UserEntity } from '@app/entities/main/user.entity';
 import {
   Collection,
@@ -9,6 +8,7 @@ import {
   Index,
   ManyToOne,
   OneToMany,
+  OptionalProps,
   Property,
   t,
 } from '@mikro-orm/core';
@@ -16,6 +16,8 @@ import { toGlobalId } from 'graphql-relay/node/node';
 
 @Entity({ tableName: 'groups' })
 export class GroupEntity extends BaseEntity {
+  [OptionalProps]?: 'createdAt' | 'updatedAt' | 'id' | 'globalID';
+
   @Property({
     persist: false,
   })
@@ -42,13 +44,6 @@ export class GroupEntity extends BaseEntity {
     mappedBy: r => r.group,
   })
   orders = new Collection<OrderEntity>(this);
-
-  @Index()
-  @OneToMany({
-    entity: () => TransactionEntity,
-    mappedBy: r => r.group,
-  })
-  transactions = new Collection<TransactionEntity>(this);
 
   @Index()
   @ManyToOne({

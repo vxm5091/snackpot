@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3a82a40f340a188e36d0903138513adf>>
+ * @generated SignedSource<<2629c2eefae45f06f1bd39a7a47b7432>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,10 +15,10 @@ export type UpdateTransactionInput = {
   itemName?: string | null;
   itemPrice?: number | null;
 };
-export type TransactionUpdateMutation$variables = {
+export type ActiveOrderCardUpdateMyTransactionMutation$variables = {
   input: UpdateTransactionInput;
 };
-export type TransactionUpdateMutation$data = {
+export type ActiveOrderCardUpdateMyTransactionMutation$data = {
   readonly updateTransaction: {
     readonly node: {
       readonly group: {
@@ -30,9 +30,9 @@ export type TransactionUpdateMutation$data = {
     } | null;
   };
 };
-export type TransactionUpdateMutation = {
-  response: TransactionUpdateMutation$data;
-  variables: TransactionUpdateMutation$variables;
+export type ActiveOrderCardUpdateMyTransactionMutation = {
+  response: ActiveOrderCardUpdateMyTransactionMutation$data;
+  variables: ActiveOrderCardUpdateMyTransactionMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -122,7 +122,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "TransactionUpdateMutation",
+    "name": "ActiveOrderCardUpdateMyTransactionMutation",
     "selections": [
       {
         "alias": null,
@@ -186,7 +186,7 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "TransactionUpdateMutation",
+    "name": "ActiveOrderCardUpdateMyTransactionMutation",
     "selections": [
       {
         "alias": null,
@@ -328,16 +328,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b997ec37bf6ed0806aa8d52758ce37f0",
+    "cacheID": "97fc6dcd393eb25a2f8414ff4aecd915",
     "id": null,
     "metadata": {},
-    "name": "TransactionUpdateMutation",
+    "name": "ActiveOrderCardUpdateMyTransactionMutation",
     "operationKind": "mutation",
-    "text": "mutation TransactionUpdateMutation(\n  $input: UpdateTransactionInput!\n) {\n  updateTransaction(input: $input) {\n    node {\n      ...Transaction_data\n      group {\n        node {\n          ...GroupBalanceCard_data\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupBalanceCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        id\n        balance\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          id\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "mutation ActiveOrderCardUpdateMyTransactionMutation(\n  $input: UpdateTransactionInput!\n) {\n  updateTransaction(input: $input) {\n    node {\n      ...Transaction_data\n      group {\n        node {\n          ...GroupBalanceCard_data\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupBalanceCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        id\n        balance\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          id\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();
 
-(node as any).hash = "30b944ae2a3c1ed56a7488515e1cd62b";
+(node as any).hash = "c848a050f13af9c1b57cc6fd391ffc34";
 
 export default node;

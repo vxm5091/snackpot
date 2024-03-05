@@ -17,23 +17,23 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamptz",
+          "type": "timestamptz(0)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
-          "length": 6,
+          "nullable": false,
+          "length": 0,
           "default": "now()",
           "mappedType": "datetime"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamptz",
+          "type": "timestamptz(0)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "length": 6,
+          "length": 0,
           "default": "now()",
           "mappedType": "datetime"
         },
@@ -83,14 +83,12 @@
             "id"
           ],
           "composite": false,
-          "constraint": true,
           "primary": true,
           "unique": true
         }
       ],
       "checks": [],
-      "foreignKeys": {},
-      "nativeEnums": {}
+      "foreignKeys": {}
     },
     {
       "columns": {
@@ -105,23 +103,23 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamptz",
+          "type": "timestamptz(0)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
-          "length": 6,
+          "nullable": false,
+          "length": 0,
           "default": "now()",
           "mappedType": "datetime"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamptz",
+          "type": "timestamptz(0)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "length": 6,
+          "length": 0,
           "default": "now()",
           "mappedType": "datetime"
         },
@@ -162,7 +160,6 @@
           ],
           "composite": false,
           "keyName": "groups_owner_id_index",
-          "constraint": false,
           "primary": false,
           "unique": false
         },
@@ -172,7 +169,6 @@
             "id"
           ],
           "composite": false,
-          "constraint": true,
           "primary": true,
           "unique": true
         }
@@ -191,8 +187,7 @@
           "referencedTableName": "public.users",
           "updateRule": "cascade"
         }
-      },
-      "nativeEnums": {}
+      }
     },
     {
       "columns": {
@@ -207,23 +202,23 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamptz",
+          "type": "timestamptz(0)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
-          "length": 6,
+          "nullable": false,
+          "length": 0,
           "default": "now()",
           "mappedType": "datetime"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamptz",
+          "type": "timestamptz(0)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "length": 6,
+          "length": 0,
           "default": "now()",
           "mappedType": "datetime"
         },
@@ -255,7 +250,6 @@
           ],
           "composite": false,
           "keyName": "users_groups_user_id_index",
-          "constraint": false,
           "primary": false,
           "unique": false
         },
@@ -265,7 +259,6 @@
           ],
           "composite": false,
           "keyName": "users_groups_group_id_index",
-          "constraint": false,
           "primary": false,
           "unique": false
         },
@@ -275,7 +268,6 @@
             "id"
           ],
           "composite": false,
-          "constraint": true,
           "primary": true,
           "unique": true
         }
@@ -306,8 +298,7 @@
           "referencedTableName": "public.groups",
           "updateRule": "cascade"
         }
-      },
-      "nativeEnums": {}
+      }
     },
     {
       "columns": {
@@ -322,23 +313,23 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamptz",
+          "type": "timestamptz(0)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
-          "length": 6,
+          "nullable": false,
+          "length": 0,
           "default": "now()",
           "mappedType": "datetime"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamptz",
+          "type": "timestamptz(0)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "length": 6,
+          "length": 0,
           "default": "now()",
           "mappedType": "datetime"
         },
@@ -349,7 +340,6 @@
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "default": "true",
           "mappedType": "boolean"
         },
         "payer_id": {
@@ -380,7 +370,6 @@
           ],
           "composite": false,
           "keyName": "orders_payer_id_index",
-          "constraint": false,
           "primary": false,
           "unique": false
         },
@@ -390,7 +379,6 @@
           ],
           "composite": false,
           "keyName": "orders_group_id_index",
-          "constraint": false,
           "primary": false,
           "unique": false
         },
@@ -400,7 +388,6 @@
             "id"
           ],
           "composite": false,
-          "constraint": true,
           "primary": true,
           "unique": true
         }
@@ -431,8 +418,7 @@
           "referencedTableName": "public.groups",
           "updateRule": "cascade"
         }
-      },
-      "nativeEnums": {}
+      }
     },
     {
       "columns": {
@@ -447,23 +433,23 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamptz",
+          "type": "timestamptz(0)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
-          "length": 6,
+          "nullable": false,
+          "length": 0,
           "default": "now()",
           "mappedType": "datetime"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamptz",
+          "type": "timestamptz(0)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "length": 6,
+          "length": 0,
           "default": "now()",
           "mappedType": "datetime"
         },
@@ -485,15 +471,6 @@
           "nullable": true,
           "mappedType": "float"
         },
-        "payer_id": {
-          "name": "payer_id",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
         "recipient_id": {
           "name": "recipient_id",
           "type": "varchar(255)",
@@ -511,15 +488,6 @@
           "primary": false,
           "nullable": false,
           "mappedType": "string"
-        },
-        "group_id": {
-          "name": "group_id",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
         }
       },
       "name": "transactions",
@@ -527,21 +495,10 @@
       "indexes": [
         {
           "columnNames": [
-            "payer_id"
-          ],
-          "composite": false,
-          "keyName": "transactions_payer_id_index",
-          "constraint": false,
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
             "recipient_id"
           ],
           "composite": false,
           "keyName": "transactions_recipient_id_index",
-          "constraint": false,
           "primary": false,
           "unique": false
         },
@@ -551,17 +508,6 @@
           ],
           "composite": false,
           "keyName": "transactions_order_id_index",
-          "constraint": false,
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "group_id"
-          ],
-          "composite": false,
-          "keyName": "transactions_group_id_index",
-          "constraint": false,
           "primary": false,
           "unique": false
         },
@@ -571,25 +517,12 @@
             "id"
           ],
           "composite": false,
-          "constraint": true,
           "primary": true,
           "unique": true
         }
       ],
       "checks": [],
       "foreignKeys": {
-        "transactions_payer_id_foreign": {
-          "constraintName": "transactions_payer_id_foreign",
-          "columnNames": [
-            "payer_id"
-          ],
-          "localTableName": "public.transactions",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.users_groups",
-          "updateRule": "cascade"
-        },
         "transactions_recipient_id_foreign": {
           "constraintName": "transactions_recipient_id_foreign",
           "columnNames": [
@@ -613,22 +546,8 @@
           ],
           "referencedTableName": "public.orders",
           "updateRule": "cascade"
-        },
-        "transactions_group_id_foreign": {
-          "constraintName": "transactions_group_id_foreign",
-          "columnNames": [
-            "group_id"
-          ],
-          "localTableName": "public.transactions",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "public.groups",
-          "updateRule": "cascade"
         }
-      },
-      "nativeEnums": {}
+      }
     }
-  ],
-  "nativeEnums": {}
+  ]
 }

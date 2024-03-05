@@ -9,6 +9,7 @@ import { TransactionConnection } from '@app/graphql/transaction/transaction.mode
 import { ENodeType } from '@app/graphql/types';
 import { UserEdge } from '@app/graphql/user/user.model';
 import { RelayService } from '@app/relay/relay.service';
+import { RelayConnection } from '@app/relay/types';
 import { GroupService } from '@app/services/group/group.service';
 import { EntityManager } from '@mikro-orm/knex';
 import { Float, Parent, ResolveField, Resolver } from '@nestjs/graphql';
@@ -59,7 +60,7 @@ export class GroupMemberResolver {
   })
   async resolveTransactions(
     @Parent() groupMember: GroupMember,
-  ): Promise<TransactionConnection> {
+  ): Promise<RelayConnection<TransactionEntity>> {
     const txnEntities = await this.groupService.getUserGroupTransactions(
       groupMember.id,
     );
@@ -74,7 +75,8 @@ export class GroupMemberResolver {
     );
 
     return txnEntities.reduce((acc, transaction) => {
-      if (transaction.payer.id === groupMember.id) {
+      if (!transaction.itemPrice) return acc;
+      if (transaction.order.$.payer.id === groupMember.id) {
         return acc + transaction.itemPrice;
       } else {
         return acc - transaction.itemPrice;

@@ -52,9 +52,7 @@ export class DatabaseSeeder extends Seeder {
         em.create(TransactionEntity, {
           id: faker.string.uuid(),
           recipient: friendMember,
-          payer: meMember,
           order,
-          group,
           itemPrice: +faker.finance.amount({ min: 3, max: 10 }),
           itemName: ITEMS[Math.floor(Math.random() * ITEMS.length)],
         });

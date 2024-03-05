@@ -9,8 +9,10 @@ input CreateGroupInput {
 }
 
 input CreateTransactionInput {
+  groupMemberID: ID!
   itemName: String!
   itemPrice: Float
+  orderID: ID!
 }
 
 """
@@ -27,6 +29,7 @@ type Group implements Node {
   globalID: ID!
   groupName: String!
   id: ID!
+  me: GroupMemberEdge!
   members: GroupMemberConnection!
   orders: OrderConnection!
   owner: UserEdge!
@@ -123,7 +126,6 @@ type Transaction implements Node {
   itemName: String!
   itemPrice: Float
   order: OrderEdge!
-  payer: GroupMemberEdge!
   recipient: GroupMemberEdge!
   updatedAt: DateTime!
 }

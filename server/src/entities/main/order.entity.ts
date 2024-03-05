@@ -2,13 +2,13 @@ import { BaseEntity } from '@app/entities/abstract/base.entity';
 import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { GroupEntity } from '@app/entities/main/group.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
-import { UserEntity } from '@app/entities/main/user.entity';
 import {
   Collection,
   Entity,
   Index,
   ManyToOne,
   OneToMany,
+  OptionalProps,
   Property,
   ref,
   Ref,
@@ -20,6 +20,8 @@ import { toGlobalId } from 'graphql-relay/node/node';
  * */
 @Entity({ tableName: 'orders' })
 export class OrderEntity extends BaseEntity {
+  [OptionalProps]?: 'createdAt' | 'updatedAt' | 'id' | 'globalID' | 'isActive';
+
   @Property({
     persist: false,
   })
@@ -28,7 +30,7 @@ export class OrderEntity extends BaseEntity {
   }
 
   @Property()
-  isActive = true
+  isActive = true;
 
   @Index()
   @ManyToOne({ entity: () => UserGroupJoinEntity })
