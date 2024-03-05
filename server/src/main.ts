@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import compression from 'compression';
 import helmet from 'helmet';
@@ -11,6 +12,12 @@ async function bootstrap() {
 
   app.use(express.json());
   app.use(compression()); // GQL output can get quite long, luckily it compresses well
+  app.useGlobalPipes(
+    new ValidationPipe({
+      enableDebugMessages: process.env.NODE_ENV === 'development',
+      transform: true,
+    }),
+  );
   app.use(
     helmet({
       contentSecurityPolicy:

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ba13ff45da8368d076d0e5c9e618439f>>
+ * @generated SignedSource<<67d78a04537d01ab217ca6ae3e958795>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,7 +10,7 @@
 
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type Order_orderData$data = {
+export type HistoricalOrderCard_orderData$data = {
   readonly createdAt: string;
   readonly group: {
     readonly node: {
@@ -32,16 +32,17 @@ export type Order_orderData$data = {
   readonly transactions: {
     readonly edges: ReadonlyArray<{
       readonly node: {
+        readonly id: string;
         readonly itemPrice: number | null;
         readonly " $fragmentSpreads": FragmentRefs<"Transaction_data">;
       } | null;
     }> | null;
   };
-  readonly " $fragmentType": "Order_orderData";
+  readonly " $fragmentType": "HistoricalOrderCard_orderData";
 };
-export type Order_orderData$key = {
-  readonly " $data"?: Order_orderData$data;
-  readonly " $fragmentSpreads": FragmentRefs<"Order_orderData">;
+export type HistoricalOrderCard_orderData$key = {
+  readonly " $data"?: HistoricalOrderCard_orderData$data;
+  readonly " $fragmentSpreads": FragmentRefs<"HistoricalOrderCard_orderData">;
 };
 
 const node: ReaderFragment = (function(){
@@ -56,7 +57,7 @@ return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "Order_orderData",
+  "name": "HistoricalOrderCard_orderData",
   "selections": [
     (v0/*: any*/),
     {
@@ -183,6 +184,7 @@ return {
                   "kind": "FragmentSpread",
                   "name": "Transaction_data"
                 },
+                (v0/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -205,6 +207,6 @@ return {
 };
 })();
 
-(node as any).hash = "50731e0250318092dbbdcb4705b75fec";
+(node as any).hash = "9af35a7fa6fac17693231ea826413c8f";
 
 export default node;

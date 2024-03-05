@@ -1,5 +1,6 @@
 import { Divider, useTheme } from '@rneui/themed';
-import { ActiveOrderCard } from 'components/ActiveOrderCard';
+import { ActiveOrderCard } from 'components/OrderCard';
+import { Spacer } from 'components/layout';
 import { useCallback } from 'react';
 import Reanimated from 'react-native-reanimated';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
@@ -12,51 +13,57 @@ interface IProps {
   _queryRef: PreloadedQuery<HomeScreenQuery>;
 }
 
-type TGroupEdge = TNonNullable<
+type TGroupEdge = NonNullable<
   HomeScreenQuery$data['me']['groups']['edges']
 >[number];
 
 export const QUERY_HomeScreen = graphql`
-	query HomeScreenQuery {
-		me {
-			...UserAvatar_data
-			groups {
-				edges {
-					node @required(action: THROW) {
-						group {
-							node @required(action: THROW) {
-								...ActiveOrderCard_data
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+  query HomeScreenQuery {
+    me {
+      ...UserAvatar_data
+      groups {
+        edges {
+          node @required(action: THROW) {
+            id
+            group {
+              node @required(action: THROW) {
+                ...ActiveOrderCard_data
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 `;
 
 export const HomeScreen: React.FC<IProps> = ({ _queryRef }) => {
-  const {theme} = useTheme();
+  const { theme } = useTheme();
   const data = usePreloadedQuery(QUERY_HomeScreen, _queryRef).me;
 
   // ------------------------------------------ Render ------------------------------------------
   const renderGroup = useCallback(
     ({ item: groupMemberEdge, index }: { item: TGroupEdge; index: number }) => {
-      return <ActiveOrderCard _data={groupMemberEdge.node.group.node} key={groupMemberEdge.id}/>;
+      return (
+        <ActiveOrderCard
+          _data={groupMemberEdge.node.group.node}
+          key={groupMemberEdge.node.id}
+          context={'HomeScreen'}
+        />
+      );
     },
     [],
   );
 
-  const renderItemSeparator = useCallback(
-    () => <Divider width={theme.spacing.md} />,
-    [],
-  );
+  const renderItemSeparator = useCallback(() => <Spacer />, []);
 
   return (
     <Reanimated.FlatList
       data={data.groups.edges}
       renderItem={renderGroup}
       ItemSeparatorComponent={renderItemSeparator}
+      automaticallyAdjustKeyboardInsets={true}
+      keyboardDismissMode={'on-drag'}
     />
   );
 };

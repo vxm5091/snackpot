@@ -13,6 +13,7 @@ import { RelayConnection } from '@app/relay/types';
 import { GroupService } from '@app/services/group/group.service';
 import { EntityManager } from '@mikro-orm/knex';
 import { Float, Parent, ResolveField, Resolver } from '@nestjs/graphql';
+import { fromGlobalId } from 'graphql-relay/node/node';
 
 @Resolver(() => GroupMember)
 export class GroupMemberResolver {
@@ -22,16 +23,14 @@ export class GroupMemberResolver {
     private readonly groupService: GroupService,
   ) {}
 
-  //   ------------------------------------- Queries -------------------------------------
-  //   ------------------------------------- Mutations -------------------------------------
   //   ------------------------------------- Resolvers -------------------------------------
-
   @ResolveField(() => UserEdge, { name: EGroupMemberField.User })
   async resolveUser(@Parent() groupMember: GroupMember): Promise<UserEdge> {
+    const groupMemberID = fromGlobalId(groupMember.globalID).id;
     const memberEntity = await this.em.findOneOrFail(
       UserGroupJoinEntity,
       {
-        id: groupMember.id,
+        id: groupMemberID,
       },
       { populate: ['user'] },
     );
@@ -42,10 +41,11 @@ export class GroupMemberResolver {
 
   @ResolveField(() => GroupEdge, { name: EGroupMemberField.Group })
   async resolveGroup(@Parent() groupMember: GroupMember): Promise<GroupEdge> {
+    const groupMemberID = fromGlobalId(groupMember.globalID).id;
     const memberEntity = await this.em.findOneOrFail(
       UserGroupJoinEntity,
       {
-        id: groupMember.id,
+        id: groupMemberID,
       },
       { populate: ['group'] },
     );
@@ -61,26 +61,31 @@ export class GroupMemberResolver {
   async resolveTransactions(
     @Parent() groupMember: GroupMember,
   ): Promise<RelayConnection<TransactionEntity>> {
-    const txnEntities = await this.groupService.getUserGroupTransactions(
-      groupMember.id,
-    );
+    const groupMemberID = fromGlobalId(groupMember.globalID).id;
+    const txnEntities =
+      await this.groupService.getUserGroupTransactions(groupMemberID);
 
     return this.relayService.getConnection(txnEntities, ENodeType.Transaction);
   }
 
   @ResolveField(() => Float, { name: EGroupMemberField.Balance })
   async resolveBalance(@Parent() groupMember: GroupMember): Promise<number> {
-    const txnEntities = await this.groupService.getUserGroupTransactions(
-      groupMember.id,
-    );
+    const groupMemberID = fromGlobalId(groupMember.globalID).id;
+    console.log({ groupMemberID });
+    const txnEntities =
+      await this.groupService.getUserGroupTransactions(groupMemberID);
+    console.log({ txnEntities });
 
-    return txnEntities.reduce((acc, transaction) => {
+    const balance = txnEntities.reduce((acc, transaction) => {
       if (!transaction.itemPrice) return acc;
-      if (transaction.order.$.payer.id === groupMember.id) {
+      console.log({ transactionOrder: transaction.order.getEntity() });
+      if (transaction.order.$.payer.id === groupMemberID) {
         return acc + transaction.itemPrice;
       } else {
         return acc - transaction.itemPrice;
       }
     }, 0);
+    console.log({ balance });
+    return balance;
   }
 }

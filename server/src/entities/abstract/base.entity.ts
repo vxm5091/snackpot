@@ -1,8 +1,12 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, t } from '@mikro-orm/core';
+import uuid from 'uuid';
 
 @Entity({ abstract: true })
 export abstract class BaseEntity {
-  @PrimaryKey()
+  @PrimaryKey({
+    type: t.bigint,
+    defaultRaw: `next_id()`,
+  })
   id!: string;
 
   @Property({ defaultRaw: 'now()' })

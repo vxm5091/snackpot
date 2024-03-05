@@ -15,6 +15,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import { fromGlobalId } from 'graphql-relay/node/node';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -25,11 +26,6 @@ export class UserResolver {
   ) {}
 
   //   ------------------------------------- Queries -------------------------------------
-  @Query(() => User, { name: 'user' })
-  getUser(@Args('id', { type: () => ID }) id: string): Promise<UserEntity> {
-    return this.em.findOneOrFail(UserEntity, id);
-  }
-
   @Query(() => User, { name: 'me' })
   getMe(): Promise<UserEntity> {
     return this.em.findOneOrFail(UserEntity, { id: USER_ID });
@@ -41,7 +37,8 @@ export class UserResolver {
     name: EUserField.Groups,
   })
   async resolveGroups(@Parent() user: User): Promise<GroupMemberConnection> {
-    const res = await this.em.find(UserGroupJoinEntity, { user: user.id });
+    const userID = fromGlobalId(user.globalID).id;
+    const res = await this.em.find(UserGroupJoinEntity, { user: userID });
     return this.relayService.getConnection(res, ENodeType.GroupMember);
   }
 }

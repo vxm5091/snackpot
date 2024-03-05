@@ -1,6 +1,6 @@
 import { Divider, Text, useTheme } from '@rneui/themed';
 import { BalanceText } from 'components/BalanceText';
-import { Row } from 'components/layout/Row';
+import { Row, Spacer } from 'components/layout';
 import { UserAvatar } from 'components/UserAvatar';
 import { GroupMember_data$key } from 'core/graphql/__generated__/GroupMember_data.graphql';
 import { View } from 'react-native';
@@ -49,7 +49,7 @@ export const GroupMember: React.FC<IProps> = ({ _data, isLast = false }) => {
         </Row>
         <BalanceText amount={data.balance} />
       </Row>
-      {!isLast && <Divider/>}
+      {!isLast && <Spacer/>}
     </View>
   );
 };

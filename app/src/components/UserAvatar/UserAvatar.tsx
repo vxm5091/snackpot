@@ -1,12 +1,12 @@
-import { Avatar } from '@rneui/themed';
+import { Avatar, AvatarProps } from '@rneui/themed';
 import { UserAvatar_data$key } from 'core/graphql/__generated__/UserAvatar_data.graphql';
 import { graphql, useFragment } from 'react-relay';
 
-interface IProps {
+interface IProps extends AvatarProps {
   _data: UserAvatar_data$key;
 }
 
-export const UserAvatar: React.FC<IProps> = ({ _data }) => {
+export const UserAvatar: React.FC<IProps> = ({ _data, ...props }) => {
   const data = useFragment(
     graphql`
       fragment UserAvatar_data on User {
@@ -27,6 +27,7 @@ export const UserAvatar: React.FC<IProps> = ({ _data }) => {
       rounded
       source={data.avatarURL ? { uri: data.avatarURL } : {}}
       title={data.avatarURL ? undefined : `${data.firstName[0]}${data.lastName[0]}`}
+      {...props}
     />
   );
 };

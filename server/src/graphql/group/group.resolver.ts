@@ -20,13 +20,12 @@ import { BadRequestException } from '@nestjs/common';
 import {
   Args,
   Context,
-  ID,
   Mutation,
   Parent,
-  Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import { fromGlobalId } from 'graphql-relay/node/node';
 
 @Resolver(() => Group)
 export class GroupResolver {
@@ -36,21 +35,19 @@ export class GroupResolver {
     private readonly relayService: RelayService,
   ) {}
 
-  //   ------------------------------------- Queries -------------------------------------
-  @Query(() => Group, { name: 'group' })
-  getGroup(@Args('id', { type: () => ID }) id: string): Promise<GroupEntity> {
-    return this.em.findOneOrFail(GroupEntity, id);
-  }
-
   //   ------------------------------------- Mutations -------------------------------------
   @Mutation(() => Group)
   async createGroup(
     @Args({ name: 'createGroupInput', type: () => CreateGroupInput })
     input: CreateGroupInput,
+    @Context() ctx: IContextGQL,
   ): Promise<GroupEntity> {
-    const group = new GroupEntity({
+    if (!ctx.userEntity) throw new BadRequestException('User not found');
+
+    const group = this.em.create(GroupEntity, {
       groupName: input.groupName,
       avatarURL: input.avatarURL,
+      owner: ctx.userEntity.id,
     });
     this.em.persist(group);
 
@@ -61,34 +58,42 @@ export class GroupResolver {
   //   ------------------------------------- Resolvers -------------------------------------
   @ResolveField(() => GroupMemberConnection, { name: EGroupField.Members })
   async resolveMembers(@Parent() group: Group): Promise<GroupMemberConnection> {
-    const res = await this.em.find(UserGroupJoinEntity, { group: group.id });
+    const groupID = fromGlobalId(group.globalID).id;
+    const res = await this.em.find(UserGroupJoinEntity, { group: groupID });
     return this.relayService.getConnection(res, ENodeType.GroupMember);
   }
 
   @ResolveField(() => UserEdge, { name: EGroupField.Owner })
   async resolveOwner(@Parent() group: Group): Promise<UserEdge> {
+    const groupID = fromGlobalId(group.globalID).id;
     const res = (await this.em.findOne(
       GroupEntity,
-      { id: group.id },
+      { id: groupID },
       {
         populate: ['owner'],
       },
     )) as GroupEntity;
 
-    return this.relayService.getEdge(res.owner, 'User');
+    return this.relayService.getEdge(res.owner, ENodeType.User);
   }
 
   @ResolveField(() => OrderConnection, { name: EGroupField.Orders })
-  async resolveOrders(@Parent() group: Group): Promise<RelayConnection<OrderEntity>> {
-    const res = (await this.em.findOne(
-      GroupEntity,
-      { id: group.id },
-      {
-        populate: ['orders'],
-      },
-    )) as GroupEntity;
+  async resolveOrders(
+    @Parent() group: Group,
+  ): Promise<RelayConnection<OrderEntity>> {
+    const groupID = fromGlobalId(group.globalID).id;
 
-    return this.relayService.getConnection(res.orders.getItems(), 'Order');
+    const res = await this.em.find(
+      OrderEntity,
+      {
+        group: groupID,
+      },
+      {
+        orderBy: { createdAt: 'DESC' },
+      },
+    );
+
+    return this.relayService.getConnection(res, ENodeType.Order);
   }
 
   @ResolveField(() => OrderEdge, {
@@ -98,14 +103,15 @@ export class GroupResolver {
   async resolveActiveOrder(
     @Parent() group: Group,
   ): Promise<RelayEdge<OrderEntity> | null> {
+    const groupID = fromGlobalId(group.globalID).id;
     const res = await this.em.findOne(OrderEntity, {
-      group: group.id,
+      group: groupID,
       isActive: true,
     });
 
     if (!res) return null;
 
-    return this.relayService.getEdge(res, 'Order');
+    return this.relayService.getEdge(res, ENodeType.Order);
   }
 
   @ResolveField(() => GroupMemberEdge, {
@@ -115,12 +121,13 @@ export class GroupResolver {
     @Parent() group: Group,
     @Context() ctx: IContextGQL,
   ): Promise<GroupMemberEdge> {
+    const groupID = fromGlobalId(group.globalID).id;
     const userID = ctx.userEntity?.id;
     if (!userID) {
       throw new BadRequestException();
     }
     const res = await this.em.findOneOrFail(UserGroupJoinEntity, {
-      group: group.id,
+      group: groupID,
       user: userID,
     });
     return this.relayService.getEdge(res, ENodeType.GroupMember);

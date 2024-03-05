@@ -16,14 +16,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteTransactionInput {
+  groupMemberID: ID!
+  orderID: ID!
+}
+
 type Group implements Node {
   activeOrder: OrderEdge
   avatarURL: String
   createdAt: DateTime!
-
-  """The globally unique relay ID"""
-  globalID: ID!
   groupName: String!
+
+  """globally unique ID"""
   id: ID!
   me: GroupMemberEdge!
   members: GroupMemberConnection!
@@ -40,10 +44,9 @@ type GroupEdge {
 type GroupMember implements Node {
   balance: Float!
   createdAt: DateTime!
-
-  """The globally unique relay ID"""
-  globalID: ID!
   group: GroupEdge!
+
+  """globally unique ID"""
   id: ID!
   transactions: TransactionConnection!
   updatedAt: DateTime!
@@ -64,22 +67,23 @@ type Mutation {
   createGroup(createGroupInput: CreateGroupInput!): Group!
   createOrder(groupID: ID!): OrderEdge!
   createTransaction(input: CreateTransactionInput!): TransactionEdge!
+  deleteTransaction(input: DeleteTransactionInput!): ID!
+  simulateTransactions(orderID: ID!): [TransactionEdge!]!
   updateOrder(input: UpdateOrderInput!): Order!
   updateTransaction(input: UpdateTransactionInput!): TransactionEdge!
   updateTransactionsMany(input: UpdateTransactionsManyInput!): TransactionConnection!
 }
 
 interface Node {
-  """The globally unique relay ID"""
-  globalID: ID!
+  """globally unique ID"""
+  id: ID!
 }
 
 type Order implements Node {
   createdAt: DateTime!
-
-  """The globally unique relay ID"""
-  globalID: ID!
   group: GroupEdge!
+
+  """globally unique ID"""
   id: ID!
   isActive: Boolean!
   payer: GroupMemberEdge!
@@ -105,19 +109,15 @@ type PageInfo {
 }
 
 type Query {
-  group(id: ID!): Group!
   me: User!
-  order(id: ID!): Order!
-  transaction(id: ID!): Transaction!
-  user(id: ID!): User!
+  node(id: ID!): Node
 }
 
 type Transaction implements Node {
   createdAt: DateTime!
-
-  """The globally unique relay ID"""
-  globalID: ID!
   group: GroupEdge!
+
+  """globally unique ID"""
   id: ID!
   itemName: String!
   itemPrice: Float
@@ -155,11 +155,10 @@ type User implements Node {
   avatarURL: String
   createdAt: DateTime!
   firstName: String!
-
-  """The globally unique relay ID"""
-  globalID: ID!
   groups: GroupMemberConnection!
-  id: String!
+
+  """globally unique ID"""
+  id: ID!
   lastName: String!
   updatedAt: DateTime!
   username: String!

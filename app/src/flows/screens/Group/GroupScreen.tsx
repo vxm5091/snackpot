@@ -1,41 +1,48 @@
 import { useNavigation } from '@react-navigation/core';
-import { ListItem, useTheme, Text } from '@rneui/themed';
-import { GroupAvatar } from 'components/GroupAvatar';
-import { GroupBalanceCard } from 'components/GroupBalanceCard';
-import { Order } from 'components/Order';
+import { useTheme } from '@rneui/themed';
+import {
+  ActiveOrderCard,
+  HistoricalOrderCard,
+} from 'components/OrderCard';
+import { GroupBalanceCard } from 'components/BalanceCard';
 import { GroupScreenQuery } from 'core/graphql/__generated__/GroupScreenQuery.graphql';
 import { TScreenPropsRoot } from 'flows/types';
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import Reanimated from 'react-native-reanimated';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
-import { formatPlural } from 'shared/format/formatPlural';
 import { useDidMount } from 'shared/hooks/lifecycleHooks';
 
 export const QUERY_GroupScreen = graphql`
 	query GroupScreenQuery($id: ID!) {
-		group(id: $id) {
-			...GroupBalanceCard_data
-			...GroupAvatar_data
-			groupName
-			members {
-				edges {
-					node {
-						...GroupMember_data
-						id
-						balance
+		node(id: $id) {
+			...on Group {
+				...GroupBalanceCard_data
+				...GroupAvatar_data
+				...ActiveOrderCard_data
+				groupName
+				members {
+					edges {
+						node {
+							...GroupMember_data
+							id
+							balance
+						}
 					}
 				}
-			}
-			orders {
-				edges {
-					node {
-						id
-						...Order_orderData
+
+				orders {
+					edges {
+						node {
+							id
+							...HistoricalOrderCard_orderData
+							isActive
+						}
 					}
 				}
 			}
 		}
+
 	}
 `;
 
@@ -51,66 +58,30 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
     QUERY_GroupScreen,
     _queryRef,
   );
-  const groupData = data.group;
-
-  // ------------------------------------------ Variables ------------------------------------------
-  const memberCount = useMemo(
-    () => groupData.members.edges?.length || 0,
-    [groupData],
-  );
-  const orderCount = useMemo(
-    () => groupData.orders.edges?.length || 0,
-    [groupData],
-  );
+  const groupData = data.node;
 
   // ------------------------------------------ Side Effects ------------------------------------------
   useDidMount(() => {
     navigation.setOptions({
-      title: groupData.groupName,
+      title: groupData?.groupName || '',
       headerShown: true,
       headerBackTitleVisible: false,
     });
   });
 
   // ------------------------------------------ Render ------------------------------------------
-  const renderHeader = useMemo(() => {
-    return (
-      <ListItem>
-        <GroupAvatar _data={groupData} />
-        <ListItem.Content>
-          <ListItem.Title
-            style={{
-              marginBottom: theme.spacing.xs,
-            }}
-          >
-            {groupData.groupName}
-          </ListItem.Title>
-          <ListItem.Subtitle>
-            {memberCount} {formatPlural('member', memberCount)}
-          </ListItem.Subtitle>
-          <ListItem.Subtitle>
-            {orderCount} {formatPlural('order', orderCount)}
-          </ListItem.Subtitle>
-        </ListItem.Content>
-      </ListItem>
-    );
-  }, [groupData, memberCount, orderCount, theme]);
+  const renderActiveOrder = useMemo(() => {
+    if (!groupData) return null;
+    return <ActiveOrderCard _data={groupData} context={'GroupScreen'}/>;
+  }, [groupData]);
 
   const renderOrderHistory = useMemo(() => {
     return (
       <View>
-        <Text
-          style={{
-            marginLeft: theme.spacing.md,
-            fontWeight: 'bold',
-          }}
-        >
-          Order history
-        </Text>
-        {groupData.orders.edges?.map(
+        {groupData?.orders?.edges?.map(
           order =>
-            order.node && (
-              <Order
+            order.node && !order.node.isActive && (
+              <HistoricalOrderCard
                 _orderData={order.node}
                 key={order.node.id}
                 
@@ -123,16 +94,17 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
 
   return (
     <Reanimated.ScrollView
+      automaticallyAdjustKeyboardInsets={true}
       contentContainerStyle={{
         // paddingVertical: SPACING.m1,
+        paddingTop: 0,
         paddingBottom: theme.spacing.lg,
         rowGap: theme.spacing.lg,
       }}
       showsVerticalScrollIndicator={false}
     >
-      {renderHeader}
-      {/*{renderMembersBalance}*/}
-      <GroupBalanceCard _data={data.group} />
+      {groupData && <GroupBalanceCard _data={groupData} />}
+      {renderActiveOrder}
       {renderOrderHistory}
     </Reanimated.ScrollView>
   );

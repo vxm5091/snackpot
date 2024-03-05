@@ -1,27 +1,15 @@
 import { Platform } from 'react-native';
 import { lightColors, createTheme, Theme, darkColors } from '@rneui/themed';
 
-const SPACING: Theme['spacing'] = {
+export const SPACING: Theme['spacing'] = {
   xs: 4,
   sm: 8,
   md: 16,
   lg: 32,
   xl: 48,
-}
+};
 
 const theme = createTheme({
-  lightColors: {
-    ...Platform.select({
-      default: lightColors.platform.android,
-      ios: lightColors.platform.ios,
-    }),
-  },
-  darkColors: {
-    ...Platform.select({
-      default: darkColors.platform.android,
-      ios: darkColors.platform.ios,
-    }),
-  },
   spacing: SPACING,
   components: {
     Card: {
@@ -36,22 +24,35 @@ const theme = createTheme({
         textAlign: 'left',
         color: 'black',
         marginBottom: SPACING.xs,
-      }
+        fontSize: 20,
+      },
     },
     CardFeaturedSubtitle: {
       style: {
         color: 'black',
-        
       },
     },
     Text: {
       style: {
         color: 'black',
         fontWeight: '500',
-      }
-    }
-  }
-  
+        fontSize: 15,
+      },
+    },
+    Badge: {
+      textStyle: {
+        fontSize: 14,
+      },
+      badgeStyle: {
+        paddingVertical: SPACING.xs,
+        paddingHorizontal: SPACING.sm,
+        flex: 1,
+      },
+      containerStyle: {
+        height: 24,
+      },
+    },
+  },
 });
 
 export default theme;

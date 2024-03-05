@@ -1,7 +1,8 @@
-import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
+import { LoadStrategy } from '@mikro-orm/core';
+import { Migrator, TSMigrationGenerator } from '@mikro-orm/migrations';
 import { MikroOrmModuleOptions as Options } from '@mikro-orm/nestjs';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { Migrator, TSMigrationGenerator } from '@mikro-orm/migrations';
+import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import { SeedManager } from '@mikro-orm/seeder';
 import 'dotenv/config';
 import { Logger } from '@nestjs/common';
@@ -28,8 +29,7 @@ const config: Options<PostgreSqlDriver> = {
   },
   metadataProvider: TsMorphMetadataProvider,
   registerRequestContext: false,
-  
-
+  loadStrategy: LoadStrategy.JOINED,
   debug: process.env.NODE_ENV !== 'production',
   logger: msg => {
     const logger = new Logger('MikroORM');

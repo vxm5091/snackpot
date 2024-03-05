@@ -43,9 +43,4 @@ export class OrderEntity extends BaseEntity {
   @Index()
   @OneToMany({ entity: () => TransactionEntity, mappedBy: r => r.order })
   transactions = new Collection<TransactionEntity>(this);
-
-  constructor(groupID: string) {
-    super();
-    this.group = ref(GroupEntity, groupID);
-  }
 }

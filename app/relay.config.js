@@ -16,7 +16,4 @@ module.exports = {
     DateTime: 'string',
   },
   noFutureProofEnums: true,
-  schemaConfig: {
-    nodeInterfaceIdField: 'globalID',
-  },
 };

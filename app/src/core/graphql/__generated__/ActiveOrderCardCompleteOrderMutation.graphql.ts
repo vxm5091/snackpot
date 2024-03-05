@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d94a92c8d0462b13ac8fc9b4514a1f64>>
+ * @generated SignedSource<<d09434fb7ad234b471412796ad9543dd>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,10 +18,22 @@ export type UpdateTransactionInput = {
   itemName?: string | null;
   itemPrice?: number | null;
 };
+export type UpdateOrderInput = {
+  id: string;
+  isActive: boolean;
+};
 export type ActiveOrderCardCompleteOrderMutation$variables = {
-  input: UpdateTransactionsManyInput;
+  orderInput: UpdateOrderInput;
+  transactionInput: UpdateTransactionsManyInput;
 };
 export type ActiveOrderCardCompleteOrderMutation$data = {
+  readonly updateOrder: {
+    readonly group: {
+      readonly node: {
+        readonly " $fragmentSpreads": FragmentRefs<"ActiveOrderCard_data" | "GroupBalanceCard_data">;
+      } | null;
+    };
+  };
   readonly updateTransactionsMany: {
     readonly edges: ReadonlyArray<{
       readonly node: {
@@ -41,42 +53,57 @@ export type ActiveOrderCardCompleteOrderMutation = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "input"
-  }
-],
-v1 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "orderInput"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "transactionInput"
+},
+v2 = [
   {
     "kind": "Variable",
     "name": "input",
-    "variableName": "input"
+    "variableName": "transactionInput"
   }
 ],
-v2 = {
+v3 = {
+  "args": null,
+  "kind": "FragmentSpread",
+  "name": "GroupBalanceCard_data"
+},
+v4 = [
+  {
+    "kind": "Variable",
+    "name": "input",
+    "variableName": "orderInput"
+  }
+],
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v3 = {
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "username",
+  "storageKey": null
+},
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "avatarURL",
   "storageKey": null
 },
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "globalID",
-  "storageKey": null
-},
-v5 = {
+v8 = {
   "alias": null,
   "args": null,
   "concreteType": "UserEdge",
@@ -92,14 +119,8 @@ v5 = {
       "name": "node",
       "plural": false,
       "selections": [
-        (v2/*: any*/),
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "username",
-          "storageKey": null
-        },
+        (v5/*: any*/),
+        (v6/*: any*/),
         {
           "alias": null,
           "args": null,
@@ -114,8 +135,94 @@ v5 = {
           "name": "lastName",
           "storageKey": null
         },
-        (v3/*: any*/),
-        (v4/*: any*/)
+        (v7/*: any*/)
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "GroupMemberEdge",
+  "kind": "LinkedField",
+  "name": "recipient",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "GroupMember",
+      "kind": "LinkedField",
+      "name": "node",
+      "plural": false,
+      "selections": [
+        (v8/*: any*/),
+        (v5/*: any*/)
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "itemName",
+  "storageKey": null
+},
+v11 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "itemPrice",
+  "storageKey": null
+},
+v12 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "groupName",
+  "storageKey": null
+},
+v13 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "GroupMemberConnection",
+  "kind": "LinkedField",
+  "name": "members",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "GroupMemberEdge",
+      "kind": "LinkedField",
+      "name": "edges",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "GroupMember",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "balance",
+              "storageKey": null
+            },
+            (v8/*: any*/),
+            (v5/*: any*/)
+          ],
+          "storageKey": null
+        }
       ],
       "storageKey": null
     }
@@ -124,14 +231,17 @@ v5 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "ActiveOrderCardCompleteOrderMutation",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "TransactionConnection",
         "kind": "LinkedField",
         "name": "updateTransactionsMany",
@@ -174,16 +284,51 @@ return {
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          {
-                            "args": null,
-                            "kind": "FragmentSpread",
-                            "name": "GroupBalanceCard_data"
-                          }
+                          (v3/*: any*/)
                         ],
                         "storageKey": null
                       }
                     ],
                     "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v4/*: any*/),
+        "concreteType": "Order",
+        "kind": "LinkedField",
+        "name": "updateOrder",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "GroupEdge",
+            "kind": "LinkedField",
+            "name": "group",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Group",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/),
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "ActiveOrderCard_data"
                   }
                 ],
                 "storageKey": null
@@ -200,13 +345,16 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "ActiveOrderCardCompleteOrderMutation",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "TransactionConnection",
         "kind": "LinkedField",
         "name": "updateTransactionsMany",
@@ -228,45 +376,10 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v2/*: any*/),
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "GroupMemberEdge",
-                    "kind": "LinkedField",
-                    "name": "recipient",
-                    "plural": false,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "GroupMember",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          (v5/*: any*/),
-                          (v4/*: any*/)
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "itemName",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "itemPrice",
-                    "storageKey": null
-                  },
+                  (v5/*: any*/),
+                  (v9/*: any*/),
+                  (v10/*: any*/),
+                  (v11/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -283,66 +396,16 @@ return {
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v2/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "groupName",
-                            "storageKey": null
-                          },
-                          (v3/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "GroupMemberConnection",
-                            "kind": "LinkedField",
-                            "name": "members",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "GroupMemberEdge",
-                                "kind": "LinkedField",
-                                "name": "edges",
-                                "plural": true,
-                                "selections": [
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "concreteType": "GroupMember",
-                                    "kind": "LinkedField",
-                                    "name": "node",
-                                    "plural": false,
-                                    "selections": [
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "kind": "ScalarField",
-                                        "name": "balance",
-                                        "storageKey": null
-                                      },
-                                      (v5/*: any*/),
-                                      (v2/*: any*/),
-                                      (v4/*: any*/)
-                                    ],
-                                    "storageKey": null
-                                  }
-                                ],
-                                "storageKey": null
-                              }
-                            ],
-                            "storageKey": null
-                          },
-                          (v4/*: any*/)
+                          (v5/*: any*/),
+                          (v12/*: any*/),
+                          (v7/*: any*/),
+                          (v13/*: any*/)
                         ],
                         "storageKey": null
                       }
                     ],
                     "storageKey": null
-                  },
-                  (v4/*: any*/)
+                  }
                 ],
                 "storageKey": null
               }
@@ -351,20 +414,200 @@ return {
           }
         ],
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v4/*: any*/),
+        "concreteType": "Order",
+        "kind": "LinkedField",
+        "name": "updateOrder",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "GroupEdge",
+            "kind": "LinkedField",
+            "name": "group",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "Group",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v5/*: any*/),
+                  (v12/*: any*/),
+                  (v7/*: any*/),
+                  (v13/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "GroupMemberEdge",
+                    "kind": "LinkedField",
+                    "name": "me",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "GroupMember",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v5/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "OrderEdge",
+                    "kind": "LinkedField",
+                    "name": "activeOrder",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Order",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v5/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "TransactionConnection",
+                            "kind": "LinkedField",
+                            "name": "transactions",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "TransactionEdge",
+                                "kind": "LinkedField",
+                                "name": "edges",
+                                "plural": true,
+                                "selections": [
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "Transaction",
+                                    "kind": "LinkedField",
+                                    "name": "node",
+                                    "plural": false,
+                                    "selections": [
+                                      (v5/*: any*/),
+                                      (v9/*: any*/),
+                                      (v10/*: any*/),
+                                      (v11/*: any*/)
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              },
+                              {
+                                "kind": "ClientExtension",
+                                "selections": [
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "__id",
+                                    "storageKey": null
+                                  }
+                                ]
+                              }
+                            ],
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "GroupMemberEdge",
+                            "kind": "LinkedField",
+                            "name": "payer",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "GroupMember",
+                                "kind": "LinkedField",
+                                "name": "node",
+                                "plural": false,
+                                "selections": [
+                                  (v5/*: any*/),
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "UserEdge",
+                                    "kind": "LinkedField",
+                                    "name": "user",
+                                    "plural": false,
+                                    "selections": [
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "User",
+                                        "kind": "LinkedField",
+                                        "name": "node",
+                                        "plural": false,
+                                        "selections": [
+                                          (v6/*: any*/),
+                                          (v5/*: any*/)
+                                        ],
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              }
+                            ],
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          (v5/*: any*/)
+        ],
+        "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "646d8f2c6e86b3fb871573cbd2b18b05",
+    "cacheID": "bc6352945522c7d358d7d7c0905143b8",
     "id": null,
     "metadata": {},
     "name": "ActiveOrderCardCompleteOrderMutation",
     "operationKind": "mutation",
-    "text": "mutation ActiveOrderCardCompleteOrderMutation(\n  $input: UpdateTransactionsManyInput!\n) {\n  updateTransactionsMany(input: $input) {\n    edges {\n      node {\n        ...Transaction_data\n        group {\n          node {\n            ...GroupBalanceCard_data\n            globalID\n          }\n        }\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupBalanceCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        id\n        balance\n        globalID\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      globalID\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          id\n          username\n          globalID\n        }\n      }\n      globalID\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "mutation ActiveOrderCardCompleteOrderMutation(\n  $transactionInput: UpdateTransactionsManyInput!\n  $orderInput: UpdateOrderInput!\n) {\n  updateTransactionsMany(input: $transactionInput) {\n    edges {\n      node {\n        ...Transaction_data\n        group {\n          node {\n            ...GroupBalanceCard_data\n            id\n          }\n        }\n        id\n      }\n    }\n  }\n  updateOrder(input: $orderInput) {\n    group {\n      node {\n        ...GroupBalanceCard_data\n        ...ActiveOrderCard_data\n        id\n      }\n    }\n    id\n  }\n}\n\nfragment ActiveOrderCard_data on Group {\n  id\n  groupName\n  avatarURL\n  me {\n    node {\n      id\n    }\n  }\n  activeOrder {\n    node {\n      id\n      transactions {\n        edges {\n          node {\n            ...Transaction_data\n            id\n            itemName\n            itemPrice\n            recipient {\n              node {\n                id\n              }\n            }\n          }\n        }\n      }\n      payer {\n        node {\n          id\n          user {\n            node {\n              username\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment GroupAvatar_data on Group {\n  id\n  groupName\n  avatarURL\n}\n\nfragment GroupBalanceCard_data on Group {\n  ...GroupAvatar_data\n  id\n  groupName\n  members {\n    edges {\n      node {\n        ...GroupMember_data\n        id\n        balance\n      }\n    }\n  }\n}\n\nfragment GroupMember_data on GroupMember {\n  balance\n  user {\n    node {\n      ...UserAvatar_data\n      username\n      id\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          id\n          username\n        }\n      }\n      id\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5dda60443d1d3e25d4326bb822141474";
+(node as any).hash = "c0497158e371d89ecb0bac2bece539ec";
 
 export default node;

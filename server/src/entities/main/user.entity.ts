@@ -23,9 +23,6 @@ export class UserEntity extends BaseEntity {
     return this.id ? toGlobalId('User', this.id) : '';
   }
 
-  @PrimaryKey()
-  id!: string;
-
   @Property({ type: t.text })
   username!: string;
 
@@ -51,25 +48,4 @@ export class UserEntity extends BaseEntity {
     mappedBy: r => r.owner,
   })
   groupsOwned = new Collection<GroupEntity>(this);
-
-  constructor({
-    id,
-    avatarURL,
-    firstName,
-    lastName,
-    username,
-  }: {
-    id?: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    avatarURL?: string;
-  }) {
-    super();
-    this.id = id || this.id;
-    this.username = username;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.avatarURL = avatarURL;
-  }
 }

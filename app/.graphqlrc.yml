@@ -12,9 +12,3 @@ extensions:
       ./src/core/graphql/schema.gql:
         plugins:
           - schema-ast
-      ./src/core/graphql/enums.ts:
-        plugins:
-          - typescript
-        config:
-          onlyEnums: true
-          enumsAsTypes: true

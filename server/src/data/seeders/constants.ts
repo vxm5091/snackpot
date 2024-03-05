@@ -1,0 +1,1 @@
+export const MENU_ITEMS = ['coffee', 'tea', 'soda', 'juice'];

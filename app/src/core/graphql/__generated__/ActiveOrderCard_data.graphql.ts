@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a22c894303880e2533836f5a268beb9e>>
+ * @generated SignedSource<<c52851e7c761d3ecc216db3330797c16>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,12 +13,19 @@ import { FragmentRefs } from "relay-runtime";
 export type ActiveOrderCard_data$data = {
   readonly activeOrder: {
     readonly node: {
+      readonly id: string;
       readonly payer: {
         readonly node: {
           readonly id: string;
+          readonly user: {
+            readonly node: {
+              readonly username: string;
+            };
+          };
         };
       };
       readonly transactions: {
+        readonly __id: string;
         readonly edges: ReadonlyArray<{
           readonly node: {
             readonly id: string;
@@ -33,7 +40,6 @@ export type ActiveOrderCard_data$data = {
           };
         }> | null;
       };
-      readonly " $fragmentSpreads": FragmentRefs<"NewTransactionOverlay_orderData">;
     };
   } | null;
   readonly avatarURL: string | null;
@@ -127,11 +133,7 @@ return {
             "name": "node",
             "plural": false,
             "selections": [
-              {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "NewTransactionOverlay_orderData"
-              },
+              (v0/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -203,6 +205,18 @@ return {
                       }
                     ],
                     "storageKey": null
+                  },
+                  {
+                    "kind": "ClientExtension",
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "__id",
+                        "storageKey": null
+                      }
+                    ]
                   }
                 ],
                 "storageKey": null
@@ -217,7 +231,52 @@ return {
                 "selections": [
                   {
                     "kind": "RequiredField",
-                    "field": (v1/*: any*/),
+                    "field": {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "GroupMember",
+                      "kind": "LinkedField",
+                      "name": "node",
+                      "plural": false,
+                      "selections": [
+                        (v0/*: any*/),
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "UserEdge",
+                          "kind": "LinkedField",
+                          "name": "user",
+                          "plural": false,
+                          "selections": [
+                            {
+                              "kind": "RequiredField",
+                              "field": {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "User",
+                                "kind": "LinkedField",
+                                "name": "node",
+                                "plural": false,
+                                "selections": [
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "username",
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              },
+                              "action": "THROW",
+                              "path": "activeOrder.node.payer.node.user.node"
+                            }
+                          ],
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    },
                     "action": "THROW",
                     "path": "activeOrder.node.payer.node"
                   }
@@ -239,6 +298,6 @@ return {
 };
 })();
 
-(node as any).hash = "c0b63310890882adb3972786856b5fd9";
+(node as any).hash = "39a9b308ca9092848c4401cdb6c4f6c7";
 
 export default node;

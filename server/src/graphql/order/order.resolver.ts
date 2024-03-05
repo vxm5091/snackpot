@@ -19,10 +19,10 @@ import {
   ID,
   Mutation,
   Parent,
-  Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import { fromGlobalId } from 'graphql-relay/node/node';
 
 @Resolver(() => Order)
 export class OrderResolver {
@@ -32,20 +32,15 @@ export class OrderResolver {
     private readonly relayService: RelayService,
   ) {}
 
-  //   ------------------------------------- Queries -------------------------------------
-  @Query(() => Order, { name: 'order' })
-  async getOrder(
-    @Args('id', { type: () => ID }) id: string,
-  ): Promise<OrderEntity> {
-    return await this.em.findOneOrFail(OrderEntity, id);
-  }
   //   ------------------------------------- Mutations -------------------------------------
   // We return an edge here because that makes it easier for Relay to re-render a list because an array of elements is equivalent to a connection of edges.
   @Mutation(() => OrderEdge)
   async createOrder(
     @Context() { userEntity }: IContextGQL,
-    @Args('groupID', { type: () => ID }) groupID: string,
+    @Args('groupID', { type: () => ID }) groupGlobalID: string,
   ): Promise<OrderEdge> {
+    const groupID = fromGlobalId(groupGlobalID).id;
+
     // check if there is an active order -> if so, return that order
     const activeOrder = await this.em.findOne(OrderEntity, {
       group: groupID,
@@ -57,15 +52,18 @@ export class OrderResolver {
     if (activeOrder) {
       entity = activeOrder;
     } else {
-      const orderEntity = new OrderEntity(groupID);
-
       // determine paying user
       const memberBalances =
         await this.groupService.getGroupMemberBalanceAll(groupID);
       const payerUser = Object.entries(memberBalances).reduce((a, b) =>
         a[1] < b[1] ? a : b,
       )[0];
-      orderEntity.payer = ref(UserGroupJoinEntity, payerUser);
+
+      // create order entity
+      const orderEntity = this.em.create(OrderEntity, {
+        group: groupID,
+        payer: ref(UserGroupJoinEntity, payerUser),
+      });
 
       await this.em.persistAndFlush(orderEntity);
       entity = orderEntity;
@@ -88,9 +86,10 @@ export class OrderResolver {
   //   ------------------------------------- Resolvers -------------------------------------
   @ResolveField(() => GroupMemberEdge, { name: EOrderField.Payer })
   async resolvePayer(@Parent() order: Order): Promise<GroupMemberEdge> {
+    const orderID = fromGlobalId(order.globalID).id;
     const orderEntity = await this.em.findOneOrFail(
       OrderEntity,
-      { id: order.id },
+      { id: orderID },
       { populate: ['payer'] },
     );
     return this.relayService.getEdge(orderEntity.payer.getEntity(), 'User');
@@ -98,9 +97,10 @@ export class OrderResolver {
 
   @ResolveField(() => GroupEdge, { name: EOrderField.Group })
   async resolveGroup(@Parent() order: Order): Promise<GroupEdge> {
+    const orderID = fromGlobalId(order.globalID).id;
     const orderEntity = await this.em.findOneOrFail(
       OrderEntity,
-      { id: order.id },
+      { id: orderID },
       { populate: ['group'] },
     );
     return this.relayService.getEdge(orderEntity.group.getEntity(), 'Group');
@@ -110,9 +110,10 @@ export class OrderResolver {
   async resolveTransactions(
     @Parent() order: Order,
   ): Promise<RelayConnection<TransactionEntity>> {
+    const orderID = fromGlobalId(order.globalID).id;
     const orderEntity = await this.em.findOneOrFail(
       OrderEntity,
-      { id: order.id },
+      { id: orderID },
       { populate: ['transactions'] },
     );
     return this.relayService.getConnection(

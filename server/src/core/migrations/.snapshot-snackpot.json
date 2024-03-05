@@ -8,12 +8,13 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
+          "type": "bigint",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
           "nullable": false,
-          "mappedType": "string"
+          "default": "next_id()",
+          "mappedType": "bigint"
         },
         "created_at": {
           "name": "created_at",
@@ -94,12 +95,13 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
+          "type": "bigint",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
           "nullable": false,
-          "mappedType": "string"
+          "default": "next_id()",
+          "mappedType": "bigint"
         },
         "created_at": {
           "name": "created_at",
@@ -143,12 +145,12 @@
         },
         "owner_id": {
           "name": "owner_id",
-          "type": "varchar(255)",
+          "type": "bigint",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "bigint"
         }
       },
       "name": "groups",
@@ -193,12 +195,13 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
+          "type": "bigint",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
           "nullable": false,
-          "mappedType": "string"
+          "default": "next_id()",
+          "mappedType": "bigint"
         },
         "created_at": {
           "name": "created_at",
@@ -224,21 +227,21 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "varchar(255)",
+          "type": "bigint",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "bigint"
         },
         "group_id": {
           "name": "group_id",
-          "type": "varchar(255)",
+          "type": "bigint",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "bigint"
         }
       },
       "name": "users_groups",
@@ -304,12 +307,13 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
+          "type": "bigint",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
           "nullable": false,
-          "mappedType": "string"
+          "default": "next_id()",
+          "mappedType": "bigint"
         },
         "created_at": {
           "name": "created_at",
@@ -340,25 +344,26 @@
           "autoincrement": false,
           "primary": false,
           "nullable": false,
+          "default": "true",
           "mappedType": "boolean"
         },
         "payer_id": {
           "name": "payer_id",
-          "type": "varchar(255)",
+          "type": "bigint",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "bigint"
         },
         "group_id": {
           "name": "group_id",
-          "type": "varchar(255)",
+          "type": "bigint",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "bigint"
         }
       },
       "name": "orders",
@@ -424,12 +429,13 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
+          "type": "bigint",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
           "nullable": false,
-          "mappedType": "string"
+          "default": "next_id()",
+          "mappedType": "bigint"
         },
         "created_at": {
           "name": "created_at",
@@ -473,21 +479,21 @@
         },
         "recipient_id": {
           "name": "recipient_id",
-          "type": "varchar(255)",
+          "type": "bigint",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "bigint"
         },
         "order_id": {
           "name": "order_id",
-          "type": "varchar(255)",
+          "type": "bigint",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "bigint"
         }
       },
       "name": "transactions",

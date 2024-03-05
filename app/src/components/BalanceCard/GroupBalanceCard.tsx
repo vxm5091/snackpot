@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import { Card, useTheme } from '@rneui/themed';
 import { GroupMember } from 'components/GroupMember';
-import { Row } from 'components/layout/Row';
+import { Row } from 'components/layout';
 import { GroupBalanceCard_data$key } from 'core/graphql/__generated__/GroupBalanceCard_data.graphql';
 import { useMemo } from 'react';
 import { View } from 'react-native';

@@ -20,7 +20,9 @@ export class GroupService {
     );
   }
 
-  async getGroupMemberBalanceAll(groupID: string): Promise<Record<string, number>> {
+  async getGroupMemberBalanceAll(
+    groupID: string,
+  ): Promise<Record<string, number>> {
     const transactions = await this.em.find(
       TransactionEntity,
       {
@@ -29,7 +31,7 @@ export class GroupService {
       { populate: ['order'] },
     );
 
-    return transactions.reduce((acc, txn) => {
+    const balances = transactions.reduce((acc, txn) => {
       if (!txn.itemPrice) {
         return acc;
       }
@@ -39,5 +41,7 @@ export class GroupService {
       acc[recipientID] = (acc[recipientID] || 0) - txn.itemPrice;
       return acc;
     }, {});
+    
+    return balances;
   }
 }

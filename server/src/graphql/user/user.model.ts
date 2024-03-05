@@ -1,13 +1,9 @@
 import { UserEntity } from '@app/entities/main/user.entity';
-import {
-  GroupMemberConnection
-} from '@app/graphql/groupMember/groupMember.model';
+import { GroupMemberConnection } from '@app/graphql/groupMember/groupMember.model';
 import { BaseNode, RelayNode } from '@app/graphql/node/node.model';
 import { PageInfo } from '@app/relay/relay.graphql';
 import { RelayConnection, RelayEdge } from '@app/relay/types';
-import { Field, Float, ObjectType } from '@nestjs/graphql';
-import { OrderConnection } from '@app/graphql/order/order.model';
-import { TransactionConnection } from '@app/graphql/transaction/transaction.model';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 /**
  * fields which match scalar entity fields don't need custom resolvers
@@ -21,9 +17,6 @@ export enum EUserField {
   implements: () => [RelayNode],
 })
 export class User extends BaseNode {
-  @Field(() => String)
-  id: string;
-
   @Field(() => String)
   username: string;
 
@@ -58,4 +51,3 @@ export class UserConnection implements RelayConnection<UserEntity> {
   @Field(() => PageInfo, { nullable: true })
   pageInfo: PageInfo;
 }
-
