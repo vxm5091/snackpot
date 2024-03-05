@@ -6,7 +6,8 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class GroupService {
   constructor(private readonly em: EntityManager) {}
-
+  
+  
   async getUserGroupTransactions(groupMemberID: string) {
     return this.em.find(
       TransactionEntity,

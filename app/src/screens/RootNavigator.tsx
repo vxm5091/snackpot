@@ -22,6 +22,7 @@ export const RootNavigator = () => {
             component={HomeScreen}
             options={{
               title: 'Home',
+              headerBackTitle: 'Back',
             }}
           />
           <Stack.Screen name={'GroupScreen'} component={GroupScreen} options={{

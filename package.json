@@ -1,0 +1,9 @@
+{
+  "name": "snackpot",
+  "scripts": {
+    "start": "concurrently --raw \"cd app && yarn start\" \"cd server && yarn start\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,9 +1,7 @@
 import { Text, useTheme } from '@rneui/themed';
 import { BalanceText } from 'components/BalanceText';
-import { Row, Spacer, Stack } from 'components/layout';
-import { sharedTextStyles } from 'components/styles';
-import { UserAvatar } from 'components/UserAvatar';
-import { View } from 'react-native';
+import { Row, Stack } from 'components/layout';
+import { sharedStyles } from 'components/styles';
 import { formatDate } from 'shared/format';
 
 interface IProps {
@@ -19,19 +17,21 @@ export const MemberRowUI: React.FC<IProps> = ({
   renderAvatar,
   amount,
   username,
-  description
+  description,
 }) => {
   const { theme } = useTheme();
   return (
     <Row
       style={{
         justifyContent: 'space-between',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
       }}
     >
-      <Row style={{
-        flex: 1
-      }}>
+      <Row
+        style={{
+          flex: 1,
+        }}
+      >
         {renderAvatar}
         <Stack spacing={'xs'}>
           {timestamp && (
@@ -43,15 +43,17 @@ export const MemberRowUI: React.FC<IProps> = ({
               {formatDate(timestamp)}
             </Text>
           )}
-          <Text style={sharedTextStyles(theme).caption}>{username}</Text>
+          <Text style={sharedStyles.caption}>{username}</Text>
         </Stack>
       </Row>
-          <Text
-            style={{
-              textAlign: 'center',
-              flex: 1,
-            }}
-          >{description}</Text>
+      <Text
+        style={{
+          textAlign: 'center',
+          flex: 1,
+        }}
+      >
+        {description}
+      </Text>
       <BalanceText amount={amount} />
     </Row>
   );

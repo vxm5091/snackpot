@@ -1,4 +1,4 @@
-import { IContextGQL } from '@app/core/types/http.types';
+
 import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
@@ -10,7 +10,7 @@ import {
 } from '@app/graphql/groupMember/groupMember.model';
 
 import { OrderConnection, OrderEdge } from '@app/graphql/order/order.model';
-import { ENodeType } from '@app/graphql/types';
+import { ENodeType, IContextGQL } from '@app/graphql/types';
 import { UserEdge } from '@app/graphql/user/user.model';
 import { RelayService } from '@app/relay/relay.service';
 import { RelayConnection, RelayEdge } from '@app/relay/types';

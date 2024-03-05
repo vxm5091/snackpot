@@ -2,7 +2,8 @@
  * Ensures that each request has its own MikroORM context
  * */
 
-import { CustomRequest } from '@app/core/types/http.types';
+
+import { CustomRequest } from '@app/graphql/types';
 import { MikroORM, RequestContext } from '@mikro-orm/core';
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction } from 'express';

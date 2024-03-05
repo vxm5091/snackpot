@@ -1,6 +1,6 @@
 import { Icon, Text, useTheme } from '@rneui/themed';
 import { ControlledInput } from 'components/ControlledInput';
-import { sharedTextStyles } from 'components/styles';
+import { sharedStyles } from 'components/styles';
 import {
   TUpdateOrderInput,
   TUserTransactionRole,
@@ -142,7 +142,7 @@ export const Transaction: React.FC<IProps> = ({
         spacing={'sm'}
       >
         <Text
-          style={sharedTextStyles(theme).caption}
+          style={sharedStyles.caption}
         >
           {recipientData.username}
         </Text>

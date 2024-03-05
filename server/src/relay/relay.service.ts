@@ -8,28 +8,9 @@ import {
 import { Loaded } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { toGlobalId } from 'graphql-relay';
-import { PaginationArgs } from './pagination.dto';
 
 @Injectable()
 export class RelayService {
-  getPagingMeta(args: PaginationArgs | undefined): TPaginationMeta {
-    if (!args) return { pagingType: 'none' };
-    const { after, first } = args;
-
-    if (!first) {
-      return { pagingType: 'none' };
-    }
-
-    if (first < 0) {
-      throw new Error('Paging limit must be positive');
-    }
-    return {
-      pagingType: 'forward',
-      after: after as string,
-      first: first as number,
-    };
-  }
-
   getConnection<T extends INodeEntity>(
     entityArr: Loaded<T>[] | T[] | null,
     name: string,

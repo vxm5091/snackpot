@@ -1,6 +1,6 @@
 import { USER_ID } from '@app/constants';
-import { IContextGQL, IReqRes } from '@app/core/types/http.types';
 import { UserEntity } from '@app/entities/main/user.entity';
+import { IContextGQL, IReqRes } from '@app/graphql/types';
 import { EntityManager } from '@mikro-orm/knex';
 import { ApolloDriverConfig } from '@nestjs/apollo';
 import { Injectable, Logger } from '@nestjs/common';

@@ -1,6 +1,7 @@
 import { Divider, useTheme } from '@rneui/themed';
 import { ActiveOrderCard } from 'components/OrderCard';
 import { Spacer } from 'components/layout';
+import { sharedStyles } from 'components/styles';
 import { useCallback } from 'react';
 import Reanimated from 'react-native-reanimated';
 import { graphql, PreloadedQuery, usePreloadedQuery } from 'react-relay';
@@ -61,6 +62,7 @@ export const HomeScreen: React.FC<IProps> = ({ _queryRef }) => {
     <Reanimated.FlatList
       data={data.groups.edges}
       renderItem={renderGroup}
+      contentContainerStyle={sharedStyles.scrollviewContainer}
       ItemSeparatorComponent={renderItemSeparator}
       automaticallyAdjustKeyboardInsets={true}
       keyboardDismissMode={'on-drag'}

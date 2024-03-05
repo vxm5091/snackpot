@@ -5,6 +5,7 @@ import {
   HistoricalOrderCard,
 } from 'components/OrderCard';
 import { MemberBalanceCard } from 'components/BalanceCard';
+import { sharedStyles } from 'components/styles';
 import { GroupScreenQuery } from 'core/graphql/__generated__/GroupScreenQuery.graphql';
 import { TScreenPropsRoot } from '../types';
 import { useMemo } from 'react';
@@ -93,12 +94,7 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
   return (
     <Reanimated.ScrollView
       automaticallyAdjustKeyboardInsets={true}
-      contentContainerStyle={{
-        // paddingVertical: SPACING.m1,
-        paddingTop: 0,
-        paddingBottom: theme.spacing.lg,
-        rowGap: theme.spacing.lg,
-      }}
+      contentContainerStyle={sharedStyles.scrollviewContainer}
       showsVerticalScrollIndicator={false}
       keyboardDismissMode={'on-drag'}
       keyboardShouldPersistTaps={'handled'}

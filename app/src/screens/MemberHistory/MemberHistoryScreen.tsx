@@ -2,6 +2,7 @@ import { Card, Text, useTheme } from '@rneui/themed';
 import { BalanceText } from 'components/BalanceText';
 import { Row, Spacer, Stack } from 'components/layout';
 import { MemberRowUI } from 'components/MemberRowUI';
+import { sharedStyles } from 'components/styles';
 import { UserAvatar } from 'components/UserAvatar';
 import { Fragment, useMemo } from 'react';
 import { View } from 'react-native';
@@ -191,9 +192,8 @@ const MemberHistoryScreen: React.FC<TScreenPropsRoot<'GroupMemberHistory'>> = ({
     <Reanimated.ScrollView
       automaticallyAdjustKeyboardInsets={true}
       contentContainerStyle={{
-        paddingTop: theme.spacing.md,
-        paddingBottom: theme.spacing.lg,
-        rowGap: theme.spacing.lg,
+        ...sharedStyles.scrollviewContainer,
+        paddingTop: theme.spacing.lg,
       }}
       showsVerticalScrollIndicator={false}
     >
@@ -202,8 +202,9 @@ const MemberHistoryScreen: React.FC<TScreenPropsRoot<'GroupMemberHistory'>> = ({
           paddingLeft: theme.spacing.md,
         }}
       >
+        <Text h4>{data.user.node.username}</Text>
         <Text h4>
-          {'Group balance · '}
+          {'Balance · '}
           <BalanceText amount={data.balance} h4 />
         </Text>
       </View>

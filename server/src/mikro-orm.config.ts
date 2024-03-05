@@ -52,8 +52,8 @@ const config: Options<PostgreSqlDriver> = {
     },
   },
   seeder: {
-    path: 'src/data/seeders',
-    pathTs: 'src/data/seeders',
+    path: 'src/seeders',
+    pathTs: 'src/seeders',
     defaultSeeder: 'DatabaseSeeder',
     glob: '!(*.d).{js,ts}',
     emit: 'ts', // seeder generation mode

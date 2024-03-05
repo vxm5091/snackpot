@@ -1,5 +1,5 @@
-import { IContextGQL } from '@app/core/types/http.types';
-import { MENU_ITEMS } from '@app/data/seeders/constants';
+
+import { MENU_ITEMS } from '@app/seeders/constants';
 import { OrderEntity } from '@app/entities/main/order.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { GroupEdge } from '@app/graphql/group/group.model';
@@ -17,7 +17,7 @@ import {
   TransactionConnection,
   TransactionEdge,
 } from '@app/graphql/transaction/transaction.model';
-import { ENodeType } from '@app/graphql/types';
+import { ENodeType, IContextGQL } from '@app/graphql/types';
 import { RelayService } from '@app/relay/relay.service';
 import { RelayConnection, RelayEdge } from '@app/relay/types';
 import { TransactionService } from '@app/services/transaction/transaction.service';
