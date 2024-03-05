@@ -1,1 +1,1 @@
-export * from './GroupCardSkeleton'
+export * from './CustomSkeleton';

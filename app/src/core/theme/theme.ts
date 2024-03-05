@@ -18,6 +18,9 @@ const theme = createTheme({
         borderRadius: 10,
         marginHorizontal: 0,
       },
+      wrapperStyle: {
+        rowGap: SPACING.md,
+      },
     },
     CardTitle: {
       style: {
@@ -38,6 +41,10 @@ const theme = createTheme({
         fontWeight: '500',
         fontSize: 15,
       },
+      h4Style: {
+        fontSize: 20,
+        fontWeight: 'bold',
+      }
     },
     Badge: {
       textStyle: {

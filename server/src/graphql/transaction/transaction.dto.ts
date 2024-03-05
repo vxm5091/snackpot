@@ -1,6 +1,6 @@
-import { Field, Float, ID, InputType, PartialType } from '@nestjs/graphql';
+import { Field, ID, InputType, PartialType } from '@nestjs/graphql';
 import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { fromGlobalId } from 'graphql-relay/node/node';
 
 @InputType()
@@ -9,9 +9,8 @@ class BaseTransactionInput {
   @IsString()
   itemName: string;
 
-  @Field(() => Float, { nullable: true })
-  @IsOptional()
-  @IsNumber()
+  @Field(() => String, { nullable: true })
+  @Transform(({ value }) => (value ? parseFloat(value) : value))
   itemPrice?: number;
 }
 
@@ -29,14 +28,14 @@ export class CreateTransactionInput extends BaseTransactionInput {
 }
 
 @InputType()
-export class UpdateTransactionInput extends PartialType(BaseTransactionInput) {
+export class UpdateTransactionInput extends BaseTransactionInput {
   @Field()
   @IsString()
   @Transform(({ value }) => (value ? fromGlobalId(value).id : null))
   id: string;
 
-  @Field(() => Float, { nullable: true })
-  @IsNumber()
+  @Field(() => String, { nullable: true })
+  @Transform(({ value }) => parseFloat(value))
   itemPrice: number;
 }
 

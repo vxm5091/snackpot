@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2b31ceea3e72525f0d3087f72e603e73>>
+ * @generated SignedSource<<aaf5bdc0003de17e89d781e26ad62650>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,36 +10,41 @@
 
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type HistoricalOrderCard_orderData$data = {
-  readonly createdAt: string;
+export type MemberHistoryScreen_data$data = {
+  readonly balance: number;
   readonly group: {
     readonly node: {
       readonly groupName: string;
     };
   };
   readonly id: string;
-  readonly isActive: boolean;
-  readonly payer: {
-    readonly node: {
-      readonly user: {
-        readonly node: {
-          readonly id: string;
-          readonly username: string;
-        };
-      };
-    };
-  };
   readonly transactions: {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly id: string;
         readonly itemName: string;
         readonly itemPrice: number | null;
+        readonly order: {
+          readonly node: {
+            readonly createdAt: string;
+            readonly payer: {
+              readonly node: {
+                readonly id: string;
+                readonly user: {
+                  readonly node: {
+                    readonly username: string;
+                  };
+                };
+              };
+            };
+          };
+        };
         readonly recipient: {
           readonly node: {
+            readonly id: string;
             readonly user: {
               readonly node: {
-                readonly " $fragmentSpreads": FragmentRefs<"Transaction_data">;
+                readonly username: string;
               };
             };
           };
@@ -47,11 +52,16 @@ export type HistoricalOrderCard_orderData$data = {
       };
     }> | null;
   };
-  readonly " $fragmentType": "HistoricalOrderCard_orderData";
+  readonly user: {
+    readonly node: {
+      readonly username: string;
+    };
+  };
+  readonly " $fragmentType": "MemberHistoryScreen_data";
 };
-export type HistoricalOrderCard_orderData$key = {
-  readonly " $data"?: HistoricalOrderCard_orderData$data;
-  readonly " $fragmentSpreads": FragmentRefs<"HistoricalOrderCard_orderData">;
+export type MemberHistoryScreen_data$key = {
+  readonly " $data"?: MemberHistoryScreen_data$data;
+  readonly " $fragmentSpreads": FragmentRefs<"MemberHistoryScreen_data">;
 };
 
 const node: ReaderFragment = (function(){
@@ -61,86 +71,52 @@ var v0 = {
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "User",
+  "kind": "LinkedField",
+  "name": "node",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "username",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
 };
 return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "HistoricalOrderCard_orderData",
+  "name": "MemberHistoryScreen_data",
   "selections": [
     (v0/*: any*/),
     {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "createdAt",
+      "name": "balance",
       "storageKey": null
     },
     {
       "alias": null,
       "args": null,
-      "kind": "ScalarField",
-      "name": "isActive",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "GroupMemberEdge",
+      "concreteType": "UserEdge",
       "kind": "LinkedField",
-      "name": "payer",
+      "name": "user",
       "plural": false,
       "selections": [
         {
           "kind": "RequiredField",
-          "field": {
-            "alias": null,
-            "args": null,
-            "concreteType": "GroupMember",
-            "kind": "LinkedField",
-            "name": "node",
-            "plural": false,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "UserEdge",
-                "kind": "LinkedField",
-                "name": "user",
-                "plural": false,
-                "selections": [
-                  {
-                    "kind": "RequiredField",
-                    "field": {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "User",
-                      "kind": "LinkedField",
-                      "name": "node",
-                      "plural": false,
-                      "selections": [
-                        (v0/*: any*/),
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "username",
-                          "storageKey": null
-                        }
-                      ],
-                      "storageKey": null
-                    },
-                    "action": "THROW",
-                    "path": "payer.node.user.node"
-                  }
-                ],
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          },
+          "field": (v1/*: any*/),
           "action": "THROW",
-          "path": "payer.node"
+          "path": "user.node"
         }
       ],
       "storageKey": null
@@ -210,14 +186,14 @@ return {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "itemPrice",
+                    "name": "itemName",
                     "storageKey": null
                   },
                   {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "itemName",
+                    "name": "itemPrice",
                     "storageKey": null
                   },
                   {
@@ -238,6 +214,7 @@ return {
                           "name": "node",
                           "plural": false,
                           "selections": [
+                            (v0/*: any*/),
                             {
                               "alias": null,
                               "args": null,
@@ -248,22 +225,7 @@ return {
                               "selections": [
                                 {
                                   "kind": "RequiredField",
-                                  "field": {
-                                    "alias": null,
-                                    "args": null,
-                                    "concreteType": "User",
-                                    "kind": "LinkedField",
-                                    "name": "node",
-                                    "plural": false,
-                                    "selections": [
-                                      {
-                                        "args": null,
-                                        "kind": "FragmentSpread",
-                                        "name": "Transaction_data"
-                                      }
-                                    ],
-                                    "storageKey": null
-                                  },
+                                  "field": (v1/*: any*/),
                                   "action": "THROW",
                                   "path": "transactions.edges.node.recipient.node.user.node"
                                 }
@@ -275,6 +237,85 @@ return {
                         },
                         "action": "THROW",
                         "path": "transactions.edges.node.recipient.node"
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "OrderEdge",
+                    "kind": "LinkedField",
+                    "name": "order",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "kind": "RequiredField",
+                        "field": {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "Order",
+                          "kind": "LinkedField",
+                          "name": "node",
+                          "plural": false,
+                          "selections": [
+                            {
+                              "alias": null,
+                              "args": null,
+                              "kind": "ScalarField",
+                              "name": "createdAt",
+                              "storageKey": null
+                            },
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": "GroupMemberEdge",
+                              "kind": "LinkedField",
+                              "name": "payer",
+                              "plural": false,
+                              "selections": [
+                                {
+                                  "kind": "RequiredField",
+                                  "field": {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "GroupMember",
+                                    "kind": "LinkedField",
+                                    "name": "node",
+                                    "plural": false,
+                                    "selections": [
+                                      (v0/*: any*/),
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "UserEdge",
+                                        "kind": "LinkedField",
+                                        "name": "user",
+                                        "plural": false,
+                                        "selections": [
+                                          {
+                                            "kind": "RequiredField",
+                                            "field": (v1/*: any*/),
+                                            "action": "THROW",
+                                            "path": "transactions.edges.node.order.node.payer.node.user.node"
+                                          }
+                                        ],
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  },
+                                  "action": "THROW",
+                                  "path": "transactions.edges.node.order.node.payer.node"
+                                }
+                              ],
+                              "storageKey": null
+                            }
+                          ],
+                          "storageKey": null
+                        },
+                        "action": "THROW",
+                        "path": "transactions.edges.node.order.node"
                       }
                     ],
                     "storageKey": null
@@ -292,11 +333,11 @@ return {
       "storageKey": null
     }
   ],
-  "type": "Order",
+  "type": "GroupMember",
   "abstractKey": null
 };
 })();
 
-(node as any).hash = "75a96211f207704875ac1809d498ad71";
+(node as any).hash = "c7ca57bc4d84a2085b19d4a91bdb6566";
 
 export default node;

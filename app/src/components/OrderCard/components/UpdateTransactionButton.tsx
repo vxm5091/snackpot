@@ -20,22 +20,21 @@ export const UpdateTransactionButton: React.FC<IProps> = ({
 }) => {
   const [commit, isCommitting] = useMutation<UpdateTransactionButtonMutation>(
     graphql`
-      mutation UpdateTransactionButtonMutation(
-        $input: UpdateTransactionInput!
-      ) {
-        updateTransaction(input: $input) {
-          #        Returning fragments in the mutation response tells Relay to re-render any components that use those fragments
-          node {
-            ...Transaction_data
-            group {
-              node {
-                ...GroupBalanceCard_data
-                ...ActiveOrderCard_data
-              }
-            }
-          }
-        }
-      }
+			mutation UpdateTransactionButtonMutation(
+				$input: UpdateTransactionInput!
+			) {
+				updateTransaction(input: $input) {
+					#        Returning fragments in the mutation response tells Relay to re-render any components that use those fragments
+					node {
+						group {
+							node {
+								...MemberBalanceCard_data
+								...ActiveOrderCard_data
+							}
+						}
+					}
+				}
+			}
     `,
   );
 

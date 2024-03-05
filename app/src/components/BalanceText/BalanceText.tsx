@@ -1,30 +1,36 @@
-import { Text, useTheme } from '@rneui/themed';
+import { Text, TextProps, useTheme } from '@rneui/themed';
 import { useMemo } from 'react';
-import { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { TextStyle } from 'react-native';
 import { formatCurrency } from 'shared/format';
 
-interface IProps {
+interface IProps extends TextProps {
   amount: number;
   withColor?: boolean;
-  containerStyle?: StyleProp<ViewStyle>
 }
 
-export const BalanceText: React.FC<IProps> = ({ amount, withColor = true, containerStyle }) => {
+export const BalanceText: React.FC<IProps> = ({
+  amount,
+  withColor = true,
+  ...props
+}) => {
   const { theme } = useTheme();
   const style = useMemo(() => {
     const color = withColor
       ? amount > 0
         ? theme.colors.primary
-        : theme.colors.error
+        : theme.colors.secondary
       : theme.colors.black;
 
     return {
       color,
       fontWeight: '500',
-      textAlign: 'right'
+      textAlign: 'right',
     } as TextStyle;
   }, [amount, theme, withColor]);
 
-
-  return <Text style={[style, containerStyle]}>{formatCurrency(amount)}</Text>;
+  return (
+    <Text style={style} {...props}>
+      {formatCurrency(amount)}
+    </Text>
+  );
 };

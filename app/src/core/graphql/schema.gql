@@ -7,7 +7,7 @@ input CreateGroupInput {
 input CreateTransactionInput {
   groupMemberID: ID!
   itemName: String!
-  itemPrice: Float
+  itemPrice: String
   orderID: ID!
 }
 
@@ -143,8 +143,8 @@ input UpdateOrderInput {
 
 input UpdateTransactionInput {
   id: String!
-  itemName: String
-  itemPrice: Float
+  itemName: String!
+  itemPrice: String
 }
 
 input UpdateTransactionsManyInput {

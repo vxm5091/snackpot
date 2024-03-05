@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9d8720f98c2e086a5b8fe8d8da882abc>>
+ * @generated SignedSource<<5525faf5b331561edaad6a67ee5774d7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -68,7 +68,48 @@ v4 = {
   "kind": "ScalarField",
   "name": "avatarURL",
   "storageKey": null
-};
+},
+v5 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "GroupMember",
+    "kind": "LinkedField",
+    "name": "node",
+    "plural": false,
+    "selections": [
+      (v0/*: any*/),
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "UserEdge",
+        "kind": "LinkedField",
+        "name": "user",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "User",
+            "kind": "LinkedField",
+            "name": "node",
+            "plural": false,
+            "selections": [
+              (v0/*: any*/),
+              (v1/*: any*/),
+              (v2/*: any*/),
+              (v3/*: any*/),
+              (v4/*: any*/)
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  }
+];
 return {
   "fragment": {
     "argumentDefinitions": [],
@@ -243,20 +284,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "me",
                                 "plural": false,
-                                "selections": [
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "concreteType": "GroupMember",
-                                    "kind": "LinkedField",
-                                    "name": "node",
-                                    "plural": false,
-                                    "selections": [
-                                      (v0/*: any*/)
-                                    ],
-                                    "storageKey": null
-                                  }
-                                ],
+                                "selections": (v5/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -304,56 +332,6 @@ return {
                                                   {
                                                     "alias": null,
                                                     "args": null,
-                                                    "concreteType": "GroupMemberEdge",
-                                                    "kind": "LinkedField",
-                                                    "name": "recipient",
-                                                    "plural": false,
-                                                    "selections": [
-                                                      {
-                                                        "alias": null,
-                                                        "args": null,
-                                                        "concreteType": "GroupMember",
-                                                        "kind": "LinkedField",
-                                                        "name": "node",
-                                                        "plural": false,
-                                                        "selections": [
-                                                          {
-                                                            "alias": null,
-                                                            "args": null,
-                                                            "concreteType": "UserEdge",
-                                                            "kind": "LinkedField",
-                                                            "name": "user",
-                                                            "plural": false,
-                                                            "selections": [
-                                                              {
-                                                                "alias": null,
-                                                                "args": null,
-                                                                "concreteType": "User",
-                                                                "kind": "LinkedField",
-                                                                "name": "node",
-                                                                "plural": false,
-                                                                "selections": [
-                                                                  (v0/*: any*/),
-                                                                  (v1/*: any*/),
-                                                                  (v2/*: any*/),
-                                                                  (v3/*: any*/),
-                                                                  (v4/*: any*/)
-                                                                ],
-                                                                "storageKey": null
-                                                              }
-                                                            ],
-                                                            "storageKey": null
-                                                          },
-                                                          (v0/*: any*/)
-                                                        ],
-                                                        "storageKey": null
-                                                      }
-                                                    ],
-                                                    "storageKey": null
-                                                  },
-                                                  {
-                                                    "alias": null,
-                                                    "args": null,
                                                     "kind": "ScalarField",
                                                     "name": "itemName",
                                                     "storageKey": null
@@ -363,6 +341,16 @@ return {
                                                     "args": null,
                                                     "kind": "ScalarField",
                                                     "name": "itemPrice",
+                                                    "storageKey": null
+                                                  },
+                                                  {
+                                                    "alias": null,
+                                                    "args": null,
+                                                    "concreteType": "GroupMemberEdge",
+                                                    "kind": "LinkedField",
+                                                    "name": "recipient",
+                                                    "plural": false,
+                                                    "selections": (v5/*: any*/),
                                                     "storageKey": null
                                                   }
                                                 ],
@@ -460,12 +448,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "908a85b58b212aacf78b13debcf0a3b2",
+    "cacheID": "1a698ce17ed8b23ea21cf8c2a2c3be70",
     "id": null,
     "metadata": {},
     "name": "HomeScreenQuery",
     "operationKind": "query",
-    "text": "query HomeScreenQuery {\n  me {\n    ...UserAvatar_data\n    groups {\n      edges {\n        node {\n          id\n          group {\n            node {\n              ...ActiveOrderCard_data\n              id\n            }\n          }\n        }\n      }\n    }\n    id\n  }\n}\n\nfragment ActiveOrderCard_data on Group {\n  id\n  groupName\n  avatarURL\n  me {\n    node {\n      id\n    }\n  }\n  activeOrder {\n    node {\n      id\n      transactions {\n        edges {\n          node {\n            ...Transaction_data\n            id\n            itemName\n            itemPrice\n            recipient {\n              node {\n                id\n              }\n            }\n          }\n        }\n      }\n      payer {\n        node {\n          id\n          user {\n            node {\n              username\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          id\n          username\n        }\n      }\n      id\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "query HomeScreenQuery {\n  me {\n    ...UserAvatar_data\n    groups {\n      edges {\n        node {\n          id\n          group {\n            node {\n              ...ActiveOrderCard_data\n              id\n            }\n          }\n        }\n      }\n    }\n    id\n  }\n}\n\nfragment ActiveOrderCard_data on Group {\n  id\n  groupName\n  avatarURL\n  me {\n    node {\n      id\n      user {\n        node {\n          ...Transaction_data\n          id\n        }\n      }\n    }\n  }\n  activeOrder {\n    node {\n      id\n      transactions {\n        edges {\n          node {\n            id\n            itemName\n            itemPrice\n            recipient {\n              node {\n                id\n                user {\n                  node {\n                    ...Transaction_data\n                    id\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n      payer {\n        node {\n          id\n          user {\n            node {\n              username\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment Transaction_data on User {\n  ...UserAvatar_data\n  username\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();

@@ -18,7 +18,7 @@ export const ControlledInput = forwardRef<TextInput, IControlledInputProps>(
       control,
       rules,
     });
-
+    
     return (
       <Input
         onBlur={field.onBlur}

@@ -1,13 +1,14 @@
 import { Icon, Text, useTheme } from '@rneui/themed';
 import { ControlledInput } from 'components/ControlledInput';
+import { sharedTextStyles } from 'components/styles';
 import {
   TUpdateOrderInput,
   TUserTransactionRole,
-} from 'components/Transaction/form';
+} from 'components/Transaction/types';
 import { UserAvatar } from 'components/UserAvatar';
 import { Row, Stack } from 'components/layout';
 import { Transaction_data$key } from 'core/graphql/__generated__/Transaction_data.graphql';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Control, Controller, ControllerRenderProps } from 'react-hook-form';
 import { UseFormStateReturn } from 'react-hook-form/dist/types';
 import { ControllerFieldState } from 'react-hook-form/dist/types/controller';
@@ -18,7 +19,7 @@ import Reanimated, {
 } from 'react-native-reanimated';
 
 import { graphql, useFragment } from 'react-relay';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { colorWithOpacity, formatCurrency } from 'shared/format';
 
 interface IRenderFieldProps {
@@ -28,42 +29,35 @@ interface IRenderFieldProps {
 }
 
 interface IProps {
-  _transactionData: Transaction_data$key;
+  _recipientData: Transaction_data$key;
   control?: Control<TUpdateOrderInput>;
   index?: number;
   role: TUserTransactionRole;
+  itemNameReadonly?: string;
+  itemPriceReadonly?: number;
 }
 
 export const Transaction: React.FC<IProps> = ({
-  _transactionData,
+  _recipientData,
   control,
   index,
   role,
+  itemPriceReadonly,
+  itemNameReadonly,
 }) => {
   const { theme } = useTheme();
 
   // ------------------------------------------ Data ------------------------------------------
-  const transactionData = useFragment(
+  const recipientData = useFragment(
     graphql`
-      fragment Transaction_data on Transaction {
-        id
-        recipient {
-          node {
-            user {
-              node {
-                ...UserAvatar_data
-                id
-                username
-              }
-            }
-          }
-        }
-        itemName
-        itemPrice
+      fragment Transaction_data on User {
+        ...UserAvatar_data
+        username
       }
     `,
-    _transactionData,
+    _recipientData,
   );
+
 
   // ------------------------------------------ Variables ------------------------------------------
   const canEdit = control && typeof index === 'number';
@@ -73,12 +67,20 @@ export const Transaction: React.FC<IProps> = ({
     if (canEdit) {
       return (
         <Controller
-          name={`transactions[${index}].itemName` as const}
+          name={`transactions.${index}.itemName` as const}
           control={control}
           render={({ field }) => (
-            <ControlledInput placeholder={'Item'} {...field} inputContainerStyle={{
-                backgroundColor: (role === 'payer' || role === 'recipient') ? colorWithOpacity(theme.colors.success, 0.5) : undefined
-              }} />
+            <ControlledInput
+              placeholder={'Item'}
+              {...field}
+              disabled={role === 'reader'}
+              inputContainerStyle={{
+                backgroundColor:
+                  role === 'payer' || role === 'recipient'
+                    ? colorWithOpacity(theme.colors.success, 0.5)
+                    : undefined,
+              }}
+            />
           )}
           rules={{
             required: true,
@@ -87,35 +89,38 @@ export const Transaction: React.FC<IProps> = ({
         />
       );
     }
-    return <Text>{transactionData.itemName}</Text>;
+    return <Text>{itemNameReadonly || ''}</Text>;
   };
 
   const renderItemPriceField = () => {
     if (canEdit) {
       return (
         <Controller
-          name={`transactions[${index}].itemPrice` as const}
+          name={`transactions.${index}.itemPrice` as const}
           control={control}
           render={({ field }) => (
             <ControlledInput
               placeholder={'Price'}
               leftIcon={<Icon name={'dollar-sign'} type={'feather'} />}
-              keyboardType={'numeric'}
+              keyboardType={'numbers-and-punctuation'}
               {...field}
               value={field.value?.toString()}
-              onChangeText={value => field.onChange(parseFloat(value))}
+              disabled={role === 'reader'}
               inputContainerStyle={{
-                backgroundColor: (role === 'payer' || role === 'recipient') ? colorWithOpacity(theme.colors.success, 0.5) : undefined
+                backgroundColor:
+                  role === 'payer' || role === 'recipient'
+                    ? colorWithOpacity(theme.colors.success, 0.5)
+                    : undefined,
               }}
             />
           )}
           rules={{
-            required: role === 'payer',
+            required: role !== 'recipient',
           }}
         />
       );
     }
-    return <Text>{formatCurrency(transactionData.itemPrice!)}</Text>;
+    return <Text>{formatCurrency(itemPriceReadonly || 0)}</Text>;
   };
 
   return (
@@ -130,35 +135,33 @@ export const Transaction: React.FC<IProps> = ({
       exiting={FadeOut}
       layout={LinearTransition}
     >
-        
-        <Stack
-          style={{
-            flex: 1,
-          }}
-          spacing={'sm'}
+      <Stack
+        style={{
+          flex: 1,
+        }}
+        spacing={'sm'}
+      >
+        <Text
+          style={sharedTextStyles(theme).caption}
         >
-          <Text
-            style={{
-              // color: theme.colors.grey1,
-              fontSize: 13,
-              fontWeight: '400',
-            }}
-          >
-            {transactionData.recipient.node!.user.node!.username}
-          </Text>
-          <Row
-            style={{
-              alignSelf: 'stretch',
-              alignItems: 'flex-start',
-              justifyContent: 'space-between',
-              // borderWidth: 1,
-            }}
-          >
-          <UserAvatar _data={transactionData.recipient.node!.user.node!} size={24} />
-            {renderItemNameField()}
-            {renderItemPriceField()}
-          </Row>
-        </Stack>
+          {recipientData.username}
+        </Text>
+        <Row
+          style={{
+            alignSelf: 'stretch',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            // borderWidth: 1,
+          }}
+        >
+          <UserAvatar
+            _data={recipientData}
+            size={24}
+          />
+          {renderItemNameField()}
+          {renderItemPriceField()}
+        </Row>
+      </Stack>
     </Reanimated.View>
   );
 };

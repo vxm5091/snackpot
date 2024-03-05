@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/core';
-import { Card, useTheme } from '@rneui/themed';
-import { GroupMember } from 'components/GroupMember';
-import { Row } from 'components/layout';
-import { GroupBalanceCard_data$key } from 'core/graphql/__generated__/GroupBalanceCard_data.graphql';
-import { useMemo } from 'react';
+import { Badge, Card, useTheme } from '@rneui/themed';
+import { MemberBalanceRow } from 'components/BalanceCard/MemberBalanceRow';
+import { Row, Spacer, Stack } from 'components/layout';
+import { MemberBalanceCard_data$key } from 'core/graphql/__generated__/MemberBalanceCard_data.graphql';
+import { Fragment, useMemo } from 'react';
 import { View } from 'react-native';
 import { graphql, useFragment } from 'react-relay';
 import Reanimated, {
@@ -13,25 +13,30 @@ import Reanimated, {
 } from 'react-native-reanimated';
 
 interface IProps {
-  _data: GroupBalanceCard_data$key;
+  _data: MemberBalanceCard_data$key;
 }
 
-export const GroupBalanceCard: React.FC<IProps> = ({ _data }) => {
+export const MemberBalanceCard: React.FC<IProps> = ({ _data }) => {
   const { theme } = useTheme();
   const navigation = useNavigation();
 
   const data = useFragment(
     graphql`
-      fragment GroupBalanceCard_data on Group {
+      fragment MemberBalanceCard_data on Group {
         ...GroupAvatar_data
         id
         groupName
         members {
           edges {
-            node {
-              ...GroupMember_data
+            node @required(action: THROW) {
+              ...MemberBalanceRow_data
               id
               balance
+              user {
+              node @required(action: THROW) {
+                  username
+								}
+							}
             }
           }
         }
@@ -51,11 +56,16 @@ export const GroupBalanceCard: React.FC<IProps> = ({ _data }) => {
       }),
     [data],
   );
+  
+  const payingNextUsername = sortedMembers[sortedMembers.length - 1].node.user.node.username;
 
   // ------------------------------------------ Render ------------------------------------------
   const renderMembers = () => {
     return sortedMembers.map((member, i, arr) => (
-      <GroupMember _data={member.node!} key={i} isLast={i === arr.length - 1} />
+      <Fragment key={member.node?.id || `${i}`}>
+        <MemberBalanceRow _data={member.node!} />
+        <Spacer />
+      </Fragment>
     ));
   };
 
@@ -66,15 +76,7 @@ export const GroupBalanceCard: React.FC<IProps> = ({ _data }) => {
       layout={LinearTransition}
     >
       <Card
-        wrapperStyle={{
-          rowGap: theme.spacing.xs,
-        }}
       >
-        <Row.Spaced
-          style={{
-            alignItems: 'flex-start',
-          }}
-        >
           <View>
             <Card.Title>Member balance</Card.Title>
             <Card.FeaturedSubtitle
@@ -83,11 +85,15 @@ export const GroupBalanceCard: React.FC<IProps> = ({ _data }) => {
                 marginTop: 0,
               }}
             >
-              Member with lowest balance will pay for next order
+              Press on a row to see a balance breakdown
             </Card.FeaturedSubtitle>
+            <Row>
+              <Badge value={`${payingNextUsername} paying next`} status={'success'} />
+            </Row>
           </View>
-        </Row.Spaced>
+        <Stack spacing={'xs'}>
         {renderMembers()}
+          </Stack>
       </Card>
     </Reanimated.View>
   );

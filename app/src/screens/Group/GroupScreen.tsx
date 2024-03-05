@@ -4,9 +4,9 @@ import {
   ActiveOrderCard,
   HistoricalOrderCard,
 } from 'components/OrderCard';
-import { GroupBalanceCard } from 'components/BalanceCard';
+import { MemberBalanceCard } from 'components/BalanceCard';
 import { GroupScreenQuery } from 'core/graphql/__generated__/GroupScreenQuery.graphql';
-import { TScreenPropsRoot } from 'flows/types';
+import { TScreenPropsRoot } from '../types';
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import Reanimated from 'react-native-reanimated';
@@ -17,14 +17,14 @@ export const QUERY_GroupScreen = graphql`
 	query GroupScreenQuery($id: ID!) {
 		node(id: $id) {
 			...on Group {
-				...GroupBalanceCard_data
+				...MemberBalanceCard_data
 				...GroupAvatar_data
 				...ActiveOrderCard_data
 				groupName
 				members {
 					edges {
 						node {
-							...GroupMember_data
+							...MemberBalanceRow_data
 							id
 							balance
 						}
@@ -64,8 +64,6 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
   useDidMount(() => {
     navigation.setOptions({
       title: groupData?.groupName || '',
-      headerShown: true,
-      headerBackTitleVisible: false,
     });
   });
 
@@ -102,8 +100,10 @@ export const GroupScreen: React.FC<IProps> = ({ _queryRef }) => {
         rowGap: theme.spacing.lg,
       }}
       showsVerticalScrollIndicator={false}
+      keyboardDismissMode={'on-drag'}
+      keyboardShouldPersistTaps={'handled'}
     >
-      {groupData && <GroupBalanceCard _data={groupData} />}
+      {groupData && <MemberBalanceCard _data={groupData} />}
       {renderActiveOrder}
       {renderOrderHistory}
     </Reanimated.ScrollView>

@@ -1,15 +1,15 @@
 import { useFocusEffect } from '@react-navigation/core';
-import { GroupCardSkeleton } from 'components/skeleton';
+import { CustomSkeleton } from 'components/skeleton';
 import { GroupScreenQuery } from 'core/graphql/__generated__/GroupScreenQuery.graphql';
 import {
   GroupScreen,
   QUERY_GroupScreen,
-} from 'flows/screens/Group/GroupScreen';
-import { TScreenPropsRoot } from 'flows/types';
+} from './GroupScreen';
+import { TScreenPropsRoot } from '../types';
 import { Suspense, useCallback } from 'react';
 import { useQueryLoader } from 'react-relay';
 
-export const GroupScreenRoute: React.FC<TScreenPropsRoot<'GroupScreen'>> = ({
+const GroupScreenRoute: React.FC<TScreenPropsRoot<'GroupScreen'>> = ({
   route,
 }) => {
   const [queryRef, loadQuery] =
@@ -24,8 +24,10 @@ export const GroupScreenRoute: React.FC<TScreenPropsRoot<'GroupScreen'>> = ({
 
   // ------------------------------------------ Render ------------------------------------------
   return (
-    <Suspense fallback={<GroupCardSkeleton />}>
+    <Suspense fallback={<CustomSkeleton />}>
       {queryRef && <GroupScreen _queryRef={queryRef} />}
     </Suspense>
   );
 };
+
+export default GroupScreenRoute;

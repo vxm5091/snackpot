@@ -71,10 +71,8 @@ export class GroupMemberResolver {
   @ResolveField(() => Float, { name: EGroupMemberField.Balance })
   async resolveBalance(@Parent() groupMember: GroupMember): Promise<number> {
     const groupMemberID = fromGlobalId(groupMember.globalID).id;
-    console.log({ groupMemberID });
     const txnEntities =
       await this.groupService.getUserGroupTransactions(groupMemberID);
-    console.log({ txnEntities });
 
     const balance = txnEntities.reduce((acc, transaction) => {
       if (!transaction.itemPrice) return acc;

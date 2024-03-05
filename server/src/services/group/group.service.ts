@@ -16,7 +16,7 @@ export class GroupService {
           { order: { payer: groupMemberID } },
         ],
       },
-      { populate: ['order'] },
+      { populate: ['order'], orderBy: { createdAt: 'DESC' } },
     );
   }
 
@@ -41,7 +41,7 @@ export class GroupService {
       acc[recipientID] = (acc[recipientID] || 0) - txn.itemPrice;
       return acc;
     }, {});
-    
+
     return balances;
   }
 }

@@ -8,8 +8,7 @@
     "paths": {
       "components/*": ["components/*"],
       "core/*": ["core/*"],
-      "flows/*": ["flows/*"],
-      "graphql/*": ["graphql/*"],
+      "screens/*": ["screens/*"],
       "shared/*": ["shared/*"]
     },
     "allowJs": true,

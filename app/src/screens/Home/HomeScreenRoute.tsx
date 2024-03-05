@@ -1,11 +1,11 @@
 import { useFocusEffect } from '@react-navigation/core';
-import { GroupCardSkeleton } from 'components/skeleton';
+import { CustomSkeleton } from 'components/skeleton';
 import { HomeScreenQuery } from 'core/graphql/__generated__/HomeScreenQuery.graphql';
-import { HomeScreen, QUERY_HomeScreen } from 'flows/screens/Home/HomeScreen';
+import { HomeScreen, QUERY_HomeScreen } from './HomeScreen';
 import { Suspense, useCallback } from 'react';
 import { useQueryLoader } from 'react-relay';
 
-export const HomeScreenRoute = () => {
+const HomeScreenRoute = () => {
   const [queryRef, loadQuery] =
     useQueryLoader<HomeScreenQuery>(QUERY_HomeScreen);
 
@@ -18,8 +18,10 @@ export const HomeScreenRoute = () => {
 
   // ------------------------------------------ Render ------------------------------------------
   return (
-    <Suspense fallback={<GroupCardSkeleton />}>
+    <Suspense fallback={<CustomSkeleton />}>
       {queryRef && <HomeScreen _queryRef={queryRef} />}
     </Suspense>
   );
 };
+
+export default HomeScreenRoute

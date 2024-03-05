@@ -1,5 +1,8 @@
 import { Button } from '@rneui/themed';
 import { CreateOrderButtonMutation } from 'core/graphql/__generated__/CreateOrderButtonMutation.graphql';
+import {
+  CreateTransactionInput
+} from 'core/graphql/__generated__/CreateTransactionButtonMutation.graphql';
 import { graphql, useMutation } from 'react-relay';
 
 interface IProps {
@@ -25,6 +28,7 @@ export const CreateOrderButton: React.FC<IProps> = ({ groupID }) => {
     );
 
   const handlePressCreateOrder = () => {
+    
     commit({
       variables: {
         groupID,

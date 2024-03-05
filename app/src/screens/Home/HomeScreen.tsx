@@ -64,6 +64,7 @@ export const HomeScreen: React.FC<IProps> = ({ _queryRef }) => {
       ItemSeparatorComponent={renderItemSeparator}
       automaticallyAdjustKeyboardInsets={true}
       keyboardDismissMode={'on-drag'}
+      keyboardShouldPersistTaps={'handled'}
     />
   );
 };

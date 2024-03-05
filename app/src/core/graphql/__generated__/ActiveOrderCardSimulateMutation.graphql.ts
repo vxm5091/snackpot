@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<da02f8702b3971d87f8f6d8190525a62>>
+ * @generated SignedSource<<7516a25cde4a8513fc3ee2f76d7bb8c5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -85,7 +85,60 @@ v7 = {
   "kind": "ScalarField",
   "name": "username",
   "storageKey": null
-};
+},
+v8 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "GroupMember",
+    "kind": "LinkedField",
+    "name": "node",
+    "plural": false,
+    "selections": [
+      (v3/*: any*/),
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "UserEdge",
+        "kind": "LinkedField",
+        "name": "user",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "User",
+            "kind": "LinkedField",
+            "name": "node",
+            "plural": false,
+            "selections": [
+              (v3/*: any*/),
+              (v7/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "firstName",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "lastName",
+                "storageKey": null
+              },
+              (v6/*: any*/)
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  }
+];
 return {
   "fragment": {
     "argumentDefinitions": [
@@ -217,20 +270,7 @@ return {
                         "kind": "LinkedField",
                         "name": "me",
                         "plural": false,
-                        "selections": [
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "GroupMember",
-                            "kind": "LinkedField",
-                            "name": "node",
-                            "plural": false,
-                            "selections": [
-                              (v3/*: any*/)
-                            ],
-                            "storageKey": null
-                          }
-                        ],
+                        "selections": (v8/*: any*/),
                         "storageKey": null
                       },
                       {
@@ -275,6 +315,8 @@ return {
                                         "plural": false,
                                         "selections": [
                                           (v3/*: any*/),
+                                          (v4/*: any*/),
+                                          (v5/*: any*/),
                                           {
                                             "alias": null,
                                             "args": null,
@@ -282,63 +324,9 @@ return {
                                             "kind": "LinkedField",
                                             "name": "recipient",
                                             "plural": false,
-                                            "selections": [
-                                              {
-                                                "alias": null,
-                                                "args": null,
-                                                "concreteType": "GroupMember",
-                                                "kind": "LinkedField",
-                                                "name": "node",
-                                                "plural": false,
-                                                "selections": [
-                                                  {
-                                                    "alias": null,
-                                                    "args": null,
-                                                    "concreteType": "UserEdge",
-                                                    "kind": "LinkedField",
-                                                    "name": "user",
-                                                    "plural": false,
-                                                    "selections": [
-                                                      {
-                                                        "alias": null,
-                                                        "args": null,
-                                                        "concreteType": "User",
-                                                        "kind": "LinkedField",
-                                                        "name": "node",
-                                                        "plural": false,
-                                                        "selections": [
-                                                          (v3/*: any*/),
-                                                          (v7/*: any*/),
-                                                          {
-                                                            "alias": null,
-                                                            "args": null,
-                                                            "kind": "ScalarField",
-                                                            "name": "firstName",
-                                                            "storageKey": null
-                                                          },
-                                                          {
-                                                            "alias": null,
-                                                            "args": null,
-                                                            "kind": "ScalarField",
-                                                            "name": "lastName",
-                                                            "storageKey": null
-                                                          },
-                                                          (v6/*: any*/)
-                                                        ],
-                                                        "storageKey": null
-                                                      }
-                                                    ],
-                                                    "storageKey": null
-                                                  },
-                                                  (v3/*: any*/)
-                                                ],
-                                                "storageKey": null
-                                              }
-                                            ],
+                                            "selections": (v8/*: any*/),
                                             "storageKey": null
-                                          },
-                                          (v4/*: any*/),
-                                          (v5/*: any*/)
+                                          }
                                         ],
                                         "storageKey": null
                                       }
@@ -444,12 +432,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "addeec52d62711c419860fd514a3b6fa",
+    "cacheID": "54ad65705c6db7dbf65f2919500a45fc",
     "id": null,
     "metadata": {},
     "name": "ActiveOrderCardSimulateMutation",
     "operationKind": "mutation",
-    "text": "mutation ActiveOrderCardSimulateMutation(\n  $orderID: ID!\n) {\n  simulateTransactions(orderID: $orderID) {\n    node {\n      id\n      itemName\n      itemPrice\n      group {\n        node {\n          ...ActiveOrderCard_data\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment ActiveOrderCard_data on Group {\n  id\n  groupName\n  avatarURL\n  me {\n    node {\n      id\n    }\n  }\n  activeOrder {\n    node {\n      id\n      transactions {\n        edges {\n          node {\n            ...Transaction_data\n            id\n            itemName\n            itemPrice\n            recipient {\n              node {\n                id\n              }\n            }\n          }\n        }\n      }\n      payer {\n        node {\n          id\n          user {\n            node {\n              username\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment Transaction_data on Transaction {\n  id\n  recipient {\n    node {\n      user {\n        node {\n          ...UserAvatar_data\n          id\n          username\n        }\n      }\n      id\n    }\n  }\n  itemName\n  itemPrice\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
+    "text": "mutation ActiveOrderCardSimulateMutation(\n  $orderID: ID!\n) {\n  simulateTransactions(orderID: $orderID) {\n    node {\n      id\n      itemName\n      itemPrice\n      group {\n        node {\n          ...ActiveOrderCard_data\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment ActiveOrderCard_data on Group {\n  id\n  groupName\n  avatarURL\n  me {\n    node {\n      id\n      user {\n        node {\n          ...Transaction_data\n          id\n        }\n      }\n    }\n  }\n  activeOrder {\n    node {\n      id\n      transactions {\n        edges {\n          node {\n            id\n            itemName\n            itemPrice\n            recipient {\n              node {\n                id\n                user {\n                  node {\n                    ...Transaction_data\n                    id\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n      payer {\n        node {\n          id\n          user {\n            node {\n              username\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment Transaction_data on User {\n  ...UserAvatar_data\n  username\n}\n\nfragment UserAvatar_data on User {\n  id\n  username\n  firstName\n  lastName\n  avatarURL\n}\n"
   }
 };
 })();

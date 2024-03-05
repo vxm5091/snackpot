@@ -3,7 +3,7 @@ import { container } from 'ansi-fragments';
 import environment from 'core/relay';
 import theme from 'core/theme/theme';
 import { StatusBar } from 'expo-status-bar';
-import { RootNavigator } from 'flows/navigators';
+import { RootNavigator } from './src/screens';
 import { Dimensions, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
