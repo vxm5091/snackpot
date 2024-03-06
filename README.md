@@ -105,8 +105,8 @@ The Home screen shows an active order card for each group the user is in. If
 there isn't an active order open, the user can start one. The payer will still
 be chosen based on balance.
 
-The highlighted green fields are the ones the user can edit. When the user is *
-*not paying**, they just have to input what they got. Filling in the price is
+The highlighted green fields are the ones the user can edit. When the user is
+not paying, they just have to input what they got. Filling in the price is
 optional for the receiving user in case the payer is the only one who goes to
 pick up the order.
 
