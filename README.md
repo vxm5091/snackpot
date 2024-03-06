@@ -4,10 +4,20 @@ Snackpot is a React Native mobile application that helps your friend or co-worke
 
 # Getting Started
 
-**Development environment requirements**
+**Requirements**
 - Postgres
 - node
 - Expo Go (mobile app available on App Store / Google Play)
+
+| Tech       | Version |
+|------------|---------|
+| Node.js    | 16.14.0 |
+| TypeScript | >= 4.0  |
+| Postgres   | *       |
+| Expo Go*   | *       |
+_Expo Go is available on App Store / Google Play. It's a great tool for running the app in development mode on your device with no additional upstart._
+
+
 
 ## Clone Repo 
 ```

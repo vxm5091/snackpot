@@ -3,6 +3,10 @@
   "scripts": {
     "start": "concurrently --raw \"cd app && yarn start\" \"cd server && yarn start\""
   },
+  "engines": {
+    "node": "16.14.0",
+  }
+},
   "devDependencies": {
     "concurrently": "^8.2.2"
   }
