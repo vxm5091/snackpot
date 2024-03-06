@@ -9,7 +9,7 @@ interface IProps {
   username: string;
   amount: number;
   timestamp?: string;
-  description: string;
+  description?: string;
 }
 
 export const MemberRowUI: React.FC<IProps> = ({
@@ -46,14 +46,16 @@ export const MemberRowUI: React.FC<IProps> = ({
           <Text style={sharedStyles.caption}>{username}</Text>
         </Stack>
       </Row>
-      <Text
-        style={{
-          textAlign: 'center',
-          flex: 1,
-        }}
-      >
-        {description}
-      </Text>
+      {description && (
+        <Text
+          style={{
+            textAlign: 'center',
+            flex: 1,
+          }}
+        >
+          {description}
+        </Text>
+      )}
       <BalanceText amount={amount} />
     </Row>
   );

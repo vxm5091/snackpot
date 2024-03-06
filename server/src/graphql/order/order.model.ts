@@ -3,10 +3,9 @@ import { GroupEdge } from '@app/graphql/group/group.model';
 import { GroupMemberEdge } from '@app/graphql/groupMember/groupMember.model';
 import { BaseNode, RelayNode } from '@app/graphql/node/node.model';
 import { TransactionConnection } from '@app/graphql/transaction/transaction.model';
-import { UserEdge } from '@app/graphql/user/user.model';
 import { PageInfo } from '@app/relay/relay.graphql';
 import { RelayConnection, RelayEdge } from '@app/relay/types';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 /**
  * fields which match scalar entity fields don't need custom resolvers
