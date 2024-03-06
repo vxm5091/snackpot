@@ -84,7 +84,7 @@ With each order, **if the user pays, their balance goes up**. If they **receive,
   </tr>
 </table>
 
-The Home screen show an active order card for each group the user is in. If there isn't an active order open, the user can start one. The payer will still be chosen based on balance.
+The Home screen shows an active order card for each group the user is in. If there isn't an active order open, the user can start one. The payer will still be chosen based on balance.
 
 The highlighted green fields are the ones the user can edit. When the user is **not paying**, they just have to input what they got. Filling in the price is optional for the receiving user in case the payer is the only one who goes to pick up the order. 
 
@@ -128,7 +128,7 @@ You can **press on any row in the member balance table** to see a historical bre
 
 ![Postgres Schema](screenshots/postgres_schema.png)
 
-There isn't much of a first-player mode to this app. It sets out to solve a group problem. As such, `users-groups` is really the focal point of the data model. A user's orders and transactions with other users is in the context of the group. From that perspective, this model more closely resembels Splitwise vs Venmo. 
+There isn't much of a first-player mode to this app. It sets out to solve a group problem. As such, `users-groups` is really the focal point of the data model. A user's orders and transactions with other users is in the context of the group. From that perspective, this model more closely resembles Splitwise vs Venmo. 
 
 
 # Assumptions / MVP shortcuts
