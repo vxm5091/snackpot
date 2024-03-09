@@ -1,12 +1,12 @@
 import { useNavigation } from '@react-navigation/core';
 import { Badge, Button, Card, Text, useTheme } from '@rneui/themed';
+import { Row, Spacer, Stack } from 'components/layout';
 import {
   CreateOrderButton,
   CreateTransactionButton,
   DeleteMyTransactionButton,
   UpdateTransactionButton,
 } from 'components/OrderCard/components';
-import { Row, Spacer, Stack } from 'components/layout';
 import { Transaction } from 'components/Transaction';
 import {
   TUpdateOrderInput,
@@ -16,6 +16,8 @@ import {
   ActiveOrderCard_data$data,
   ActiveOrderCard_data$key,
 } from 'core/graphql/__generated__/ActiveOrderCard_data.graphql';
+import { ActiveOrderCardCompleteOrderMutation } from 'core/graphql/__generated__/ActiveOrderCardCompleteOrderMutation.graphql';
+import { ActiveOrderCardSimulateMutation } from 'core/graphql/__generated__/ActiveOrderCardSimulateMutation.graphql';
 import { CreateTransactionButtonMutation$data } from 'core/graphql/__generated__/CreateTransactionButtonMutation.graphql';
 import { Fragment, useCallback, useMemo, useState } from 'react';
 import {
@@ -24,7 +26,7 @@ import {
   useForm,
   useWatch,
 } from 'react-hook-form';
-import { TouchableOpacity, View, StyleSheet, Keyboard } from 'react-native';
+import { Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Reanimated, {
   FadeIn,
   FadeOut,
@@ -32,8 +34,6 @@ import Reanimated, {
 } from 'react-native-reanimated';
 import Toast from 'react-native-toast-message';
 import { graphql, useFragment, useMutation } from 'react-relay';
-import { ActiveOrderCardCompleteOrderMutation } from 'core/graphql/__generated__/ActiveOrderCardCompleteOrderMutation.graphql';
-import { ActiveOrderCardSimulateMutation } from 'core/graphql/__generated__/ActiveOrderCardSimulateMutation.graphql';
 import { useDidMount, useDidUpdate } from 'shared/hooks/lifecycleHooks';
 
 type TActiveOrderNode = NonNullable<
@@ -181,6 +181,13 @@ export const ActiveOrderCard: React.FC<IProps> = ({ _data, context }) => {
     const username = activeOrder.payer.node.user.node.username;
     return `${username}'s turn to pay!`;
   }, [activeOrder, isPayer]);
+  const userHasTransaction = useMemo(
+    () =>
+      activeOrder?.transactions.edges?.some(
+        txnEdge => txnEdge.node.recipient.node.id === data.me.node.id,
+      ),
+    [activeOrder, data],
+  );
 
   // ------------------------------------------ Form ------------------------------------------
   const transactionMap = useMemo(() => {
@@ -240,6 +247,7 @@ export const ActiveOrderCard: React.FC<IProps> = ({ _data, context }) => {
     if (res) {
       const index = formValues.findIndex(txn => txn.id === res);
       setUserIndex(index);
+      setUserTransactionID(res);
     }
   });
 
@@ -415,11 +423,7 @@ export const ActiveOrderCard: React.FC<IProps> = ({ _data, context }) => {
     }
 
     //   scenario 3: user doesn't have a transaction yet -> create
-    if (
-      !activeOrder.transactions.edges?.some(
-        txnEdge => txnEdge.node.recipient.node.id === data.me.node.id,
-      )
-    ) {
+    if (!userHasTransaction) {
       return (
         <Stack spacing={'sm'}>
           <CreateTransactionButton
