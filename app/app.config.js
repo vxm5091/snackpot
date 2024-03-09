@@ -19,6 +19,7 @@ export default ({ config }) => ({
   assetBundlePatterns: ['**/*'],
   ios: {
     supportsTablet: true,
+    bundleIdentifier: 'com.snackpot',
   },
   android: {
     adaptiveIcon: {
@@ -29,4 +30,14 @@ export default ({ config }) => ({
   web: {
     favicon: './assets/favicon.png',
   },
+  plugins: [
+    [
+      'expo-build-properties',
+      {
+        ios: {
+          flipper: true,
+        },
+      },
+    ],
+  ],
 });

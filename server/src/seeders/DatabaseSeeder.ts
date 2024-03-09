@@ -1,11 +1,11 @@
 import { USER_ID } from '@app/constants';
-import { MENU_ITEMS } from '@app/seeders/constants';
-import { GroupFactory } from '@app/seeders/GroupFactory';
-import { UserFactory } from '@app/seeders/UserFactory';
 import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
 import { TransactionEntity } from '@app/entities/main/transaction.entity';
 import { UserEntity } from '@app/entities/main/user.entity';
+import { MENU_ITEMS } from '@app/seeders/constants';
+import { GroupFactory } from '@app/seeders/GroupFactory';
+import { UserFactory } from '@app/seeders/UserFactory';
 import { faker } from '@faker-js/faker';
 import { ref, wrap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/knex';
@@ -13,9 +13,11 @@ import { Seeder } from '@mikro-orm/seeder';
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
-    const PAST_ORDERS = process.env.PAST_ORDERS_PER_GROUP ? +process.env.PAST_ORDERS_PER_GROUP  : 10;
+    const PAST_ORDERS = process.env.PAST_ORDERS_PER_GROUP
+      ? +process.env.PAST_ORDERS_PER_GROUP
+      : 10;
     const GROUPS = process.env.GROUPS ? +process.env.GROUPS : 3;
-    
+
     const me = em.create(UserEntity, {
       id: USER_ID,
       username: 'me',
@@ -42,7 +44,6 @@ export class DatabaseSeeder extends Seeder {
           }),
         );
 
-        
         for (let i = 0; i < PAST_ORDERS; i++) {
           const payer = faker.helpers.arrayElement(memberEntities);
 

@@ -113,12 +113,12 @@ pick up the order.
 When **the user is paying**, they can edit all the fields and make any
 adjustments.
 
-**Simulate transactions**
+**Simulate transactions**<br>
 When starting a new order, the user's entry will be the only one. This
 essentially fills in all the other members' orders with dummy data. **Note**: if
 all the members already have entries, it won't generate new ones.
 
-**Simulate end order**
+**Simulate end order**<br>
 In a production flow, only the payer can close out the order. That way, they can
 make sure the amounts are right. Since we're in test mode, we want to simulate
 closing the order and starting a new one.
@@ -151,17 +151,188 @@ member's latest balance.
 You can **press on any row in the member balance table** to see a historical
 breakdown of that user's transactions within the group.
 
-# Data model
+## Data model & Postgres
 
 ![Postgres Schema](screenshots/postgres_schema.png)
 
-There isn't much of a first-player mode to this app. It sets out to solve a
-group problem. As such, `users-groups` is really the focal point of the data
-model. A user's orders and transactions with other users is in the context of
-the group. From that perspective, this model more closely resembles Splitwise vs
-Venmo.
+**Why SQL**?
 
-# Assumptions / MVP shortcuts
+1. **Structured data**<br>
+   There are specific data points our data model needs in order to produce the
+   output that our users are looking for. For each transaction, we need to know
+   who the receiving group member is, what they got, how much it cost, and what
+   order it relates to. Based on the order, we know who paid. Now we can
+   calculate whose balance goes up, whose balance goes down, and by how
+   much.<br><br>
+2. **Relational data**<br>
+   I think the diagram above mostly speaks for itself here. **Users** joins *
+   *groups**. Groups create **orders**, which are made up of **transactions**
+   between the user paying for the order, and other members of the
+   group.<br><br>
+
+3. **Need for complex joins**<br>
+   There isn't much of a first-player mode to this app. It sets out to solve a
+   group problem. As such, `users-groups` is really the focal point of the data
+   model. A user's orders and transactions with other users is in the context of
+   the group (think Splitwise as opposed to Venmo). To accurately track a
+   member's
+   balance within the group, we need a structured data model that efficiently
+   joins
+   these entities
+
+**Order** vs **Transaction**<br>
+An **order** is composed of **transactions** between the user whose turn it is
+to pay, and each member of the group who got an item. Since the **payer** is the
+same for all transactions in an order, foreign key relationship is kept in
+the _orders_ table.
+
+## NestJS + GraphQL + MikroORM
+
+**NestJS** is a Node.js framework. It provides the guardrails for building a
+clean and scalable server, as well as all the tools that one might need in the
+process.
+
+I chose **GraphQL** over a REST API firstly because of the relational aspect of
+the data model discussed in the Postgres section above. The beauty of a GraphQL
+approach, especially during a rapid MVP / iteration stage, is that it
+removes the
+pressure of having to think through all the access patterns upfront, or having
+to add new endpoints as our client-side features evolve. Instead, we do the work
+upfront, and present the frontend with a blueprint of the data model. The client
+is then free to traverse that blueprint in any way.
+
+NestJS offers two ways of building GraphQL applications: code first or schema
+first. I chose code first, meaning the `schema.gql` file is generated based on
+our Typescript code, as opposed to vice versa. When combined with MikroORM, we
+get:
+
+- type safety across the entire backend without having to define additional
+  interfaces, etc.
+- Consistency across domains (eg.
+  compare `CreateTransactionInput`, `Transaction` GraphQL model,
+  and `TransactionEntity`. different domains, consistent design) and types (
+  every type is organized the same).
+
+## Relay
+
+Relay is a GraphQL specification that was developed by the same team at Meta
+that developed GraphQL. It set out to solve two problems: pagination and
+caching. On the client side, Meta developed React Relay, a framework used by
+this app as well. See React Relay's intro to the GraphQL specification for an
+explanation:
+
+[GraphQL Relay Spec](https://relay.dev/docs/guides/graphql-server-specification/)
+
+The benefits we get from using React Relay with a Relay-compliant GraphQL
+API are significant.
+
+1. **Caching.**<br>
+   The core of the Relay spec is the **globally unique ID.** This allows
+   React Relay to cache each item reliably.<br><br>
+2. **Declarative bottom-up component structure**<br>
+   Each component declare its own data dependencies. The
+   Relay compiler generates the relevant fragment (and Typescript type),
+   which the parent spreads as a fragment. Let's take a look at an example
+   from our code:
+
+```ts
+// UserAvatar.tsx
+
+interface IProps extends AvatarProps {
+  _data: UserAvatar_data$key;
+}
+
+export const UserAvatar: React.FC<IProps> = ({ _data, ...props }) => {
+  const data = useFragment(
+    graphql`
+      fragment UserAvatar_data on User {
+        firstName
+        lastName
+        avatarURL
+      }
+    `,
+    _data,
+  );
+
+//   rest of code
+};
+```
+
+So these are the fields the `UserAvatar` component needs. Now here's a
+parent component:
+
+```ts
+// Transaction.tsx
+
+interface IProps {
+  _recipientData: Transaction_data$key;
+  //   ...
+}
+
+export const Transaction: React.FC<IProps> = ({
+  _recipientData,
+  //   ...
+}) => {
+  const recipientData = useFragment(
+    graphql`
+      fragment Transaction_data on User {
+        ...UserAvatar_data
+        username
+      }
+    `,
+    _recipientData,
+  );
+  
+  return (
+    // ...
+    <UserAvatar
+      _data = { recipientData }
+  />
+  // ...
+)
+  ;
+}
+```
+
+Notice what's happening here. `Transaction` declares its own data
+dependencies, and then spreads its children's dependencies as a fragment.
+From the perspective of `Transaction`, it just knows that `Avatar` needs its
+data fragment. What fields are in that fragment is `Avatar`'s business.
+
+This allows us to develop components in a truly modularized and declarative
+fashion.
+
+_Continuing list_
+
+3. **No overfetching**<br>
+   By following the pattern above, React Relay dedupes the query and ensures no
+   overfetching by rolling up all the individual fragments into one query
+   <br><br>
+4. **Re-rendering upon data update**<br>
+   For example, spreading a fragment in the mutation response will re-render
+   any component that relies on that fragment. More fundamentally, whenever
+   the data associated with a fragment is updated in the Relay store, that
+   will trigger a re-render.
+   <br><br>
+5. **Render as you fetch**<br>
+   React Relay is designed to take advantage of the new concurrency paradigm
+   in React. By leveraging `Suspense`, we can isolate loading states and
+   produce a more responsive and instantaneous user experience. Our main
+   focus as the frontend developer is to define the data logic, the
+   `Suspense` boundaries, and fallback components. React Relay handles
+   displaying the data that's currently available in the store (if any),
+   suspending the components that don't have any data in the store (mostly
+   on initial render), and updating the store upon receiving a response.
+   <br><br>
+6. **Pagination**<br>
+   Pagination isn't necessarily a top priority for a v1.0 MVP because it'll
+   take at least a bit of time for people to use the app enough to build up
+   long lists of data. But that can quickly change. Pagination is especially
+   critical in a React Native application, where list performance can
+   degrade rapidly if not properly optimized. I'll expand more on this with
+   some examples once I build it in.
+
+## Assumptions / MVP shortcuts
 
 1. Ignoring tax. The assumption is that that piece balances out over time and
    the focus is more so on facilitating the decision making behind whose turn it
@@ -178,6 +349,7 @@ Venmo.
   all, who really wants to do expenses on a daily basis? (gamification, auto
   complete suggestions based on past transactions)
 - pagination
+- server-side caching
 
 
 

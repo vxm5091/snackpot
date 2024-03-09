@@ -1,6 +1,5 @@
 import { BaseEntity } from '@app/entities/abstract/base.entity';
 import { UserGroupJoinEntity } from '@app/entities/join/user-group.entity';
-import { GroupEntity } from '@app/entities/main/group.entity';
 import { OrderEntity } from '@app/entities/main/order.entity';
 import {
   Entity,
@@ -18,11 +17,8 @@ import { toGlobalId } from 'graphql-relay/node/node';
  * */
 @Entity({ tableName: 'transactions' })
 export class TransactionEntity extends BaseEntity {
-  [OptionalProps]?:
-    | 'createdAt'
-    | 'updatedAt'
-    | 'id'
-    | 'globalID'
+  [OptionalProps]?: 'createdAt' | 'updatedAt' | 'id' | 'globalID';
+
   @Property({
     persist: false,
   })
@@ -43,8 +39,4 @@ export class TransactionEntity extends BaseEntity {
   @Index()
   @ManyToOne({ entity: () => OrderEntity })
   order!: Ref<OrderEntity>;
-
-  // @Index()
-  // @ManyToOne({ entity: () => GroupEntity })
-  // group!: Ref<GroupEntity>;
 }
